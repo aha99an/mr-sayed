@@ -1,0 +1,13 @@
+*.pyc
+/static
+/media
+.idea
+/notes.txt
+*.log
+/db.sqlite3
+.coverage
+/htmlcov
+/.pytest_cache
+/.vscode
+/env
+/my_env

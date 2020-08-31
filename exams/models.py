@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 import math
 from django.utils import timezone
-from accounts.models import User
+from accounts.models import CustomUser
 
 
 class Quiz(models.Model):
@@ -31,7 +31,7 @@ class StudentQuiz(models.Model):
     #     ('incomplete', 'incomplete'),)
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name="provider_quiz")
     score = models.IntegerField(null=True, blank=True, default=0)

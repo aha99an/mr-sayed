@@ -4,3 +4,4 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
 
 ]
+app_name = 'home'

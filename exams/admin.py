@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (Quiz, StudentQuiz, EssayQuestion, StudentEssayAnswer, TrueFalseQuestion, StudentTrueFalseAnswer,
+from .models import (Exam, StudentQuiz, EssayQuestion, StudentEssayAnswer, TrueFalseQuestion, StudentTrueFalseAnswer,
                      ChoiceQuestion, StudentChoiceAnswer)
 
 
@@ -7,7 +7,7 @@ class QuizAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at']
 
 
-admin.site.register(Quiz, QuizAdmin)
+admin.site.register(Exam, QuizAdmin)
 admin.site.register(StudentQuiz)
 admin.site.register(EssayQuestion)
 admin.site.register(StudentEssayAnswer)

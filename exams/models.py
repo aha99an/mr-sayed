@@ -7,7 +7,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 
 
-class Quiz(models.Model):
+class Exam(models.Model):
 
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -17,6 +17,10 @@ class Quiz(models.Model):
     time_quiz = models.IntegerField(default=0)
     mandatory = models.BooleanField(default=False)
     max_tries = models.IntegerField(default=1)
+    availabe_from = models.DateTimeField(blank=True, null=True)
+    availabe_to = models.DateTimeField(blank=True, null=True)
+    answer = models.FileField(blank=True, null=True)
+    show_answer = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -32,8 +36,8 @@ class StudentQuiz(models.Model):
 
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    quiz = models.ForeignKey(
-        Quiz, on_delete=models.CASCADE, related_name="provider_quiz")
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, related_name="provider_quiz")
     score = models.IntegerField(null=True, blank=True, default=0)
     answered_questions = models.IntegerField(null=True, blank=True, default=0)
     # status = models.CharField(
@@ -44,11 +48,11 @@ class StudentQuiz(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.quiz.name + " " + self.user.username
+        return self.exam.name + " " + self.user.username
 
 
 class EssayQuestion(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100)
@@ -68,7 +72,7 @@ class StudentEssayAnswer(models.Model):
 
 
 class TrueFalseQuestion(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100)
@@ -100,7 +104,7 @@ class ChoiceQuestion(models.Model):
         (OPTION3, 'option3'),
         (OPTION4, 'option4'),
     )
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     option1 = models.CharField(max_length=300)
@@ -111,6 +115,9 @@ class ChoiceQuestion(models.Model):
     grade = models.FloatField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.question
 
 
 class StudentChoiceAnswer(models.Model):
@@ -142,7 +149,7 @@ class StudentChoiceAnswer(models.Model):
 #         (3, 'Option3'),
 #         (4, 'Option4'),
 #     )
-#     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+#     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 #     question = models.CharField(max_length=300)
 #     option1 = models.CharField(max_length=300, null=True, blank=True)
 #     option2 = models.CharField(max_length=300, null=True, blank=True)
@@ -160,29 +167,29 @@ class StudentChoiceAnswer(models.Model):
 #         return self.question
 
 
-# # update the quiz total_question number every time a question is added
+# # update the exam total_question number every time a question is added
 # @receiver(post_save, sender=QuizQuestion)
 # def question_save(sender, instance, **kwargs):
-#     quiz = Quiz.objects.get(quiz_id=instance.quiz_id.quiz_id)
-#     quiz.total_question = quiz.quizquestion_set.all().filter(status=True).count()
-#     quiz.score = quiz.total_question
-#     # quiz.pass_score = math.ceil(int(quiz.total_question)*.8)
-#     quiz.save()
+#     exam = Exam.objects.get(quiz_id=instance.quiz_id.quiz_id)
+#     exam.total_question = exam.quizquestion_set.all().filter(status=True).count()
+#     exam.score = exam.total_question
+#     # exam.pass_score = math.ceil(int(exam.total_question)*.8)
+#     exam.save()
 
-# # Change provider quiz status, count number of tries
+# # Change provider exam status, count number of tries
 # @receiver(post_save, sender=StudentAnswer)
 # def providerquiz_save(sender, instance, **kwargs):
-#     quiz = Quiz.objects.get(quiz_id=instance.provider_quiz.quiz.quiz_id)
+#     exam = Exam.objects.get(quiz_id=instance.provider_quiz.exam.quiz_id)
 #     provider_quiz = StudentQuiz.objects.get(id=instance.provider_quiz.id)
-#     if provider_quiz.answered_questions < quiz.total_question:
+#     if provider_quiz.answered_questions < exam.total_question:
 #         provider_quiz.status = "incomplete"
 #     else:
 #         try:
-#             current_try_number = StudentQuiz.objects.filter(quiz=quiz).filter(user_id=provider_quiz.user_id).exclude(id=StudentQuiz.id).last().try_number
+#             current_try_number = StudentQuiz.objects.filter(exam=exam).filter(user_id=provider_quiz.user_id).exclude(id=StudentQuiz.id).last().try_number
 #             provider_quiz.try_number = int(current_try_number)+1
 #         except:
 #             provider_quiz.try_number = 1
-#         if provider_quiz.score <  math.ceil(int(quiz.total_question)*(int(quiz.pass_score)*.01)):
+#         if provider_quiz.score <  math.ceil(int(exam.total_question)*(int(exam.pass_score)*.01)):
 
 #             provider_quiz.status = "fail"
 #         else:

@@ -2,6 +2,6 @@
 {% block content %}
 {% for exam in object_list%}
 
-<a href="{% url 'exams:exam_detail' exam.id  %}"> {{ exam }}</a>
+<a href="{% url 'exam_detail' exam.id  %}"> {{ exam }}</a>
 {% endfor %}
 {% endblock content %}

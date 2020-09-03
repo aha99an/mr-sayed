@@ -48,7 +48,8 @@ class StudentExam(models.Model):
 
 
 class EssayQuestion(models.Model):
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, related_name="essay_question")
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100)
@@ -68,7 +69,8 @@ class StudentEssayAnswer(models.Model):
 
 
 class TrueFalseQuestion(models.Model):
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, related_name="true_false_question")
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100)
@@ -100,7 +102,8 @@ class ChoiceQuestion(models.Model):
         (OPTION3, 'option3'),
         (OPTION4, 'option4'),
     )
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, related_name="choice_question")
     question = models.CharField(max_length=300, null=True, blank=True)
     image_question = models.ImageField(null=True, blank=True)
     option1 = models.CharField(max_length=300)

@@ -6,17 +6,37 @@
 <form method="post">
     {% csrf_token %}
     <p>{{question.question}}</p>
-    <input type="radio" name="answer" value="{{question.option1}}">
+    <input type="radio" name="answer" value="{{question.option1}}" {% if form.answer.value == question.option1 %}
+        checked{% endif %}>
     <label for="{{question.option1}}">1- {{question.option1}}</label><br>
-    <input type="radio" name="answer" value="{{question.option2}}">
+    <input type="radio" name="answer" value="{{question.option2}}" {% if form.answer.value == question.option2 %}
+        checked{% endif %}>
     <label for="{{question.option2}}">2- {{question.option2}}</label><br>
-    <input type="radio" name="answer" value="{{question.option3}}">
+    <input type="radio" name="answer" value="{{question.option3}}" {% if form.answer.value == question.option3 %}
+        checked{% endif %}>
     <label for="{{question.option3}}">3- {{question.option3}}</label><br>
-    <input type="radio" name="answer" value="{{question.option4}}">
+    <input type="radio" name="answer" value="{{question.option4}}" {% if form.answer.value == question.option4 %}
+        checked{% endif %}>
     <label for="{{question.option4}}">4- {{question.option4}}</label><br>
 
 
 
     <button type="submit">Answer</button>
 </form>
+
+
+<!-- {% for i,k in test.items %}
+number:{{i}}<br />
+url:{{k.url}}<br />
+question:{{k.question}}<br />
+{% endfor %} -->
+
+{% for i,k in all_questions.items %}
+<a href="{% url k.url k.question.exam.id k.question.id   %}"> question num {{i}}</a>
+
+<!-- number:{{i}}<br /> 
+url:{{k.url}}<br />
+question:{{k.question}}<br /> -->
+{% endfor %}
+
 {% endblock content %}

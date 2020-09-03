@@ -40,14 +40,14 @@
 							<li><a href="#">{{ user.username }}</a></li>
 							<li><a href="{% url 'logout' %}">Log out</a></li>
 							{% else %}
-							<li><a href="{% url 'login' %}" class="button primary">Log In</a></li>
+							<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
 							{% endif %}
 						</ul>
 					</nav>
 				</header>
 
 			<!-- Main -->
-				<div id="main" class="wrapper style1">
+				<div id="main" style="margin:  20px 00px 00px 00px;">
 					<div class="container">
 						<header class="major">
 							<!-- <h2>Elements</h2>
@@ -57,7 +57,7 @@
 						</header>
 
                         <!-- section -->
-                                <section>
+                                <section class=form-section>
                                     {% block content %}
                                     {% endblock %}
                                 </section>

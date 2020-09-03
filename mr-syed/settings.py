@@ -26,12 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
     # local apps
     'home',
-    'exams'
+    'accounts',
+    'exams',
+    # 3rd Party
+    # 'crispy_forms',
 ]
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -118,3 +121,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL='/media/'
 MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+

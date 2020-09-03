@@ -28,16 +28,12 @@ class Exam(models.Model):
         return self.name
 
 
-class StudentQuiz(models.Model):
-    # STATUS_CHOICES = (
-    #     ('pass', 'pass'),
-    #     ('fail', 'fail'),
-    #     ('incomplete', 'incomplete'),)
+class StudentExam(models.Model):
 
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     exam = models.ForeignKey(
-        Exam, on_delete=models.CASCADE, related_name="provider_quiz")
+        Exam, on_delete=models.CASCADE, related_name="student_exam")
     score = models.IntegerField(null=True, blank=True, default=0)
     answered_questions = models.IntegerField(null=True, blank=True, default=0)
     # status = models.CharField(
@@ -62,8 +58,8 @@ class EssayQuestion(models.Model):
 
 class StudentEssayAnswer(models.Model):
     question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
-    student_quiz = models.ForeignKey(
-        StudentQuiz, on_delete=models.CASCADE)
+    student_exam = models.ForeignKey(
+        StudentExam, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100, null=True, blank=True)
     image_answer = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True)
@@ -83,8 +79,8 @@ class TrueFalseQuestion(models.Model):
 
 class StudentTrueFalseAnswer(models.Model):
     question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
-    student_quiz = models.ForeignKey(
-        StudentQuiz, on_delete=models.CASCADE, null=True, blank=True)
+    student_exam = models.ForeignKey(
+        StudentExam, on_delete=models.CASCADE, null=True, blank=True)
     answer = models.BooleanField()
     # image_answer = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True)
@@ -121,9 +117,9 @@ class ChoiceQuestion(models.Model):
 
 
 class StudentChoiceAnswer(models.Model):
-    question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
-    student_quiz = models.ForeignKey(
-        StudentQuiz, on_delete=models.CASCADE)
+    question = models.ForeignKey(ChoiceQuestion, on_delete=models.CASCADE)
+    student_exam = models.ForeignKey(
+        StudentExam, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100, null=True, blank=True)
     # image_answer = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True)
@@ -180,12 +176,12 @@ class StudentChoiceAnswer(models.Model):
 # @receiver(post_save, sender=StudentAnswer)
 # def providerquiz_save(sender, instance, **kwargs):
 #     exam = Exam.objects.get(quiz_id=instance.provider_quiz.exam.quiz_id)
-#     provider_quiz = StudentQuiz.objects.get(id=instance.provider_quiz.id)
+#     provider_quiz = StudentExam.objects.get(id=instance.provider_quiz.id)
 #     if provider_quiz.answered_questions < exam.total_question:
 #         provider_quiz.status = "incomplete"
 #     else:
 #         try:
-#             current_try_number = StudentQuiz.objects.filter(exam=exam).filter(user_id=provider_quiz.user_id).exclude(id=StudentQuiz.id).last().try_number
+#             current_try_number = StudentExam.objects.filter(exam=exam).filter(user_id=provider_quiz.user_id).exclude(id=StudentExam.id).last().try_number
 #             provider_quiz.try_number = int(current_try_number)+1
 #         except:
 #             provider_quiz.try_number = 1

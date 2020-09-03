@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import TrainingListView, ExamDetailView
+from .views import ExamListView, ExamDetailView, ChoiceQuestionCreateView
 urlpatterns = [
-    path('', TrainingListView.as_view(), name='exam_list'),
+    path('', ExamListView.as_view(), name='exam_list'),
     path('exam/<int:pk>/', ExamDetailView.as_view(), name='exam_detail'),
+    path('choice/<int:exam_pk>/<int:question_pk>/', ChoiceQuestionCreateView.as_view(),
+         name="choice_question")
 
 ]
 app_name = 'exams'

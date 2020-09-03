@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>HELLO</h1>
+<!-- Choice questions -->
+
+<form method="post">
+    {% csrf_token %}
+    <p>{{question.question}}</p>
+    <input type="radio" name="answer" value="{{question.option1}}">
+    <label for="{{question.option1}}">1- {{question.option1}}</label><br>
+    <input type="radio" name="answer" value="{{question.option2}}">
+    <label for="{{question.option2}}">2- {{question.option2}}</label><br>
+    <input type="radio" name="answer" value="{{question.option3}}">
+    <label for="{{question.option3}}">3- {{question.option3}}</label><br>
+    <input type="radio" name="answer" value="{{question.option4}}">
+    <label for="{{question.option4}}">4- {{question.option4}}</label><br>
+
+
+
+    <button type="submit">Answer</button>
+</form>
+{% endblock content %}

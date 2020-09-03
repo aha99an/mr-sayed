@@ -1,8 +1,12 @@
-from django.views.generic import ListView, DetailView
-from .models import Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion, StudentExam
 from collections import OrderedDict
+from .forms import StudentChoiceAnswerForm
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 
-class TrainingListView(ListView):
+
+class ExamListView(ListView):
     model = Exam
     template_name = "exams/exam-list.html"
 
@@ -45,3 +49,37 @@ class ExamDetailView(DetailView):
         context["essay_qs"] = choice_essay_dict
         context["true_false_qs"] = true_false_qs_dict
         return context
+
+
+class ChoiceQuestionCreateView(CreateView):
+    template_name = 'exams/choice-question.html'
+    form_class = StudentChoiceAnswerForm
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["question"] = ChoiceQuestion.objects.get(id=self.kwargs.get(
+            "question_pk"), exam__id=self.kwargs.get("exam_pk"))
+        return ctx
+
+    def get_success_url(self):
+        # if self.request.method =="POST":
+        #         print ("hereeeeeeeeeeeeeeeeeeeeeeeeee")
+        #         formo = self.ExampleFormSet(self.request.POST)
+        #         instances = formo.save(commit=False)
+        #         for instance in instances:
+        #                 instance.save()
+        return reverse_lazy('home:home')
+
+    def form_valid(self, form):
+        print("HEIILOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        self.object = form.save(commit=False)
+        print(self.object)
+        self.object.question = ChoiceQuestion.objects.get(id=self.kwargs.get(
+            "question_pk"), exam__id=self.kwargs.get("exam_pk"))
+        self.object.student_exam = StudentExam.objects.get(
+            user=self.request.user, exam__id=self.kwargs.get("exam_pk"))
+        self.object.save()
+
+        # do something with self.object
+        # remember the import: from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(self.get_success_url())

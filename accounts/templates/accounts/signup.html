@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-{% block content %}
+{% block head %}
 <h2>Sign up</h2>
-<form method="post">
+{% endblock%}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
 {% csrf_token %}
-<h2>zebyyyyyyyyyyy</h2>
 {{ form.as_p }}
-<h2>zebyyyyyyyyyyyy2</h2>
-<button type="submit">Sign up</button>
+<button type="submit"  class="button primary">Sign up</button>
 </form>
 {% endblock content %}
+
+

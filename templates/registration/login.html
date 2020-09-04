@@ -2,8 +2,12 @@
 {% block content %}
 <h2>Log In</h2>
 <form method="post">
-    {{ form.as_p }}
-    {% csrf_token %}
-<button type="submit">Log In</button>
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit" class="button primary">Log In</button>
+<hr/>
+<div style="text-align: center";>
+<a href="{% url 'signup' %}" class="button primary">Create New Account</a>
+</div>
 </form>
 {% endblock content %}

@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
+
+
+
+{% block head %}
+<h2>Welcome to Mr-syed website</h2>
+
+{% endblock %}
+
+
+
+
 {% block content %}
-<h1>HOME</h1>
-<form method="post">
+<section>
+    <p>dadasa</p>
 {% csrf_token %}
 {{ form.as_p }}
-</form>
-{% endblock content %}
+<p1>{{zeby}}</p>
+</section>
+<hr />
+
+{% endblock %}

@@ -9,23 +9,21 @@ def check_size(value):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    parentPhoneNumber = forms.CharField(validators = [check_size,])
+    parentPhoneNumber = forms.CharField(validators = [check_size,], label ="Parent mobile")
+    phoneNumber = forms.CharField(validators = [check_size,], label ="Your mobile")
+    username = forms.EmailField(label ="email")
 
-    phoneNumber = forms.CharField(validators = [check_size,])
-#########################
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
-#########################
 
-    class Meta(UserCreationForm):
+    class Meta:
         model = CustomUser
      #  fields = UserCreationForm.Meta.fields +("school", "parentPhoneNumber", "phoneNumber", "profile_pic")
         # fields = UserCreationForm.Meta.fields
-        fields = ('username','first_name','last_name', 'email', 'school', "parentPhoneNumber", "phoneNumber", "profile_pic" )
-        
+        fields = ('username','first_name','last_name', 'school', "parentPhoneNumber", "phoneNumber", "profile_pic" )
 
 
 class CustomUserChangeForm(UserChangeForm):

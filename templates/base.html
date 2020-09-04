@@ -37,7 +37,7 @@
 							</li>
 							<li><a href="elements.html">Elements</a></li>
 							{% if user.is_authenticated %}
-							<li><a href="#">{{ user.username }}</a></li>
+							<li><a href="#">{{ user.first_name }}</a></li>
 							<li><a href="{% url 'logout' %}">Log out</a></li>
 							{% else %}
 							<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>

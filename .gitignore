@@ -1,6 +1,4 @@
 *.pyc
-/static
-/media
 .idea
 /notes.txt
 *.log

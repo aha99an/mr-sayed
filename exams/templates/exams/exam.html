@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>HELLO</h1>
+<!-- Choice questions -->
+{% if choice_qs %}
+{% for number, question in choice_qs.items %}
+{{number}}{{question}}<br>
+{% endfor %}
+{% endif %}
+
+<!-- essay questions -->
+{% if essay_qs %}
+{% for number, question in essay_qs.items %}
+{{number}}{{question}}<br>
+{% endfor %}
+{% endif %}
+
+<!-- true-false questions -->
+{% if true_false_qs %}
+{% for number, question in true_false_qs.items %}
+{{number}}{{question}}<br>
+{% endfor %}
+{% endif %}
+
+
+{% endblock content %}

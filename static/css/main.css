@@ -2180,7 +2180,7 @@ input, select, textarea {
 	}
 
 	header.major {
-		margin: 0 0 2em 0;
+		margin: 0 0 .5em 0;
 		position: relative;
 		text-align: center;
 	}
@@ -2901,6 +2901,8 @@ input, select, textarea {
 			background-color: #3a37f0;
 			box-shadow: none;
 			color: #ffffff !important;
+			padding: 0px 10px 10px 10px;
+			
 		}
 
 			input[type="submit"].primary:hover,
@@ -3794,7 +3796,7 @@ input, select, textarea {
 			}
 
 			header.major {
-				margin: 0 0 2em 0;
+				margin: 0 0 0em 0;
 			}
 
 		/* Goto Next */
@@ -4109,9 +4111,3 @@ input, select, textarea {
 					}
 
 	}
-
-
-	.form-section {
-		margin:0px 200px 0px 200px;
-	}
-	

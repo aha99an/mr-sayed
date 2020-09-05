@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{exam.name}}</h2>
+{% endblock %}
+{% block content %}
+<script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+<!-- Timer -->
+
+<h2 style=" text-align: center; " id="demo">{{exam.exam_time}}</h2>
+
+<br>
+
+<!-- Question -->
+{% if question_content.question.question %}
+
+<h3>{{question_content.question.question}}</h3>
+
+<br>
+{% endif %}
+{% if question_content.question.image_question %}
+<span class="image fit">
+    <img src="{{ question_content.question.image_question.url}}" alt={{ question_content.question.question }}>
+</span>
+{% endif %}
+
+
+<!-- Choice form -->
+{% if question_content.type == "choice_question"%}
+<form method="post">
+    {% csrf_token %}
+
+
+    <div class="col-4 col-12-medium">
+        <input type="radio" name="answer" id="{{question_content.question.option1}}"
+            value="{{question_content.question.option1}}"
+            {% if form.answer.value == question_content.question.option1 %} checked{% endif %}>
+        <label for="{{question_content.question.option1}}">1- {{question_content.question.option1}}</label><br>
+    </div>
+    <div class="col-4 col-12-medium">
+        <input type="radio" name="answer" id="{{question_content.question.option2}}"
+            value="{{question_content.question.option2}}"
+            {% if form.answer.value == question_content.question.option2 %} checked{% endif %}>
+        <label for="{{question_content.question.option2}}">2- {{question_content.question.option2}}</label><br>
+    </div>
+    <div class="col-4 col-12-medium">
+        <input type="radio" name="answer" id="{{question_content.question.option3}}"
+            value="{{question_content.question.option3}}"
+            {% if form.answer.value == question_content.question.option3 %} checked{% endif %}>
+        <label for="{{question_content.question.option3}}">3- {{question_content.question.option3}}</label><br>
+    </div>
+    <div class="col-4 col-12-medium">
+        <input type="radio" name="answer" id="{{question_content.question.option4}}"
+            value="{{question_content.question.option4}}"
+            {% if form.answer.value == question_content.question.option4 %} checked{% endif %}>
+        <label for="{{question_content.question.option4}}">4- {{question_content.question.option4}}</label><br>
+
+    </div>
+
+    <button type="submit" class="button primary"
+        style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%"
+        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">answer</button>
+
+</form>
+<!-- onclick="return confirm('تسليم الامتحان والخروج؟'); -->
+
+{% endif%}
+
+
+
+
+<!-- essay form -->
+{% if question_content.type == "essay_question"%}
+<form method="post" enctype="multipart/form-data" class="md-form">
+    {% csrf_token %}
+
+
+    <div class="col-12">
+        <textarea name="answer" id="demo-message" placeholder="اكتب اجابة السؤال او قم برفع صورة للاجابة"
+            rows="6">{% if form.answer.value %}{{form.answer.value }}{% endif %}</textarea>
+    </div>
+    <br>
+    {{form.image_answer}}
+    <br><br>
+    <button type="submit" class="button primary"
+        style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">answer</button>
+    <!-- onclick="return confirm('تسليم الامتحان والخروج؟'); -->
+</form>
+{% endif %}
+<!-- <a href="{% url 'exam_list' %}" onclick="return confirm('تسليم الامتحان والخروج؟');"> -->
+<a href="#" onclick="myFunction()">
+
+    <button type="submit" class="button primary"
+        style="background-color: #ff0000; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">End exam</button>
+</a>
+<br><br>
+<!-- questions table -->
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question_number,question_content in all_questions.items %}
+            <tr>
+
+                <td>
+                    <a href="{% url 'question' question_content.question.exam.id question_number   %}">
+                        <button type="button" class="button primary">question {{question_number}}</button>
+                    </a>
+                </td>
+                <td>
+                    <span style="color:yellow;">{{question_content.answered}}</span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+    <script>
+        // alert message on end exam
+        function finishFunction() {
+            var last_question_id = "{{all_questions|length}}"
+            var question_id = "question_id"
+            console.log(last_question_id)
+            console.log(question_id)
+            swal({
+                title: 'تسليم الامتحان والخروج؟',
+                // text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم',
+                cancelButtonText: "لا"
+            }).then((result) => {
+                if (result.value) {
+
+                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 2000);
+                    swal(
+                        'تم تسليم الامتحان بنجاح',
+
+                    )
+                }
+            })
+        }
+
+        function myFunction() {
+            swal({
+                title: 'تسليم الامتحان والخروج؟',
+                // text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم',
+                cancelButtonText: "لا"
+            }).then((result) => {
+                if (result.value) {
+
+                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 2000);
+                    swal(
+                        'تم تسليم الامتحان بنجاح',
+
+                    )
+                }
+            })
+        }
+        // Timer
+        var started = new Date("{{ student_exam.created_at.isoformat }}")
+        var finish = new Date(started.getTime() + "{{ exam.time_quiz }}" * 60 * 1000);
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = finish - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("demo").innerHTML = hours + "h "
+                + minutes + "m " + seconds + "s ";
+
+            // If the count down is over, write some text 
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "انتهى الوقت";
+                setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 2000);
+                swal(
+                    "انتهى الوقت, وقد تم تسليم الاسئلة المجابة",
+
+                )
+            }
+        }, 1000);
+    </script>
+    {% endblock content %}

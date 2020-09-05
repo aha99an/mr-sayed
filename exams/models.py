@@ -14,7 +14,7 @@ class Exam(models.Model):
     is_active = models.BooleanField(default=True)
     total_question = models.IntegerField(default=0)
     score = models.DecimalField(max_digits=10, default=0, decimal_places=2)
-    time_quiz = models.IntegerField(default=0)
+    time_quiz = models.IntegerField(default=0, help_text="In minutes")
     mandatory = models.BooleanField(default=False)
     max_tries = models.IntegerField(default=1)
     availabe_from = models.DateTimeField(blank=True, null=True)
@@ -40,8 +40,8 @@ class StudentExam(models.Model):
     #     max_length=100, choices=STATUS_CHOICES, blank=True, null=True)
     try_number = models.IntegerField(null=True, blank=True, default=0)
     # is_reset = models.BooleanField(default=False, null=True, blank=True)
-    created_at = models.DateTimeField(editable=False, null=True, blank=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.exam.name + " " + self.user.username
@@ -58,33 +58,12 @@ class EssayQuestion(models.Model):
 
 
 class StudentEssayAnswer(models.Model):
-    question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        EssayQuestion, on_delete=models.CASCADE, related_name="student_essay_answer")
     student_exam = models.ForeignKey(
         StudentExam, on_delete=models.CASCADE)
-    answer = models.CharField(max_length=100, null=True, blank=True)
+    answer = models.TextField(max_length=100, null=True, blank=True)
     image_answer = models.ImageField(null=True, blank=True)
-    grade = models.FloatField(max_length=100, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class TrueFalseQuestion(models.Model):
-    exam = models.ForeignKey(
-        Exam, on_delete=models.CASCADE, related_name="true_false_question")
-    question = models.CharField(max_length=300, null=True, blank=True)
-    image_question = models.ImageField(null=True, blank=True)
-    grade = models.FloatField(max_length=100)
-    right_answer = models.BooleanField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class StudentTrueFalseAnswer(models.Model):
-    question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
-    student_exam = models.ForeignKey(
-        StudentExam, on_delete=models.CASCADE, null=True, blank=True)
-    answer = models.BooleanField()
-    # image_answer = models.ImageField(null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -120,7 +99,8 @@ class ChoiceQuestion(models.Model):
 
 
 class StudentChoiceAnswer(models.Model):
-    question = models.ForeignKey(ChoiceQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        ChoiceQuestion, on_delete=models.CASCADE, related_name="student_choice_answer")
     student_exam = models.ForeignKey(
         StudentExam, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100, null=True, blank=True)
@@ -129,6 +109,27 @@ class StudentChoiceAnswer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+class TrueFalseQuestion(models.Model):
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, related_name="true_false_question")
+    question = models.CharField(max_length=300, null=True, blank=True)
+    image_question = models.ImageField(null=True, blank=True)
+    grade = models.FloatField(max_length=100)
+    right_answer = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class StudentTrueFalseAnswer(models.Model):
+    question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
+    student_exam = models.ForeignKey(
+        StudentExam, on_delete=models.CASCADE, null=True, blank=True)
+    answer = models.BooleanField()
+    # image_answer = models.ImageField(null=True, blank=True)
+    grade = models.FloatField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 # class QuizQuestion(models.Model):
 

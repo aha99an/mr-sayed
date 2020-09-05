@@ -53,4 +53,7 @@ class StudentHomeworkFile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def snippet_file_name(self):
-        return self.student_homework_file.name[:100] + "..."
+        if len(self.student_homework_file.name) > 20:
+            return self.student_homework_file.name[:20] + "..."
+        else:
+            return self.student_homework_file.name

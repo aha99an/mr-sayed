@@ -116,12 +116,14 @@ class HomeworkMultipleUpdateView(FormView):
         return ctx
 
     def get_success_url(self):
-        return reverse_lazy("homework_list")
+        return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})
 
 
 class UploadedFileDeleteView(DeleteView):
     model = StudentHomeworkFile
-    success_url = reverse_lazy('homework', kwargs={"homework_pk": 1})
 
     def get_object(self):
-        return StudentHomeworkFile.objects.get(id=self.kwargs.get("home_work_answer_file_pk"))
+        return StudentHomeworkFile.objects.get(id=self.kwargs.get("file_pk"))
+
+    def get_success_url(self):
+        return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})

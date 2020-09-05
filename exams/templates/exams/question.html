@@ -162,10 +162,11 @@
             }).then((result) => {
                 if (result.value) {
 
-                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 2000);
-                    swal(
-                        'تم تسليم الامتحان بنجاح',
-
+                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 3000);
+                    swal({
+                        type: 'success',
+                        text: 'تم تسليم الامتحان بنجاح'
+                    }
                     )
                 }
             })

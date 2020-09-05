@@ -60,14 +60,14 @@ class ExamListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        all_exams = OrderedDict()
-        exams = Exam.objects.filter(is_active=True)
+        all_exams = []
+        exams = self.get_queryset()
         for i in exams:
             answered = "not answered yet"
             if i.student_exam.all():
                 answered = "answered"
-            all_exams["exam"] = {"exam": i,
-                                 "answered": answered}
+            all_exams.append({"exam": i,
+                              "answered": answered})
         ctx["exams"] = all_exams
         if self.request.session.get('exam_time_expired'):
             ctx["exam_time_expired"] = True

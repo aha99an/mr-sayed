@@ -11,7 +11,7 @@ def check_size(value):
 class CustomUserCreationForm(UserCreationForm):
     parentPhoneNumber = forms.CharField(validators = [check_size,], label ="Parent mobile")
     phoneNumber = forms.CharField(validators = [check_size,], label ="Your mobile")
-    username = forms.EmailField(label ="email")
+    username = forms.EmailField(label ="E-mail")
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)

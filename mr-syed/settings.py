@@ -30,8 +30,7 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'exams',
-    # 3rd Party
-    # 'crispy_forms',
+    'questions',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 

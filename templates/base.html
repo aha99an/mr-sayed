@@ -1,50 +1,58 @@
 {% load static %}
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Elements - Landed by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
-	</head>
-	<body class="is-preload">
-        
-		<div id="page-wrapper">
-            
-			<!-- Header -->
-				<header id="header">
-					<h1 id="logo"><a href="{% url 'home' %}">Mr. Sayed Abdelhamed </a></h1>
-					<nav id="nav">
+
+<head>
+	<title>Mr.sayed website</title>
+	<meta charset="utf-8" />
+	<script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+		integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+	<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+	<noscript>
+		<link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+</head>
+
+<body class="is-preload">
+
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<h1 id="logo"><a href="{% url 'home' %}">Mr. Sayed Abdelhamed </a></h1>
+			<nav id="nav">
+				<ul>
+					<li><a href="{% url 'home' %}">Home</a></li>
+					<li>
+						<a href="#">Layouts</a>
 						<ul>
-							<li><a href="{% url 'home' %}">Home</a></li>      
+							<li><a href="left-sidebar.html">Left Sidebar</a></li>
+							<li><a href="right-sidebar.html">Right Sidebar</a></li>
+							<li><a href="no-sidebar.html">No Sidebar</a></li>
 							<li>
-								<a href="#">Layouts</a>
+								<a href="#">Submenu</a>
 								<ul>
-									<li><a href="left-sidebar.html">Left Sidebar</a></li>
-									<li><a href="right-sidebar.html">Right Sidebar</a></li>
-									<li><a href="no-sidebar.html">No Sidebar</a></li>
-									<li>
-										<a href="#">Submenu</a>
-										<ul>
-											<li><a href="#">Option 1</a></li>
-											<li><a href="#">Option 2</a></li>
-											<li><a href="#">Option 3</a></li>
-											<li><a href="#">Option 4</a></li>
-										</ul>
-									</li>
+									<li><a href="#">Option 1</a></li>
+									<li><a href="#">Option 2</a></li>
+									<li><a href="#">Option 3</a></li>
+									<li><a href="#">Option 4</a></li>
 								</ul>
 							</li>
-							<li><a href="elements.html">Elements</a></li>
-							{% if user.is_authenticated %}
-							<li><a href="#">{{ user.first_name }}</a></li>
-							<li><a href="{% url 'logout' %}">Log out</a></li>
-							{% else %}
-							<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
-							{% endif %}
 						</ul>
-					</nav>
-				</header>
+					</li>
+					<li><a href="{% url 'exam_list' %}">exams</a></li>
+					{% if user.is_authenticated %}
+					<li><a href="#">{{ user.first_name }}</a></li>
+					<li><a href="{% url 'logout' %}">Log out</a></li>
+					{% else %}
+					<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+		</header>
 
 			<!-- Main -->
 				<div id="main" class="wrapper style">
@@ -65,33 +73,44 @@
 					</div>
 				</div>
 
-			<!-- Footer -->
-				<footer id="footer">
-					<ul class="icons">
-					<!--	<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li> -->
-						<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<!-- <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
-						<!--  <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
-						<!--  <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>-->
-						<!--  <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>-->
-					</ul>
-					<ul class="copyright">
-						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</footer>
+				<!-- section -->
+				<section>
+					{% block content %}
+					{% endblock %}
+				</section>
 
+			</div>
 		</div>
 
-        <!-- Scripts -->
-			<script src=  "{% static 'js/jquery.min.js' %}"></script>
-			<script src=  "{% static 'js/jquery.scrolly.min.js' %}"></script>
-			<script src=  "{% static 'js/jquery.dropotron.min.js' %}"></script>
-			<script src=  "{% static 'js/jquery.scrollex.min.js' %}"></script>
-			<script src=  "{% static 'js/browser.min.js' %}"></script>
-			<script src=  "{% static 'js/breakpoints.min.js' %}"></script>
-			<script src=  "{% static 'js/util.js' %}"></script>
-			<script src=  "{% static 'js/main.js' %}"></script>
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="icons">
+				<!--	<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li> -->
+				<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<!-- <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+				<!--  <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+				<!--  <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>-->
+				<!--  <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>-->
+			</ul>
+			<ul class="copyright">
+				<li>&copy; Untitled. All rights reserved.</li>
+				<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+			</ul>
+		</footer>
 
-        
-	</body>
+	</div>
+
+	<!-- Scripts -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+	<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
+	<script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
+	<script src="{% static 'js/browser.min.js' %}"></script>
+	<script src="{% static 'js/breakpoints.min.js' %}"></script>
+	<script src="{% static 'js/util.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+
+
+</body>
+
 </html>

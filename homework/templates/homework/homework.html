@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{homework.name}}</h2>
+{% endblock %}
+{% block content %}
+{% if homework_notebook %}
+{% for assignment in homework_notebook %}
+<p style="text-align: right; color: lightblue;">
+    {{assignment.homework_text}}
+</p>
+{% endfor %}
+{% endif %}
+{% if homework_questions %}
+{% for question in homework_questions %}
+{% if question.extension in image_extensions %}
+<span class="image fit">
+    <a href="{{ question.homework_file.url }}">
+        <img src="{{ question.homework_file.url}}">
+    </a>
+</span>
+{% else %}
+<h3>Homework files</h3>
+
+<a href="{{ question.homework_file.url }}" style="color: lightblue;">
+    {{question.homework_file.name}}
+
+</a>
+<br><br><br>
+{% endif %}
+{% endfor %}
+{% endif %}
+<!-- uploaded files -->
+
+{% if uploaded_files %}
+<h3>Uploaded files</h3>
+<br>
+<div class="table-responsive table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <h4>Name</h4>
+                </th>
+                <th scope="col" style="text-align: center;">
+                    <h4>Delete</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in uploaded_files %}
+            <tr>
+
+                <td>
+                    <a href="{{file.student_homework_file.url}}"
+                        style="color: lightblue;">{{file.snippet_file_name}}</a>
+
+                </td>
+                <td style="text-align: center;">
+                    <span>
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'delete_file' homework.id file.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; Delete &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+    {% endif %}
+
+
+    <form method="post" enctype="multipart/form-data" class="md-form">
+        {% csrf_token %}
+
+        {{form}}
+        <br><br>
+        <button type="submit" class="button primary"
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">submit</button>
+    </form>
+
+    <!-- <a href="{% url 'exam_list' %}" onclick="return confirm('تسليم الامتحان والخروج؟');"> -->
+
+
+    {% endblock content %}

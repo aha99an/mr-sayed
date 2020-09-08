@@ -104,10 +104,17 @@ class StudentChoiceAnswer(models.Model):
     student_exam = models.ForeignKey(
         StudentExam, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100, null=True, blank=True)
-    # image_answer = models.ImageField(null=True, blank=True)
-    grade = models.FloatField(max_length=100, null=True, blank=True)
+    grade = models.FloatField(max_length=100, null=True, blank=True, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        answers_list = [self.question.option1, self.question.option2,
+                        self.question.option3, self.question.option4]
+
+        if self.answer == answers_list[self.question.right_answer_choice]:
+            self.grade = self.question.grade
+        super(StudentChoiceAnswer, self).save(*args, **kwargs)
 
 
 class TrueFalseQuestion(models.Model):

@@ -2,12 +2,13 @@
 {% block content %}
 <h2>Log In</h2>
 <form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit" class="button primary">Log In</button>
-<hr/>
-<div style="text-align: center";>
-<a href="{% url 'signup' %}" class="button primary">Create New Account</a>
-</div>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button primary">Log In</button>
+    <a href="{% url 'password_reset' %}" style="display: inline-block;">Forget Password?</a>
+    <hr />
+    <div style="text-align: center" ;>
+        <a href="{% url 'signup' %}" class="button primary">Create New Account</a>
+    </div>
 </form>
 {% endblock content %}

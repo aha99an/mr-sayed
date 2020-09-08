@@ -12,13 +12,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for key,exam in exams.items %}
+            {% for exam in exams %}
 
             <tr>
 
                 <td>
 
-                    <a href="{% url 'question' exam.exam.id 1 %}"> {{ exam.exam }}</a>
+                    <a href="{% url 'question' exam.exam.id 1 %}" style="color: lightblue;"> {{ exam.exam }}</a>
                 </td>
                 <td>
                     <span style="color:yellow;">{{ exam.answered }}</span>

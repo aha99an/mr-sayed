@@ -82,8 +82,9 @@
     {{form.image_answer}}
     <br><br>
     <button type="submit" class="button primary"
-        style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">answer</button>
-    <!-- onclick="return confirm('تسليم الامتحان والخروج؟'); -->
+        style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%"
+        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">answer</button>
+
 </form>
 {% endif %}
 <!-- <a href="{% url 'exam_list' %}" onclick="return confirm('تسليم الامتحان والخروج؟');"> -->
@@ -100,6 +101,7 @@
             <tr>
                 <th>Name</th>
                 <th>Status</th>
+                <th>Grade</th>
             </tr>
         </thead>
         <tbody>
@@ -113,6 +115,9 @@
                 </td>
                 <td>
                     <span style="color:yellow;">{{question_content.answered}}</span>
+                </td>
+                <td>
+                    <span style="color:yellow;">{{question_content.question.grade|floatformat}}</span>
                 </td>
 
             </tr>
@@ -162,10 +167,11 @@
             }).then((result) => {
                 if (result.value) {
 
-                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 2000);
-                    swal(
-                        'تم تسليم الامتحان بنجاح',
-
+                    setTimeout(() => { location.replace("{% url 'exam_list' %}"); }, 3000);
+                    swal({
+                        type: 'success',
+                        text: 'تم تسليم الامتحان بنجاح'
+                    }
                     )
                 }
             })

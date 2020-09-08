@@ -10,5 +10,5 @@ class CustomUser(AbstractUser):
     profile_pic = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.email= self.username
+        self.email = self.username
         super(CustomUser, self).save(*args, **kwargs)

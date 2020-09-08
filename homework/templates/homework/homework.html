@@ -3,6 +3,13 @@
 <h2>{{homework.name}}</h2>
 {% endblock %}
 {% block content %}
+{% if homework_notebook %}
+{% for assignment in homework_notebook %}
+<p style="text-align: right; color: lightblue;">
+    {{assignment.homework_text}}
+</p>
+{% endfor %}
+{% endif %}
 {% if homework_questions %}
 {% for question in homework_questions %}
 {% if question.extension in image_extensions %}
@@ -24,6 +31,7 @@
 {% endif %}
 <!-- uploaded files -->
 
+{% if uploaded_files %}
 <h3>Uploaded files</h3>
 <br>
 <div class="table-responsive table-wrapper">
@@ -65,7 +73,7 @@
         <tfoot>
 
     </table>
-
+    {% endif %}
 
 
     <form method="post" enctype="multipart/form-data" class="md-form">

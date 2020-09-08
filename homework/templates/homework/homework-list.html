@@ -18,10 +18,16 @@
 
                 <td>
 
-                    <a href="{% url 'homework' homework.homework.id %}"> {{ homework.homework }}</a>
+                    <a style="color: lightblue;" href="{% url 'homework' homework.homework.id %}">
+                        {{ homework.homework }}</a>
                 </td>
                 <td>
-                    <span style="color:yellow;">{{ homework.answered }}</span>
+
+                    {% if homework.answered == "answered" %}
+                    &nbsp&nbsp<div class="check"></div>
+                    {% else %}
+                    &#10060;
+                    {% endif %}
                 </td>
 
             </tr>

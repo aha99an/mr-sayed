@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
-
+{% load staticfiles%}
 
 
 {% block head %}
-<h2>Welcome to Mr-syed website</h2>
+<style>
 
+</style>
+<h2>Welcome to Mr-syed website</h2>
+<!-- <div style="mix-blend-mode: multiply;
+">
+    <img src="{% static 'css/images/check-mark-html-done-icon-11563029359rpmvepeinu.png' %}">
+</div> -->
 {% endblock %}
 
 
@@ -12,10 +18,8 @@
 
 {% block content %}
 <section>
-    <p>dadasa</p>
-{% csrf_token %}
-{{ form.as_p }}
-<p1>{{zeby}}</p>
+    {% csrf_token %}
+    {{ form.as_p }}
 </section>
 <hr />
 

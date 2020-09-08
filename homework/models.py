@@ -27,6 +27,14 @@ class HomeworkFile(models.Model):
         return extension
 
 
+class HomeworkNotebook(models.Model):
+    homework = models.ForeignKey(
+        Homework, on_delete=models.CASCADE, related_name="homework_notebook")
+    homework_text = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class HomeworkAnswerFile(models.Model):
     homework = models.ForeignKey(
         Homework, on_delete=models.CASCADE, related_name="homework_answer_file")

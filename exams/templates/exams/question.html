@@ -114,7 +114,12 @@
                     </a>
                 </td>
                 <td>
-                    <span style="color:yellow;">{{question_content.answered}}</span>
+                    
+                    {% if question_content.answered == "answered" %}
+                    &nbsp&nbsp<div class="check"></div>
+                    {% else %}
+                    &#10060;
+                    {% endif %}
                 </td>
                 <td>
                     <span style="color:yellow;">{{question_content.question.grade|floatformat}}</span>

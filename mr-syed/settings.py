@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'exams',
     "classes",
     "homework",
+    "lectures",
     # 3rd Party
     # 'crispy_forms',
 ]

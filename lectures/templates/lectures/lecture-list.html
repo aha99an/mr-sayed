@@ -1,32 +1,33 @@
 {% extends 'base.html' %}
 {% block head %}
-<h2>Exams</h2>
+<h2>Lectures</h2>
 {% endblock %}{% block content %}
 
 <div class="table-wrapper">
     <table>
         <thead>
             <tr>
-                <th>exam</th>
-                <th>Status</th>
+                <th>المحاضرة</th>
+                <th>المشاهدة؟</th>
             </tr>
         </thead>
         <tbody>
-            {% for exam in exams %}
+            {% for lecture in object_list %}
 
             <tr>
 
                 <td>
-                        
-                    <a href="{% url 'question' exam.exam.id 1 %}" style="color: lightblue;"> {{ exam.exam }}</a>
+
+                    <a style="color: lightblue;" href="{% url 'lecture' lecture.id %}">
+                        {{ lecture.name }}</a>
                 </td>
                 <td>
-                    &nbsp&nbsp
-                    {% if exam.answered == "answered" %}
-                    <div class="check"></div>
+                    &#10060;
+                    <!-- {% if homework.answered == "answered" %}
+                    &nbsp&nbsp<div class="check"></div>
                     {% else %}
                     &#10060;
-                    {% endif %}
+                    {% endif %} -->
                 </td>
 
             </tr>

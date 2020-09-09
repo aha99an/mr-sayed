@@ -41,7 +41,6 @@ class HomeworkMultipleUpdateView(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.homwork = Homework.objects.get(id=self.kwargs.get("homework_pk"))
-        print(self.kwargs.get("homework_pk"), "HHHHHHHHHHHHHHHHHHHHHHH")
         self.student_homework, created = StudentHomework.objects.get_or_create(
             homework=self.homwork, user=self.request.user)
         return super().dispatch(request, *args, **kwargs)
@@ -49,13 +48,8 @@ class HomeworkMultipleUpdateView(FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        print(form)
-        # print(request.FILES)
         files = request.FILES.getlist('student_homework_file')
-        print(files)
-        # student_homework = StudentHomework.objects.filter(
-        #     homework__id=self.kwargs.get("homework_pk"), user=self.request.user).last()
-        # print(student_homework, "HHHHHHHHHHHHHHHHHHHHH")
+
         if form.is_valid():
             for f in files:
                 StudentHomeworkFile.objects.create(
@@ -69,7 +63,7 @@ class HomeworkMultipleUpdateView(FormView):
         ctx = super().get_context_data(*args, **kwargs)
         homework = Homework.objects.get(id=self.kwargs.get("homework_pk"))
         homework_questions = homework.homework_file.all()
-        print("HHHHHHHHHHHHH", homework.homework_notebook.all())
+
         student_homework = StudentHomework.objects.filter(
             homework__id=self.kwargs.get("homework_pk"), user=self.request.user).last()
 

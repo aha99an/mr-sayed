@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+<h2>{{request.user.username}}</h2>
+{% endblock %}
+{% block content %}
+
+<div class="row profile">
+    <div class="col-md-3 col-md-push-9">
+        <div class="profile-sidebar">
+            <!-- SIDEBAR USERPIC -->
+            <img style=" border: 2px solid lightblue;
+            border-radius: 20px;" src=" {% static 'css/IMG_20200904_173329.jpg' %}"
+                class="img-rounded img-responsive" alt="">
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    <!-- <img class="img-thumbnail" src="{% static 'css/IMG_20200904_173329.jpg' %}"> -->
+
+                </div>
+                <!-- <div class="profile-usertitle-job">
+                    Developer
+                </div> -->
+            </div>
+            <!-- END SIDEBAR USER TITLE -->
+            <!-- SIDEBAR BUTTONS -->
+            <!-- <div class="profile-userbuttons">
+                <button type="button" class="btn btn-success btn-sm">Follow</button>
+                <button type="button" class="btn btn-danger btn-sm">Message</button>
+            </div> -->
+            <!-- END SIDEBAR BUTTONS -->
+            <!-- SIDEBAR MENU -->
+            <div class="profile-usermenu">
+                <ul class="nav">
+                    <li>
+                        <a style="text-align: right; " href="{% url 'password_change' %}">
+                            تغيير الباسورد &nbsp;
+                            <i class="glyphicon glyphicon-user"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <div
+                            style="text-align: right; display:block; padding:10px 15px; color: white; border-bottom: dotted 1px;">
+                            {{ request.user.student_class}} &nbsp;
+                            <i class="glyphicon glyphicon-ok"></i>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- END MENU -->
+        </div>
+        <br />
+    </div>
+
+    <!-- Body -->
+    <div class="col-md-9 col-sm-12 col-md-pull-3">
+        <div class="profile-content">
+
+            <!-- Exams -->
+            <div class="table-wrapper">
+                <table DIR="RTL">
+                    <thead>
+                        <tr>
+                            <th>الامتحان</th>
+                            <th>الدرجة</th>
+                            <th>نموذج الاجابة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for exam in student_exams %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'question' exam.exam.id 1 %}"
+                                    style="color: lightblue;">
+                                    {{ exam.exam }}</a>
+                            </td>
+                            <td>
+                                {% if exam.is_graded %}
+                                {{exam.exam.grade|floatformat}}/{{exam.grade|floatformat}}
+                                {% else %}
+                                جاري تصحيح الامتحان
+                                {% endif %}
+                            </td>
+                            {% if exam.exam.answer %}
+                            <td>
+
+                                <a href="{{exam.exam.answer.url}}" download>
+                                    <button type="button" class="button primary">تنزيل نموذج
+                                        الاجابة</button>
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+
+                        <!-- {{exam.exam}}
+                                {{exam.grade}} -->
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

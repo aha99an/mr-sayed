@@ -1,26 +1,34 @@
 from django.db import models
-from django.db.models.signals import post_save, pre_save
 from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 import math
 from django.utils import timezone
 from accounts.models import CustomUser
+from datetime import timedelta
 
 
 class Exam(models.Model):
+    CHOICE_EXAM = 0
+    VARIETY_EXAM = 1
 
+    EXAM_TYPE_CHOICES = (
+        (CHOICE_EXAM, 'امتحان اختياري'),
+        (VARIETY_EXAM, 'امتحان اختياري و مقالي'),
+    )
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
-    is_active = models.BooleanField(default=True)
     total_question = models.IntegerField(default=0)
-    score = models.DecimalField(max_digits=10, default=0, decimal_places=2)
-    time_quiz = models.IntegerField(default=0, help_text="In minutes")
-    mandatory = models.BooleanField(default=False)
-    max_tries = models.IntegerField(default=1)
-    availabe_from = models.DateTimeField(blank=True, null=True)
-    availabe_to = models.DateTimeField(blank=True, null=True)
+    grade = models.DecimalField(max_digits=10, default=0, decimal_places=1)
+    time = models.IntegerField(default=0, help_text="In minutes")
+    exam_type = models.IntegerField(
+        choices=EXAM_TYPE_CHOICES, default=0)
+    # mandatory = models.BooleanField(default=False)
+    # max_tries = models.IntegerField(default=1)
+    # availabe_from = models.DateTimeField(blank=True, null=True)
+    # availabe_to = models.DateTimeField(blank=True, null=True)
     answer = models.FileField(blank=True, null=True)
     show_answer = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -34,11 +42,14 @@ class StudentExam(models.Model):
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     exam = models.ForeignKey(
         Exam, on_delete=models.CASCADE, related_name="student_exam")
-    score = models.IntegerField(null=True, blank=True, default=0)
+    grade = models.DecimalField(
+        max_digits=4, decimal_places=1, null=True, blank=True)
     answered_questions = models.IntegerField(null=True, blank=True, default=0)
+    is_graded = models.BooleanField(default=False)
+    expiry_time = models.DateTimeField(null=True, blank=True)
     # status = models.CharField(
     #     max_length=100, choices=STATUS_CHOICES, blank=True, null=True)
-    try_number = models.IntegerField(null=True, blank=True, default=0)
+    # try_number = models.IntegerField(null=True, blank=True, default=0)
     # is_reset = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,6 +66,11 @@ class EssayQuestion(models.Model):
     grade = models.FloatField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.exam.exam_type = Exam.VARIETY_EXAM
+        self.exam.save()
+        super(EssayQuestion, self).save(*args, **kwargs)
 
 
 class StudentEssayAnswer(models.Model):
@@ -137,68 +153,3 @@ class StudentTrueFalseAnswer(models.Model):
     grade = models.FloatField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-# class QuizQuestion(models.Model):
-
-#     TRUE_FALSE_Q = 0
-#     MCQ_Q = 1
-#     ESSAY_Q = 2
-
-#     Question_type = (
-#         (TRUE_FALSE_Q, 'True & False'),
-#         (MCQ_Q, 'MCQ'),
-#         (ESSAY_Q, '')
-#     )
-
-#     Question_Answer = (
-#         (1, 'Option1'),
-#         (2, 'Option2'),
-#         (3, 'Option3'),
-#         (4, 'Option4'),
-#     )
-#     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-#     question = models.CharField(max_length=300)
-#     option1 = models.CharField(max_length=300, null=True, blank=True)
-#     option2 = models.CharField(max_length=300, null=True, blank=True)
-#     option3 = models.CharField(max_length=300, null=True, blank=True)
-#     option4 = models.CharField(max_length=300, null=True, blank=True)
-#     right_answer_choice = models.IntegerField(choices=Question_Answer)
-#     right_answer_essay = models.TextField(blank=True, null=True)
-#     right_answer_tr_fa = models.BooleanField(
-#         default=False, null=True, blank=True)
-#     question_type = models.IntegerField(choices=Question_type)
-#     created_date = models.DateTimeField(auto_now_add=True)
-#     update_date = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.question
-
-
-# # update the exam total_question number every time a question is added
-# @receiver(post_save, sender=QuizQuestion)
-# def question_save(sender, instance, **kwargs):
-#     exam = Exam.objects.get(quiz_id=instance.quiz_id.quiz_id)
-#     exam.total_question = exam.quizquestion_set.all().filter(status=True).count()
-#     exam.score = exam.total_question
-#     # exam.pass_score = math.ceil(int(exam.total_question)*.8)
-#     exam.save()
-
-# # Change provider exam status, count number of tries
-# @receiver(post_save, sender=StudentAnswer)
-# def providerquiz_save(sender, instance, **kwargs):
-#     exam = Exam.objects.get(quiz_id=instance.provider_quiz.exam.quiz_id)
-#     provider_quiz = StudentExam.objects.get(id=instance.provider_quiz.id)
-#     if provider_quiz.answered_questions < exam.total_question:
-#         provider_quiz.status = "incomplete"
-#     else:
-#         try:
-#             current_try_number = StudentExam.objects.filter(exam=exam).filter(user_id=provider_quiz.user_id).exclude(id=StudentExam.id).last().try_number
-#             provider_quiz.try_number = int(current_try_number)+1
-#         except:
-#             provider_quiz.try_number = 1
-#         if provider_quiz.score <  math.ceil(int(exam.total_question)*(int(exam.pass_score)*.01)):
-
-#             provider_quiz.status = "fail"
-#         else:
-#             provider_quiz.status = "pass"
-#     provider_quiz.save()

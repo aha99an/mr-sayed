@@ -4,9 +4,8 @@ from .models import (Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion,
 from collections import OrderedDict
 from .forms import StudentChoiceAnswerForm, StudentEssayAnswerForm
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from datetime import datetime, timedelta
+from django.shortcuts import get_object_or_404
+from datetime import timedelta
 from django.shortcuts import redirect
 from django.utils import timezone
 
@@ -58,6 +57,13 @@ def get_all_questions(exam_id, user):
     return questions
 
 
+def set_expiry_date(student_exam):
+    exam_time = timedelta(minutes=student_exam.exam.time)
+    student_exam.expiry_time = student_exam.created_at + exam_time
+    student_exam.save()
+    return
+
+
 class ExamListView(ListView):
     model = Exam
     template_name = "exams/exam-list.html"
@@ -91,9 +97,9 @@ class QuestionUpdateView(UpdateView):
         self.exam = Exam.objects.get(id=self.kwargs.get("exam_pk"))
         self.student_exam, created = StudentExam.objects.get_or_create(
             user=self.request.user, exam=self.exam)
-        addtime = timedelta(minutes=self.exam.time_quiz)
-        finish_time = self.student_exam.created_at + addtime
-        if finish_time < timezone.now():
+        if not self.student_exam.expiry_time:
+            set_expiry_date(self.student_exam)
+        if self.student_exam.expiry_time < timezone.now():
             self.request.session['exam_time_expired'] = True
             return redirect("exam_list")
         return super().dispatch(request, *args, **kwargs)
@@ -125,7 +131,7 @@ class QuestionUpdateView(UpdateView):
         ctx["question_content"] = all_questions[self.kwargs.get("question_pk")]
         ctx["exam"] = self.exam
         ctx["all_questions"] = all_questions
-        ctx["exam_time"] = self.exam.time_quiz
+        ctx["exam_time"] = self.exam.time
         ctx["student_exam"] = self.student_exam
         ctx["question_id"] = self.kwargs.get("question_pk")
         return ctx

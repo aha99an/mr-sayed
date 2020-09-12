@@ -17,11 +17,16 @@
             <tr>
 
                 <td>
-
+                        
                     <a href="{% url 'question' exam.exam.id 1 %}" style="color: lightblue;"> {{ exam.exam }}</a>
                 </td>
                 <td>
-                    <span style="color:yellow;">{{ exam.answered }}</span>
+                    &nbsp&nbsp
+                    {% if exam.answered == "answered" %}
+                    <div class="check"></div>
+                    {% else %}
+                    &#10060;
+                    {% endif %}
                 </td>
 
             </tr>

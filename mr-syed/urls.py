@@ -10,9 +10,11 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('exams/', include('exams.urls')),
     path('homeworks/', include('homework.urls')),
+    path('lectures/', include('lectures.urls')),
+    path('classes/', include('classes.urls')),
     path('', include('home.urls')),
 
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

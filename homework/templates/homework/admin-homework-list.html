@@ -3,6 +3,21 @@
 <h2>Homeworks</h2>
 {% endblock %}
 {% block content %}
+<!-- <a href="#">{{class}}</a> <br> -->
+<form method="get" action="{% url 'admin_homework_list' %}">
+    <!-- <p>Filter: <input type="text" value="{{class.name}}" name="filter" />{{class.name}}</p> -->
+    <select name="class_filter" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار حصة</option>
+
+        {% for class in classes %}
+
+        <option value="{{class.name}}" {% if class_filter == class.name %} selected{% endif %}>
+            {{class.name}}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
 <div class="table-wrapper">
     <table>
         <thead>
@@ -12,20 +27,20 @@
             </tr>
         </thead>
         <tbody>
-            {% for homework in homeworks %}
+            {% for homework in object_list %}
 
             <tr>
                 <td>
                     <a style="color: lightblue;" href="{% url 'homework' homework.homework.id %}">
-                        {{ homework.homework }}</a>
+                        {{ homework }}</a>
                 </td>
                 <td>
-
+                    <!-- 
                     {% if homework.answered == "answered" %}
                     &nbsp&nbsp<div class="check"></div>
                     {% else %}
                     &#10060;
-                    {% endif %}
+                    {% endif %} -->
                 </td>
 
             </tr>
@@ -34,4 +49,6 @@
         <tfoot>
 
     </table>
+
+
     {% endblock content %}

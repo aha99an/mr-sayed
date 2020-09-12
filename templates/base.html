@@ -31,6 +31,19 @@
 					{% if user.is_admin %}
 					<li><a href="{% url 'class_list' %}">Classes</a></li>
 					<li><a href="{% url 'week_list' %}">Weeks</a></li>
+					<li class="opener"
+						style="user-select: none; cursor: pointer; white-space: nowrap; opacity: 1;">
+						<a href="#">التصحيح</a>
+
+						<ul class="" style="user-select: none; display: none; position: absolute;">
+							<li style="white-space: nowrap;"><a href="left-sidebar.html"
+									style="display: block;">تصحيح الواجب</a></li>
+							<li style="white-space: nowrap;"><a href="right-sidebar.html"
+									style="display: block;">Right Sidebar</a></li>
+							<li style="white-space: nowrap;"><a href="no-sidebar.html"
+									style="display: block;">No Sidebar</a></li>
+						</ul>
+					</li>
 					{% endif %}
 					<li><a href="{% url 'exam_list' %}">exams</a></li>
 					<li><a href="{% url 'homework_list' %}">Homeworks</a></li>

@@ -36,7 +36,8 @@
 						<a href="#">التصحيح</a>
 
 						<ul class="" style="user-select: none; display: none; position: absolute;">
-							<li style="white-space: nowrap;"><a href="left-sidebar.html"
+							<li style="white-space: nowrap;"><a
+									href="{% url 'admin_homework_list' %}"
 									style="display: block;">تصحيح الواجب</a></li>
 							<li style="white-space: nowrap;"><a href="right-sidebar.html"
 									style="display: block;">Right Sidebar</a></li>
@@ -74,6 +75,10 @@
 				</header>
 
 				<!-- section -->
+				<section dir="rtl" lang="ar">
+					{% block content2 %}
+					{% endblock %}
+				</section>
 				<section>
 					{% block content %}
 					{% endblock %}

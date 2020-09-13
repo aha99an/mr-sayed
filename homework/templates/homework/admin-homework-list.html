@@ -2,7 +2,7 @@
 {% block head %}
 <h2>Homeworks</h2>
 {% endblock %}
-{% block content %}
+{% block content2 %}
 <!-- <a href="#">{{class}}</a> <br> -->
 <form method="get" action="{% url 'admin_homework_list' %}">
     <!-- <p>Filter: <input type="text" value="{{class.name}}" name="filter" />{{class.name}}</p> -->
@@ -16,14 +16,24 @@
         </option>
         {% endfor %}
     </select>
+    <select name="is_checked_filter" onchange="this.form.submit()">
+        <option value="">التصحيح؟ </option>
+        <option value="True" {% if is_checked_filter == "True" %} selected{% endif %}>تم تصحيحه
+        </option>
+        <option value="False" {% if is_checked_filter == "False" %} selected{% endif %}>لم يتم
+            تصحيحه
+        </option>
+    </select>
 </form>
 
 <div class="table-wrapper">
     <table>
         <thead>
             <tr>
-                <th>exam</th>
-                <th>Status</th>
+                <th>الطالب</th>
+                <th>الواجب</th>
+                <th>الحصة</th>
+                <th>التصحيح</th>
             </tr>
         </thead>
         <tbody>
@@ -31,18 +41,19 @@
 
             <tr>
                 <td>
-                    <a style="color: lightblue;" href="{% url 'homework' homework.homework.id %}">
+                    <a style="color: lightblue;"
+                        href="{% url 'admin_check_homework' homework.id %}">
                         {{ homework }}</a>
                 </td>
+                <td>{{ homework.homework.name }}</td>
+                <td>{{ homework.user.student_class }}</td>
                 <td>
-                    <!-- 
-                    {% if homework.answered == "answered" %}
+                    {% if homework.notes %}
                     &nbsp&nbsp<div class="check"></div>
                     {% else %}
                     &#10060;
-                    {% endif %} -->
+                    {% endif %}
                 </td>
-
             </tr>
             {% endfor %}
         </tbody>
@@ -51,4 +62,4 @@
     </table>
 
 
-    {% endblock content %}
+    {% endblock content2 %}

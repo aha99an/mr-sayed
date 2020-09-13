@@ -48,9 +48,19 @@ class StudentHomework(models.Model):
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     homework = models.ForeignKey(
         Homework, on_delete=models.CASCADE, related_name="student_homework")
-    grade = models.FloatField(blank=True, null=True)
+    notes = models.TextField(null=True, blank=True)
+    is_checked = models.BooleanField(default=False)
+    notes_file = models.FileField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.homework.name + "__" + self.user.username
+
+    def save(self, *args, **kwargs):
+        if self.notes:
+            self.is_checked = True
+        super(StudentHomework, self).save(*args, **kwargs)
 
 
 class StudentHomeworkFile(models.Model):

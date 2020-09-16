@@ -70,15 +70,10 @@ class HomeworkMultipleUpdateView(FormView):
         ctx["homework_questions"] = homework_questions
         ctx["homework_notebook"] = homework.homework_notebook.all()
         ctx["homework"] = homework
-
+        ctx["image_extensions"] = image_extensions
         if student_homework:
             ctx["uploaded_files"] = student_homework.student_homework_file.all()
 
-        ctx["image_extensions"] = image_extensions
-        # ctx["all_questions"] = all_questions
-        # ctx["exam_time"] = self.exam.time_quiz
-        # ctx["student_exam"] = self.student_exam
-        # ctx["question_id"] = self.kwargs.get("question_pk")
         return ctx
 
     def get_success_url(self):
@@ -126,7 +121,7 @@ class UploadedFileDeleteView(DeleteView):
 #         print(ctx["uploaded_files"])
 #         ctx["image_extensions"] = image_extensions
 #         # ctx["all_questions"] = all_questions
-#         # ctx["exam_time"] = self.exam.time_quiz
+#         # ctx["exam_time"] = self.exam.time
 #         # ctx["student_exam"] = self.student_exam
 #         # ctx["question_id"] = self.kwargs.get("question_pk")
 #         return ctx

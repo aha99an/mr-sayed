@@ -111,12 +111,12 @@ input, select, textarea {
 		-ms-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 		transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 		border-bottom: dotted 1px;
-		color: #3a37f0;
+		color: lightblue;
 		text-decoration: none;
 	}
 
 		a:hover {
-			color: #3a37f0 !important;
+			color: lightblue !important;
 			border-bottom-color: transparent;
 		}
 
@@ -2180,13 +2180,13 @@ input, select, textarea {
 	}
 
 	header.major {
-		margin: 0 0 .5em 0;
+		margin: 0 0 2em 0;
 		position: relative;
 		text-align: center;
 	}
 
 		header.major:after {
-			background: #3a37f0;
+			background: lightblue;
 			content: '';
 			display: inline-block;
 			height: 0.2em;
@@ -2255,7 +2255,7 @@ input, select, textarea {
 		input[type="email"]:focus,
 		select:focus,
 		textarea:focus {
-			border-color: #3a37f0;
+			border-color: lightblue;
 		}
 
 	select {
@@ -2358,7 +2358,7 @@ input, select, textarea {
 
 		input[type="checkbox"]:focus + label:before,
 		input[type="radio"]:focus + label:before {
-			border-color: #3a37f0;
+			border-color: lightblue;
 		}
 
 	input[type="checkbox"] + label:before {
@@ -2774,6 +2774,9 @@ input, select, textarea {
 
 		table td {
 			padding: 0.75em 0.75em;
+			color: #ffffff;
+			text-align: right;
+
 		}
 
 		table th {
@@ -2781,7 +2784,7 @@ input, select, textarea {
 			font-size: 0.9em;
 			font-weight: 300;
 			padding: 0 0.75em 0.75em 0.75em;
-			text-align: left;
+			text-align: right;
 		}
 
 		table thead {
@@ -2855,8 +2858,8 @@ input, select, textarea {
 		input[type="button"]:active,
 		.button:hover,
 		.button:active {
-			box-shadow: inset 0 0 0 1px #3a37f0;
-			color: #3a37f0 !important;
+			box-shadow: inset 0 0 0 1px lightblue;
+			color: lightblue !important;
 		}
 
 		input[type="submit"]:active,
@@ -3141,7 +3144,7 @@ input, select, textarea {
 		}
 
 		.spotlight.style1 .content {
-			border-color: #3a37f0;
+			border-color: lightblue;
 		}
 
 		.spotlight.style2 .content {
@@ -3203,7 +3206,7 @@ input, select, textarea {
 	}
 
 		.wrapper.style2 {
-			background: #3a37f0;
+			background: lightblue;
 		}
 
 			.wrapper.style2 input[type="text"]:focus,
@@ -3238,7 +3241,7 @@ input, select, textarea {
 			.wrapper.style2 input[type="button"].primary,
 			.wrapper.style2 .button.primary {
 				background-color: #ffffff;
-				color: #3a37f0 !important;
+				color: lightblue !important;
 			}
 
 				.wrapper.style2 input[type="submit"].primary:hover, .wrapper.style2 input[type="submit"].primary:active,
@@ -3342,7 +3345,7 @@ input, select, textarea {
 			}
 
 			.dropotron > li.active > a, .dropotron > li.active > span {
-				color: #3a37f0;
+				color: lightblue;
 			}
 
 		.dropotron.level-0 {
@@ -3432,7 +3435,7 @@ input, select, textarea {
 						}
 
 					#header nav ul li.active > a, #header nav ul li.active > span {
-						color: #3a37f0;
+						color: lightblue;
 					}
 
 					#header nav ul li > ul {
@@ -3796,7 +3799,7 @@ input, select, textarea {
 			}
 
 			header.major {
-				margin: 0 0 0em 0;
+				margin: 0 0 1em 0;
 			}
 
 		/* Goto Next */
@@ -3932,7 +3935,7 @@ input, select, textarea {
 					}
 
 					#titleBar .toggle:before {
-						background: #3a37f0;
+						background: lightblue;
 						color: rgba(255, 255, 255, 0.5);
 						content: '\f0c9';
 						display: block;
@@ -4121,3 +4124,4 @@ input, select, textarea {
         border-bottom: 7px solid #78b13f;
         border-right: 7px solid #78b13f;
     }
+	

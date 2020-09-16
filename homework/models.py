@@ -60,6 +60,8 @@ class StudentHomework(models.Model):
     def save(self, *args, **kwargs):
         if self.notes:
             self.is_checked = True
+        else:
+            self.is_checked = False
         super(StudentHomework, self).save(*args, **kwargs)
 
 

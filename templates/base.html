@@ -23,34 +23,50 @@
 	<div id="page-wrapper">
 
 		<!-- Header -->
-		<header id="header">
-			<h1 id="logo"><a href="{% url 'home' %}">Mr. Sayed Abdelhamed </a></h1>
+		<header id="header" dir="rtl" lang="ar">
+			<h1 id="logo"><a href="{% url 'home' %}">الاستاذ سيد عبدالحميد </a></h1>
 			<nav id="nav">
 				<ul>
-					<li><a href="{% url 'home' %}">Home</a></li>
+					<li><a href="{% url 'home' %}">الرئيسية</a></li>
 					{% if user.is_admin %}
-					<li><a href="{% url 'class_list' %}">Classes</a></li>
-					<li><a href="{% url 'week_list' %}">Weeks</a></li>
+					<li><a href="{% url 'class_list' %}">الحصص</a></li>
+					<li><a href="{% url 'week_list' %}">الاسابيع</a></li>
 					<li class="opener"
 						style="user-select: none; cursor: pointer; white-space: nowrap; opacity: 1;">
 						<a href="#">التصحيح</a>
-
 						<ul class="" style="user-select: none; display: none; position: absolute;">
 							<li style="white-space: nowrap;"><a
 									href="{% url 'admin_homework_list' %}"
 									style="display: block;">تصحيح الواجب</a></li>
-							<li style="white-space: nowrap;"><a href="right-sidebar.html"
-									style="display: block;">Right Sidebar</a></li>
-							<li style="white-space: nowrap;"><a href="no-sidebar.html"
-									style="display: block;">No Sidebar</a></li>
+							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">تصحيح الامتحان</a></li>
 						</ul>
 					</li>
+					<li class="opener"
+						style="user-select: none; cursor: pointer; white-space: nowrap; opacity: 1;">
+						<a href="#">اضافة</a>
+						<ul class="" style="user-select: none; display: none; position: absolute;">
+							<li style="white-space: nowrap;"><a
+									href="{% url 'admin_homework_list' %}"
+									style="display: block;">اضافة محاضرة</a></li>
+							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة امتحان</a></li>
+							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة واجب</a></li>
+							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة مجموعة</a></li>
+							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة اسبوع</a></li>
+						</ul>
+					</li>
+					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>
+
 					{% endif %}
-					<li><a href="{% url 'exam_list' %}">exams</a></li>
-					<li><a href="{% url 'homework_list' %}">Homeworks</a></li>
+					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
+					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
 					{% if user.is_authenticated %}
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
-					<li><a href="{% url 'logout' %}">Log out</a></li>
+					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
 					<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
 					{% endif %}

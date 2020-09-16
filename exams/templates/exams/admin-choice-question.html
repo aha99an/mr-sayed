@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{object.question.question}}</h2>
+{% endblock %}
+{% block content2 %}
+
+<!-- Question -->
+{% if object.question.question %}
+
+<h3>{{object.question.question}}</h3>
+
+<br>
+{% endif %}
+{% if object.question.image_question %}
+<span class="image fit">
+    <img src="{{ object.question.image_question.url}}" alt={{ object.question.question }}>
+</span>
+{% endif %}
+
+{% if not object.answered %}
+لم يجاوب الطالب على هذا السؤال
+<br /><br />
+{% endif %}
+{% if object.type == "choice_question" %}
+<!-- Choice form -->
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option1}}"
+        value="{{object.question.option1}}" {% if object.answered == object.question.option1 %}
+        checked {% endif %} disabled>
+    <label for="{{object.question.option1}}">1-
+        {{object.question.option1}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option2}}"
+        value="{{object.question.option2}}" {% if object.answered == object.question.option2 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option2}}">2-
+        {{object.question.option2}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option3}}"
+        value="{{object.question.option3}}" {% if object.answered == object.question.option3 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option3}}">3-
+        {{object.question.option3}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option4}}"
+        value="{{object.question.option4}}" {% if object.answered == object.question.option4 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option4}}">4-
+        {{object.question.option4}}</label><br>
+
+</div>
+<h3>الاجابة الصحيحة رقم: {{object.question.right_answer_choice}}
+</h3>
+<br><br>
+
+<!-- Essay question -->
+{% elif object.type == "essay_question" %}
+
+
+
+اجابة الطالب:-
+<br />
+{{object.student_answer.answer}}
+{% if object.student_answer.image_answer %}
+<a href="{{ object.student_answer.image_answer.url}}">
+    <span class="image fit">
+        <img src="{{ object.student_answer.image_answer.url}}"
+            alt={{ object.student_answer.image_answer }}>
+    </span>
+</a>
+{% endif %}
+{% if not object.student_answer.answer and not object.student_answer.image_answer %}
+<br />
+لم يجاوب الطالب على هذا السؤال
+{% endif %}
+<br />
+
+
+<div class="main">
+    {% if question_pk == all_questions|length %}
+    <form method="POST" action="{% url 'update_grade' object.student_answer.id 1 %}">
+        {% else %}
+        <form method="POST"
+            action="{% url 'update_grade' object.student_answer.id question_pk|add:1 %}">
+            {% endif %}
+
+            {% csrf_token %}
+            {{form.grade.errors}}<label style="text-align: right; margin:0;"
+                for="number">الدرجة:</label>
+            <div style="text-align: right;"><input type="number" style="color:black" name="grade"
+                    step="any" value="{{object.student_answer.grade|floatformat}}">
+
+                <br>
+
+                <input type="submit" value="&nbsp&nbspضع الدرجة&nbsp&nbsp">
+        </form>
+        <br /><br />
+        <h4>درجة السؤال: {{object.question.grade|floatformat}} </h4>
+
+</div>
+
+{% endif %}
+
+{% if question_pk == all_questions|length %}
+<a href="{% url 'admin_choice_question' student_exam_pk 1 %}">
+    {% else %}
+    <a href="{% url 'admin_choice_question' student_exam_pk question_pk|add:1 %}">
+
+        {% endif %}
+        <button type="submit" class="button primary"
+            style="font-size: 30px;height: 4rem; line-height: 4rem; width:100%">السؤال
+            التالي</button>
+    </a>
+
+
+
+    <br /><br />
+    <!-- questions table -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>رقم السؤال</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question_number,question_content in all_questions.items %}
+                <tr>
+
+                    <td>
+                        <a href="{% url 'admin_choice_question' student_exam_pk question_number %}">
+                            <button type="button" class="button primary">السؤال
+                                {{question_number}}</button>
+                        </a>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+
+        </table>
+        {% endblock content2 %}

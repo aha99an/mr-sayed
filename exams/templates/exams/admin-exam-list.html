@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% block head %}
-<h2>الواجبات</h2>
+<h2>الامتحانات</h2>
 {% endblock %}
 {% block content2 %}
 <!-- <a href="#">{{class}}</a> <br> -->
-<form method="get" action="{% url 'admin_homework_list' %}">
-    <!-- <p>Filter: <input type="text" value="{{class.name}}" name="filter" />{{class.name}}</p> -->
+<form method="get" action="{% url 'admin_exam_list' %}">
     <select name="class_filter" dir="rtl" onchange="this.form.submit()">
         <option value="">اختار حصة</option>
 
@@ -31,24 +30,24 @@
         <thead>
             <tr>
                 <th>الطالب</th>
-                <th>الواجب</th>
+                <th>الامتحان</th>
                 <th>الحصة</th>
                 <th>التصحيح</th>
             </tr>
         </thead>
         <tbody>
-            {% for homework in object_list %}
+            {% for student_exam in object_list %}
 
             <tr>
                 <td>
                     <a style="color: lightblue;"
-                        href="{% url 'admin_check_homework' homework.id %}">
-                        {{ homework.user }}</a>
+                        href="{% url 'admin_first_choice_question' student_exam.id %}">
+                        {{ student_exam.user }}</a>
                 </td>
-                <td>{{ homework.homework.name }}</td>
-                <td>{{ homework.user.student_class }}</td>
+                <td>{{ student_exam.exam.name }}</td>
+                <td>{{ student_exam.user.student_class }}</td>
                 <td>
-                    {% if homework.notes %}
+                    {% if student_exam.is_graded %}
                     &nbsp&nbsp<div class="check"></div>
                     {% else %}
                     &#10060;
@@ -60,6 +59,5 @@
         <tfoot>
 
     </table>
-
 
     {% endblock content2 %}

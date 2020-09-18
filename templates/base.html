@@ -68,7 +68,7 @@
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
-					<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
+					<li><a href="{% url 'login' %}" class="button primary">تسجيل دخول/انشاء حساب</a></li>
 					{% endif %}
 
 					{% if user.is_student %}
@@ -103,13 +103,8 @@
 			</div>
 		</div>
 
-                        <!-- section -->
-                                <section>
-                                    {% block content %}
-                                    {% endblock %}
-                                </section>
-					</div>
-				</div>
+		   
+		
 		<!-- Footer -->
 		<footer id="footer">
 			<ul class="icons">

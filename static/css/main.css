@@ -2904,7 +2904,7 @@ input, select, textarea {
 			background-color: #3a37f0;
 			box-shadow: none;
 			color: #ffffff !important;
-			padding: 0px 10px 10px 10px;
+			padding: 0px 10px 10px 10px; 
 		}
 
 			input[type="submit"].primary:hover,

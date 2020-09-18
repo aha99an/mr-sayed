@@ -74,30 +74,29 @@
                         {% for exam in student_exams %}
                         <tr>
                             <td>
-                                <a href="{% url 'question' exam.exam.id 1 %}"
+                                <a href="{% url 'profile_exam_question' exam.id 1 %}"
                                     style="color: lightblue;">
                                     {{ exam.exam }}</a>
                             </td>
                             <td>
                                 {% if exam.is_graded %}
-                                {{exam.exam.grade|floatformat}}/{{exam.grade|floatformat}}
+                                {{exam.grade|floatformat}}/{{exam.exam.grade|floatformat}}
                                 {% else %}
                                 جاري تصحيح الامتحان
                                 {% endif %}
                             </td>
-                            {% if exam.exam.answer %}
                             <td>
-
+                                {% if exam.exam.answer %}
+                                
                                 <a href="{{exam.exam.answer.url}}" download>
                                     <button type="button" class="button primary">تنزيل نموذج
                                         الاجابة</button>
                                 </a>
+                                {% else %}
+                                نموذج الاجابة سيكون متاح الاسبوع القادم
+                                {% endif %}
                             </td>
-                            {% endif %}
                         </tr>
-
-                        <!-- {{exam.exam}}
-                                {{exam.grade}} -->
                         {% endfor %}
                     </tbody>
                     <tfoot>
@@ -105,6 +104,53 @@
                 </table>
 
             </div>
+                    <hr>
+                    <!-- Homeworks -->
+                    <div class="table-wrapper">
+                <table DIR="RTL">
+                    <thead>
+                        <tr>
+                            <th>الامتحان</th>
+                            <th>الدرجة</th>
+                            <th>نموذج الاجابة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for exam in student_exams %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'profile_exam_question' exam.id 1 %}"
+                                    style="color: lightblue;">
+                                    {{ exam.exam }}</a>
+                            </td>
+                            <td>
+                                {% if exam.is_graded %}
+                                {{exam.grade|floatformat}}/{{exam.exam.grade|floatformat}}
+                                {% else %}
+                                جاري تصحيح الامتحان
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if exam.exam.answer %}
+                                
+                                <a href="{{exam.exam.answer.url}}" download>
+                                    <button type="button" class="button primary">تنزيل نموذج
+                                        الاجابة</button>
+                                </a>
+                                {% else %}
+                                نموذج الاجابة سيكون متاح الاسبوع القادم
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+
+                </table>
+
+            </div>
+
         </div>
     </div>
 </div>

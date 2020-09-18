@@ -2784,7 +2784,7 @@ input, select, textarea {
 			font-size: 0.9em;
 			font-weight: 300;
 			padding: 0 0.75em 0.75em 0.75em;
-			text-align: left;
+			text-align: right;
 		}
 
 		table thead {
@@ -4134,3 +4134,14 @@ input, select, textarea {
 		margin-left: 1200px;
 	  }
 	  
+	  .check {
+        /* padding: 20px; */
+        text-align: center;
+        display: inline-block;
+        transform: rotate(45deg);
+        height: 24px;
+        width: 12px;
+        border-bottom: 7px solid #78b13f;
+        border-right: 7px solid #78b13f;
+    }
+	

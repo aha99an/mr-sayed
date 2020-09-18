@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('answer', models.CharField(blank=True, max_length=1000, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('ءuser', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_mr_question', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_mr_question', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

@@ -1,3 +1,49 @@
-from django.shortcuts import render
+from .models import Class, Week
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from .forms import ClassForm
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
-# Create your views here.
+
+class ClassListView(ListView):
+    model = Class
+    template_name = "classes/class-list.html"
+
+
+class WeekListView(ListView):
+    model = Week
+    template_name = "classes/class-list.html"
+
+
+class ClassCreateView(CreateView):
+    template_name = "classes/create-class.html"
+    form_class = ClassForm
+    success_url = reverse_lazy('create_class')
+
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     print(form.instance.end)
+    #     # form.instance.user = self.request.user
+    #     self.object.save()
+    #     return HttpResponseRedirect(self.get_success_url())
+
+    # def form_invalid(self, form):
+    #     return self.render_to_response(self.get_context_data(form=form))
+
+
+class ClassUpdateView(UpdateView):
+    model = Class
+    template_name = "classes/update-class.html"
+    form_class = ClassForm
+    success_url = reverse_lazy('class_list')
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["object_id"] = self.object.id
+        return ctx
+
+
+class ClassDeleteView(DeleteView):
+    model = Class
+    success_url = reverse_lazy('class_list')

@@ -32,7 +32,10 @@ INSTALLED_APPS = [
     'exams',
     'questions',
     "classes",
+    "homework",
+    "lectures",
     # 3rd Party
+    "storages",
     # 'crispy_forms',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -131,3 +134,12 @@ EMAIL_HOST_PASSWORD = 'iszoleqzpvimtcre'  # past the key or password app here
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
+
+
+# aws credintials
+# AWS_ACCESS_KEY_ID = "AKIAVATIJWXIW7INOAFP"
+# AWS_SECRET_ACCESS_KEY = "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"
+# AWS_STORAGE_BUCKET_NAME = "website-try"
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

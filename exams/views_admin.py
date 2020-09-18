@@ -87,7 +87,7 @@ class ExamAdminListView(ListView):
 
 
 class AdminChoiceQuestion(DetailView):
-    template_name = 'exams/admin-choice-question.html'
+    template_name = 'exams/admin-question.html'
 
     def get_object(self):
         self.student_exam_pk = self.kwargs.get("student_exam_pk")

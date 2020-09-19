@@ -18,9 +18,10 @@ class CustomUser(AbstractUser):
     phoneNumber = models.IntegerField(default=0)
     profile_pic = models.ImageField(null=True, blank=True)
     student_class = models.ForeignKey(Class, null=True, on_delete=models.SET_NULL,
-                                      related_name="student_class")
+                                      related_name="student_class", verbose_name="المجموعة")
     user_type = models.IntegerField(choices=USER_TYPE_CHOICES, default=0)
     is_active = models.BooleanField(default=False)
+    random_password = models.CharField(max_length=10, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.email = self.username

@@ -4,13 +4,7 @@
 {% endblock %}
 
 
-{% block content %}
-{% endblock content %}
-
-
 {% block content2 %}
-<a href="{% url 'question_new' %}" class="button primary">  انشاء سؤال جديد  </a>
-
 <div class="table-wrapper" dir="rtl" style="text-align: right;">
     <table>
         <thead>
@@ -23,7 +17,7 @@
             {% for qu in object_list %}
             <tr> 
                 <td> 
-                    <a href="{% url 'question_detail' qu.id %}">
+                    <a href="{% url 'all_questions' %}">
                         
                         {{ qu.question }}    
                     </a>   

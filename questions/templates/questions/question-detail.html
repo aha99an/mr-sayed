@@ -3,8 +3,9 @@
 <h2>السؤال</h2>
 {% endblock %}
 div cladiv class="check"></div>ss="check"></div>
-{% block content %}
-<h3>:السؤال</h3>
+
+{% block content2 %}
+<h3>السؤال:</h3>
 <p>{{ object.question }}</p>
 
 {% if object.image_question %}
@@ -18,17 +19,29 @@ div cladiv class="check"></div>ss="check"></div>
 {% endif %}
 
 
-{% if is_answered %}
-<h2>الأجابة</h2>
+{% if object.is_answered %}
+<h2>الإجابة:</h2>
     {% else  %} 
+    
     {% endif %}
 
 {% if object.answer %}
-    object.answer
+<p>{{ object.answer }}</p>
     {% else  %} 
     {% endif %}
 
 
 
-{% endblock content %}
+{% if object.image_answer %}
+<a href="{{ object.image_answer.url}}">    
 
+    <span class="image fit">
+            <img src="{{ object.image_answer.url}}"  href="{{object.image_answer.url}}" alt={{ object.image_answer }}>    
+        </span>
+    </a>
+{% else  %}
+{% endif %}
+
+
+
+{% endblock content2 %}

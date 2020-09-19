@@ -62,9 +62,11 @@
 					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>
 
 					{% endif %}
+					
+					{% if user.is_authenticated %}
 					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
 					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
-					{% if user.is_authenticated %}
+					<li><a href="{% url 'questions_list' %}">اسأل الأستاذ</a></li>
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}

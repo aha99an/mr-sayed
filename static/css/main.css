@@ -2314,8 +2314,10 @@ input, select, textarea {
 			display: inline-block;
 			font-size: 1em;
 			font-weight: 100;
-			padding-left: 2.55em;
-			padding-right: 0.75em;
+			/* padding-left: 2.55em;
+			padding-right: 0.75em; */
+			padding-left: 0.75em;
+			padding-right: 2.55em;
 			position: relative;
 		}
 
@@ -2341,7 +2343,8 @@ input, select, textarea {
 				display: inline-block;
 				font-size: 0.8em;
 				height: 2.25em;
-				left: 0;
+				/* left: 0; */
+				right: 0;
 				line-height: 2.25em;
 				position: absolute;
 				text-align: center;

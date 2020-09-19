@@ -17,7 +17,7 @@
             {% for qu in object_list %}
             <tr> 
                 <td> 
-                    <a href="{% url 'all_questions' %}">
+                    <a href="{% url 'answer_question' qu.id %}">
                         
                         {{ qu.question }}    
                     </a>   

@@ -12,3 +12,8 @@ class MrQuestion(models.Model):
     is_answered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.answer or self.image_answer:
+            self.is_answered = True 
+        super(MrQuestion, self).save(*args, **kwargs)

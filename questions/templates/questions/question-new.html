@@ -10,7 +10,7 @@
 {% block content2 %}
 <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
 
-<form action="" method="post">{% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 {{ form.as_p }}
 <button class="btn btn-success ml-2" type="submit"    onclick="myFunction()" >Save</button>
 </form>

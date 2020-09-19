@@ -19,14 +19,27 @@ class QuestionCreateView(CreateView):
     model = MrQuestion
     template_name = 'questions/question-new.html'
     fields = ('question', 'image_question',)
-    success_url = reverse_lazy('questions_list')
+    success_url = reverse_lazy('student_questions')
 
-    def form_valid(self, form): # new
+    def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
 class QuestionallListView (ListView):
     model = MrQuestion
-    template_name = "questions/student-questions.html"
-   
+    template_name = "questions/all-questions.html"
+
+class QuestionUpdateView(UpdateView): 
+    model = MrQuestion
+    template_name = 'questions/answer-question.html'
+    fields = ('answer', 'image_answer')
+    success_url = reverse_lazy('all_questions')
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+
+        question_model = self.get_object()
+        ctx['question'] = question_model
+
+        return ctx

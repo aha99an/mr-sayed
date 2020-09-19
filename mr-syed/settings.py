@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'exams',
+    'questions',
     "classes",
     "homework",
     "lectures",

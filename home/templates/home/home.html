@@ -3,14 +3,7 @@
 
 
 {% block head %}
-<style>
-
-</style>
-<h2>Welcome to Mr-syed website</h2>
-<!-- <div style="mix-blend-mode: multiply;
-">
-    <img src="{% static 'css/images/check-mark-html-done-icon-11563029359rpmvepeinu.png' %}">
-</div> -->
+<h2>Welcome to Mr. Sayed website</h2>
 {% endblock %}
 
 
@@ -18,9 +11,24 @@
 
 {% block content %}
 <section>
-    {% csrf_token %}
-    {{ form.as_p }}
+<h1> Mr. Sayed Abdelhamed</h1>
+<p1>He is a teacher at the Khadija Youssef School.</p1>
+<p>Experience of more than forty years years.</p>
+
+<p style="font-size: 30px; "> <strong>Mr. Sayed Abdelhamed's vision </strong></p>
+
+<div class="column">
+The right kind of education is not concerned with any ideology, however much it may promise a future utopia: it is not based on any system, however carefully thought out, nor is it a means of conditioning the individual in some special manner. Education in the true sense is helping the individual to be mature and free, to flower greatly in love and goodness. That is what we should be interested in, and not in shaping the child according to some idealistic pattern. The highest function of education is to bring about an integrated individual who is capable of dealing with life as a whole.
+    </div> 
+
+<div class="column">
+    <img class="circular--square" src="../media/pp.jpg" />
+  </div>
+
 </section>
+
+<!-- {{ form.as_p }} -->
+
 <hr />
 
 {% endblock %}

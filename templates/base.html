@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE HTML>
-<html>
+<html dir="rtl">
 
 <head>
 	<title>Mr.sayed website</title>
@@ -62,13 +62,15 @@
 					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>
 
 					{% endif %}
+					
+					{% if user.is_authenticated %}
 					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
 					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
-					{% if user.is_authenticated %}
+					<li><a href="{% url 'student_questions' %}">اسأل الأستاذ</a></li>
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
-					<li><a href="{% url 'login' %}" class="button primary">Log In/Sign up</a></li>
+					<li><a href="{% url 'login' %}" class="button primary">تسجيل دخول/انشاء حساب</a></li>
 					{% endif %}
 
 					{% if user.is_student %}
@@ -80,11 +82,11 @@
 			</nav>
 		</header>
 
-		<!-- Main -->
-		<div id="main" class="wrapper style1">
-			<div class="container">
-				<header class="major">
-					<!-- <h2>Elements</h2>
+			<!-- Main -->
+				<div id="main" class="wrapper style">
+					<div class="container">
+						<header class="major">
+							<!-- <h2>Elements</h2>
 							<p>Ipsum dolor feugiat aliquam tempus sed magna lorem consequat accumsan</p> -->
 					{% block head %}
 					{% endblock %}
@@ -103,6 +105,8 @@
 			</div>
 		</div>
 
+		   
+		
 		<!-- Footer -->
 		<footer id="footer">
 			<ul class="icons">

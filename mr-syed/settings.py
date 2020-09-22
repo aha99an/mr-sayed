@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "homework",
     "lectures",
     # 3rd Party
-    "storages",
+    # "storages",
     # 'crispy_forms',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

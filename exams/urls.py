@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (ExamListView, QuestionUpdateView)
-from .views_admin import ExamAdminListView, AdminChoiceQuestion, update_view
+from .views_admin import ExamAdminListView, AdminChoiceQuestion, update_view, AdminAddExamListView
 urlpatterns = [
     path('', ExamListView.as_view(), name='exam_list'),
     path('question/<int:exam_pk>/<int:question_pk>/', QuestionUpdateView.as_view(),
@@ -15,4 +15,6 @@ urlpatterns = [
 
     path('update_grade/<int:student_essay_answer_pk>/<int:question_pk>/',
          update_view, name='update_grade'),
+
+     path('admin-add-exam-list/', AdminAddExamListView.as_view() ,name='admin_add_exam_list'),
 ]

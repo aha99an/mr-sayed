@@ -1,1 +1,1 @@
-web: gunicorn mr-syed/wsgi.py --log-file -
+web: gunicorn mr-syed.wsgi --log-file -

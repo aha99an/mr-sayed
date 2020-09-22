@@ -63,7 +63,7 @@
 
     <button type="submit" class="button primary"
         style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%"
-        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">answer</button>
+        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">اجابة السؤال</button>
 
 </form>
 <!-- onclick="return confirm('تسليم الامتحان والخروج؟'); -->
@@ -89,7 +89,7 @@
     <br><br>
     <button type="submit" class="button primary"
         style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%"
-        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">answer</button>
+        onclick="{% if question_id == all_questions|length %} return confirm('انتهت الاسئلة, لكن لديك وقت للمراجعة');{% endif %}">اجابة السؤال</button>
 
 </form>
 {% endif %}
@@ -97,8 +97,7 @@
 <a href="#" onclick="myFunction()">
 
     <button type="submit" class="button primary"
-        style="background-color: #ff0000; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">End
-        exam</button>
+        style="background-color: #ff0000; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">انهاء الامتحان</button>
 </a>
 <br><br>
 <!-- questions table -->
@@ -106,9 +105,9 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Grade</th>
+                <th>رقم السؤال</th>
+                <th>حل السؤال</th>
+                <th>درجة السؤال</th>
             </tr>
         </thead>
         <tbody>
@@ -118,7 +117,7 @@
                 <td>
                     <a
                         href="{% url 'question' question_content.question.exam.id question_number   %}">
-                        <button type="button" class="button primary">question
+                        <button type="button" class="button primary">السؤال
                             {{question_number}}</button>
                     </a>
                 </td>

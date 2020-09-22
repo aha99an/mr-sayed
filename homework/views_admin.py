@@ -1,7 +1,7 @@
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
-from .models import (Homework, HomeworkFile, HomeworkAnswerFile, StudentHomework,
-                     StudentHomeworkFile, HomeworkNotebook)
+from .models import (Homework, HomeworkFile, StudentHomework,
+                     StudentHomeworkFile)
 from classes.models import Class
 from .forms import AdminHomeworkForm
 from django.urls import reverse_lazy
@@ -60,5 +60,4 @@ class HomeworkAdminUpdateView(UpdateView):
         ctx["student_homework_files"] = student_homework.student_homework_file.all()
 
         ctx["homework_questions"] = student_homework.homework.homework_file.all()
-        ctx["homework_notebook"] = student_homework.homework.homework_notebook.all()
         return ctx

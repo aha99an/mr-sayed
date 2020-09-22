@@ -109,25 +109,25 @@
                 <table DIR="RTL">
                     <thead>
                         <tr>
-                            <th>الامتحان</th>
-                            <th>الدرجة</th>
+                            <th>الواجب</th>
+                            <th>التصحيح</th>
                             <th>نموذج الاجابة</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {% for exam in student_exams %}
+                        {% for homework in student_homeworks %}
                         <tr>
                             <td>
-                                <a href="{% url 'profile_exam_question' exam.id 1 %}"
+                                <a href="{% url 'profile_homework' homework.id %}"
                                     style="color: lightblue;">
-                                    {{ exam.exam }}</a>
+                                    {{ homework.homework }}</a>
                             </td>
                             <td>
-                                {% if exam.is_graded %}
-                                {{exam.grade|floatformat}}/{{exam.exam.grade|floatformat}}
+                                {% if homework.is_checked %}
+                                تم تصحيح الواجب
                                 {% else %}
-                                جاري تصحيح الامتحان
+                                جاري تصحيح الواجب 
                                 {% endif %}
                             </td>
                             <td>

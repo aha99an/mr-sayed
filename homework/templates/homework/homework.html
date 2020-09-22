@@ -3,12 +3,10 @@
 <h2>{{homework.name}}</h2>
 {% endblock %}
 {% block content %}
-{% if homework_notebook %}
-{% for assignment in homework_notebook %}
+{% if homework.homework_text %}
 <p style="text-align: right; color: lightblue;">
-    {{assignment.homework_text}}
+    {{homework.homework_text}}
 </p>
-{% endfor %}
 {% endif %}
 {% if homework_questions %}
 {% for question in homework_questions %}
@@ -19,7 +17,7 @@
     </a>
 </span>
 {% else %}
-<h3>Homework files</h3>
+<h3>ملفات الواجب</h3>
 
 <a href="{{ question.homework_file.url }}" style="color: lightblue;">
     {{question.homework_file.name}}
@@ -32,17 +30,17 @@
 <!-- uploaded files -->
 
 {% if uploaded_files %}
-<h3>Uploaded files</h3>
+<h3>الملفات المُسلمة</h3>
 <br>
 <div class="table-responsive table-wrapper">
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">
-                    <h4>Name</h4>
+                    <h4>الاسم</h4>
                 </th>
                 <th scope="col" style="text-align: center;">
-                    <h4>Delete</h4>
+                    <h4>مسح</h4>
                 </th>
             </tr>
         </thead>
@@ -61,7 +59,7 @@
                         <form method="post" action="{% url 'delete_file' homework.id file.id %}"
                             style="margin: 0 0 0 0;">
                             {% csrf_token %}
-                            <input type="submit" value="&nbsp; Delete &nbsp;" class="btn btn-danger"
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
                                 style="background-color: red;">
                         </form>
                     </span>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import (Homework, HomeworkFile, HomeworkAnswerFile, StudentHomework,
+from .models import (Homework, HomeworkFile, StudentHomework,
                      StudentHomeworkFile)
 
 
@@ -10,7 +10,7 @@ class StudentHomeworkFileForm(forms.ModelForm):
 
 
 class StudentHomeworkMultipleFileForm(forms.Form):
-    student_homework_file = forms.FileField(
+    student_homework_file = forms.FileField(label=" رفع ملفات الواجب", 
         widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
 

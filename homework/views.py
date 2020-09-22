@@ -1,7 +1,7 @@
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
-from .models import (Homework, HomeworkFile, HomeworkAnswerFile, StudentHomework,
-                     StudentHomeworkFile, HomeworkNotebook)
+from .models import (Homework, HomeworkFile, StudentHomework,
+                     StudentHomeworkFile)
 from collections import OrderedDict
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -68,7 +68,6 @@ class HomeworkMultipleUpdateView(FormView):
             homework__id=self.kwargs.get("homework_pk"), user=self.request.user).last()
 
         ctx["homework_questions"] = homework_questions
-        ctx["homework_notebook"] = homework.homework_notebook.all()
         ctx["homework"] = homework
         ctx["image_extensions"] = image_extensions
         if student_homework:
@@ -88,43 +87,3 @@ class UploadedFileDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})
-
-
-# class HomeworkUpdateView(UpdateView):
-#     model = StudentHomeworkFile
-#     template_name = 'homework/homework.html'
-#     form_class = StudentHomeworkMultipleFileForm
-
-#     # def dispatch(self, request, *args, **kwargs):
-#     #     return super().dispatch(request, *args, **kwargs)
-
-#     def get_object(self):
-
-#         return StudentHomeworkFile.objects.last()
-
-#     def form_valid(self, form):
-#         return super().form_valid(form)
-
-#     def get_context_data(self, *args, **kwargs):
-#         ctx = super().get_context_data(*args, **kwargs)
-#         homework = Homework.objects.get(id=self.kwargs.get("homework_pk"))
-#         homework_questions = homework.homework_file.all()
-#         student_homework = StudentHomework.objects.get(
-#             homework__id=self.kwargs.get("homework_pk"), user=self.request.user)
-#         print(student_homework)
-#         print("HEEEEEEEEEEEE")
-#         print(student_homework.student_homework_file.all())
-#         ctx["homework_questions"] = homework_questions
-#         print(ctx["homework_questions"])
-#         ctx["homework"] = homework
-#         ctx["uploaded_files"] = student_homework.student_homework_file.all()
-#         print(ctx["uploaded_files"])
-#         ctx["image_extensions"] = image_extensions
-#         # ctx["all_questions"] = all_questions
-#         # ctx["exam_time"] = self.exam.time
-#         # ctx["student_exam"] = self.student_exam
-#         # ctx["question_id"] = self.kwargs.get("question_pk")
-#         return ctx
-
-#     def get_success_url(self):
-#         return reverse_lazy("homework_list")

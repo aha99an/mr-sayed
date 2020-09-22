@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{object.homework.name}}</h2>
+{% endblock %}
+{% block content %}
+{% if object.homework.homework_text %}
+<p style="text-align: right; color: lightblue;">
+    {{object.homework.homework_text}}
+</p>
+{% endif %}
+{% if object.homework.homework_file %}
+<h3>ملفات الواجب</h3>
+
+{% for question in object.homework.homework_file.all %}
+{% if question.extension in image_extensions %}
+<span class="image fit">
+    <a href="{{ question.homework_file.url }}">
+        <img src="{{ question.homework_file.url}}">
+    </a>
+</span>
+{% else %}
+
+<a href="{{ question.homework_file.url }}" style="color: lightblue;">
+    {{question.homework_file.name}}
+
+</a>
+<br><br><br>
+{% endif %}
+{% endfor %}
+{% endif %}
+<!-- uploaded files -->
+
+{% if object.student_homework_file %}
+<h3>الملفات المُسلمة</h3>
+<br>
+<div class="table-responsive table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <h4>الاسم</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in object.student_homework_file.all %}
+            <tr>
+
+                <td>
+                    <a href="{{file.student_homework_file.url}}"
+                        style="color: lightblue;">{{file.snippet_file_name}}</a>
+
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+    {% else %}
+    لم يتم حل الواجب
+    {% endif %}
+
+    {% if object.notes %}
+    الملاحظات:
+    <br>
+    {{object.notes}}
+    {% endif %}
+
+    {% endblock content %}

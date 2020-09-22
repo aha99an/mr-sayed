@@ -7,7 +7,7 @@ from exams.models import Exam, StudentExam, StudentChoiceAnswer, StudentEssayAns
 from django.db.models import Sum
 from django.utils import timezone
 from collections import OrderedDict
-
+from homework.models import StudentHomework
 
 def get_all_questions(exam_id, user):
     exam = Exam.objects.get(id=exam_id)
@@ -89,6 +89,7 @@ class ProfileView(TemplateView):
                             user=self.request.user)
 
         ctx["student_exams"] = student_exams
+        ctx["student_homeworks"] = StudentHomework.objects.filter(user=self.request.user)
         return ctx
 
 
@@ -103,12 +104,8 @@ class ExamQuestionDetailView(DetailView):
         self.question_pk = self.kwargs.get("question_pk")
         self.all_questions = get_all_questions(
             student_exam.exam.id, student_exam.user)
-        if self.question_pk:
-            question_content = self.all_questions[self.question_pk]
+        question_content = self.all_questions[self.question_pk]
 
-        else:
-            question_content = list(self.all_questions.values())[0]
-        print(question_content)
         return question_content
 
     def get_context_data(self, *args, **kwargs):
@@ -120,3 +117,28 @@ class ExamQuestionDetailView(DetailView):
         else:
             ctx["question_pk"] = 1
         return ctx
+
+class HomeworkDetailView(DetailView):
+    template_name = 'accounts/profile-homework.html'
+    model = StudentHomework
+    # def get_object(self):
+    #     self.student_exam_pk = self.kwargs.get("student_exam_pk")
+    #     student_exam = StudentExam.objects.get(id=self.student_exam_pk)
+    #     student_exam.is_graded = True
+    #     student_exam.save()
+    #     self.question_pk = self.kwargs.get("question_pk")
+    #     self.all_questions = get_all_questions(
+    #         student_exam.exam.id, student_exam.user)
+    #     question_content = self.all_questions[self.question_pk]
+
+    #     return question_content
+
+    # def get_context_data(self, *args, **kwargs):
+    #     ctx = super().get_context_data(*args, **kwargs)
+    #     ctx["all_questions"] = self.all_questions
+    #     ctx["student_exam_pk"] = self.student_exam_pk
+    #     if self.question_pk:
+    #         ctx["question_pk"] = self.question_pk
+    #     else:
+    #         ctx["question_pk"] = 1
+    #     return ctx

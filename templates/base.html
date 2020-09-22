@@ -64,9 +64,7 @@
 					{% endif %}
 					
 					{% if user.is_authenticated %}
-					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
-					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
-					<li><a href="{% url 'student_questions' %}">اسأل الأستاذ</a></li>
+	
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
@@ -74,6 +72,9 @@
 					{% endif %}
 
 					{% if user.is_student %}
+					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
+					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
+					<li><a href="{% url 'student_questions' %}">اسأل الأستاذ</a></li>
 					{% comment %} <li><a href="#">Student</a></li> {% endcomment %}
 					{% endif %}
 

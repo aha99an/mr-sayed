@@ -46,17 +46,17 @@
 						style="user-select: none; cursor: pointer; white-space: nowrap; opacity: 1;">
 						<a href="#">اضافة</a>
 						<ul class="" style="user-select: none; display: none; position: absolute;">
-							<li style="white-space: nowrap;"><a
+							{% comment %} <li style="white-space: nowrap;"><a
 									href="{% url 'admin_homework_list' %}"
-									style="display: block;">اضافة محاضرة</a></li>
-							<li style="white-space: nowrap;"><a href="{% url 'admin_add_exam_list' %}"
-									style="display: block;">اضافة امتحان</a></li>
-							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
-									style="display: block;">اضافة واجب</a></li>
-							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة محاضرة</a></li> {% endcomment %}
+							{% comment %} <li style="white-space: nowrap;"><a href="{% url 'admin_add_exam_list' %}"
+									style="display: block;">اضافة امتحان</a></li> {% endcomment %}
+							{% comment %} <li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة واجب</a></li> {% endcomment %}
+							<li style="white-space: nowrap;"><a href="{% url 'class_list' %}"
 									style="display: block;">اضافة مجموعة</a></li>
-							<li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
-									style="display: block;">اضافة اسبوع</a></li>
+							{% comment %} <li style="white-space: nowrap;"><a href="{% url 'admin_exam_list' %}"
+									style="display: block;">اضافة حصة</a></li> {% endcomment %}
 						</ul>
 					</li>
 					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{student_homework}}</h2>
+{% endblock %}
+{% block content %}
+<section dir="rtl" lang="ar">
+    <!-- Homework questions -->
+    {% if homework_notebook %}
+    {% for assignment in homework_notebook %}
+    <p style="text-align: right; color: lightblue;">
+        {{assignment.homework_text}}
+    </p>
+    {% endfor %}
+    {% endif %}
+    {% if homework_questions %}
+    <h3>ملفات الواجب</h3>
+    {% for question in homework_questions %}
+
+    <a href="{{ question.homework_file.url }}" style="color: lightblue;">
+        {{question.homework_file.name}}
+
+    </a>
+    <br><br><br>
+    {% endfor %}
+    {% endif %}
+
+
+
+
+    <!-- Student homework -->
+    <!-- <div style="text-align: right;"> -->
+    <h3>واجب التلميذ</h3>
+    {% for file in student_homework_files %}
+    <a href="{{file.student_homework_file.url}}"
+        style="color: lightblue;">{{file.snippet_file_name}}</a>
+    {% endfor %}
+    <form method="post" enctype="multipart/form-data" class="md-form">
+        {% csrf_token %}
+
+        {{form}}
+        <br>
+        <input type="submit" class="button primary" value="تم"
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+    </form>
+</section>
+{% endblock content %}

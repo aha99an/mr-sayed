@@ -15,8 +15,7 @@ SECRET_KEY = '&b5=0pq&c-#18rpqb92v7h%9h4xd%l!*9*j2y4bq5cgpnmv6*d'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
+# ALLOWED_HOSTS = ['3.134.92.56']
 # Application definition
 
 INSTALLED_APPS = [
@@ -30,9 +29,12 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'exams',
+    'questions',
     "classes",
     "homework",
+    "lectures",
     # 3rd Party
+    # "storages",
     # 'crispy_forms',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -131,3 +133,12 @@ EMAIL_HOST_PASSWORD = 'iszoleqzpvimtcre'  # past the key or password app here
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
+
+
+# aws credintials
+# AWS_ACCESS_KEY_ID = "AKIAVATIJWXIW7INOAFP"
+# AWS_SECRET_ACCESS_KEY = "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"
+# AWS_STORAGE_BUCKET_NAME = "website-try"
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

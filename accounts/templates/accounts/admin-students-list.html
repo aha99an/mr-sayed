@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>الطلاب</h2>
+{% endblock %}
+{% block content2 %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>الطالب</th>
+                <th>الحصة</th>
+                <th>مفعل/غير مفعل</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in object_list %}
+
+            <tr>
+                <td>
+                    <a style="color: lightblue;" href="{% url 'student_update_view' student.id %}">
+                        {{ student }}</a>
+                </td>
+                <td>{{ student.student_class }}</td>
+                <!-- <td>{{ student.is_active }}</td> -->
+                <td>
+                    {% if student.is_active %}
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div class="check"></div>
+                    {% else %}
+                    &nbsp&nbsp&nbsp&nbsp&#10060;
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+    {% endblock %}

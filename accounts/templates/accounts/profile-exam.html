@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>{{question_pk}} السؤال رقم </h2>
+{% endblock %}
+{% block content2 %}
+
+<!-- Question -->
+{% if object.question.question %}
+
+<h3>{{object.question.question}}</h3>
+
+<br>
+{% endif %}
+{% if object.question.image_question %}
+<a href="{{ object.question.image_question.url}}">
+
+<span class="image fit">
+    <img src="{{ object.question.image_question.url}}" alt={{ object.question.question }}>
+</span>
+</a>
+{% endif %}
+
+
+{% if object.type == "choice_question" %}
+<!-- Choice form -->
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option1}}"
+        value="{{object.question.option1}}" {% if object.answer.answer == object.question.option1 %}
+        checked {% endif %} disabled>
+    <label for="{{object.question.option1}}">1-
+        {{object.question.option1}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option2}}"
+        value="{{object.question.option2}}" {% if object.answer.answer == object.question.option2 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option2}}">2-
+        {{object.question.option2}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option3}}"
+        value="{{object.question.option3}}" {% if object.answer.answer == object.question.option3 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option3}}">3-
+        {{object.question.option3}}</label><br>
+</div>
+<div class="col-4 col-12-medium">
+    <input type="radio" name="answer" id="{{object.question.option4}}"
+        value="{{object.question.option4}}" {% if object.answer.answer == object.question.option4 %}
+        checked{% endif %} disabled>
+    <label for="{{object.question.option4}}">4-
+        {{object.question.option4}}</label><br>
+
+</div>
+{% if not object.answer %}
+لم تجاوب على هذا السؤال<br /><br />
+{% endif %}
+<h3>الاجابة الصحيحة رقم: {{object.question.right_answer_choice}}
+</h3>
+<br><br>
+
+<!-- Essay question -->
+{% elif object.type == "essay_question" %}
+
+
+
+اجابة الطالب:-
+<br />
+{{object.answer.answer}}
+{% if object.answer.image_answer %}
+<a href="{{ object.answer.image_answer.url}}">
+    <span class="image fit">
+        <img src="{{ object.answer.image_answer.url}}"
+            alt={{ object.answer.image_answer }}>
+    </span>
+</a>
+{% endif %}
+{% if not object.answer.answer and not object.answer.image_answer %}
+لم تجاوب على هذا السؤال
+<br />
+{% endif %}
+<br />
+
+
+{% if object.answer.grade %}
+<h4>درجة السؤال: {{object.question.grade|floatformat}}/{{object.answer.grade|floatformat}}</h4>
+{% else %}
+<h4>درجة السؤال: {{object.question.grade|floatformat}}/0</h4>
+{% endif %}
+<br>
+{% endif %}
+
+{% if question_pk == all_questions|length %}
+<a href="{% url 'profile_exam_question' student_exam_pk 1 %}">
+    {% else %}
+    <a href="{% url 'profile_exam_question' student_exam_pk question_pk|add:1 %}">
+
+        {% endif %}
+        <button type="submit" class="button primary"
+            style="font-size: 30px;height: 4rem; line-height: 4rem; width:100%">السؤال
+            التالي</button>
+    </a>
+
+
+
+    <br /><br />
+    <!-- questions table -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>رقم السؤال</th>
+                    <th>الدرجة</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question_number,question_content in all_questions.items %}
+                <tr>
+
+                    <td>
+                        <a href="{% url 'profile_exam_question' student_exam_pk question_number %}">
+                            <button type="button" class="button primary">السؤال
+                                {{question_number}}</button>
+                        </a>
+                    </td>
+        {% if question_content.answer.grade %}
+        <td>{{question_content.answer.grade|floatformat}} / {{question_content.question.grade|floatformat}}</td>
+        {% else %}
+                <td>0 / {{question_content.question.grade|floatformat}}</td>
+        {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+
+        </table>
+    {% endblock content2 %}

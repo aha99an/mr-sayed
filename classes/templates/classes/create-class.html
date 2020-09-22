@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>إنشاء حصة</h2>
+{% endblock %}
+{% block content %}
+<form method="post" class="md-form">
+    {% csrf_token %}
+
+    {{form.name.errors}}
+    <div style="text-align: right; padding: .5em 0em .5em 0em ;">{{form.name.label}}</div>
+    <input type="text" style="text-align:right;" name="name">
+
+    {{form.name.errors}}
+
+    <div style="text-align: right; padding: .5em 0em .5em 0em ;">{{form.week_day.label}}</div>
+    <select name="week_day" dir="rtl">
+        {% for x,y in form.fields.week_day.choices %}
+
+        <option value="{{ x }}" {% if form.fields.week_day.value == x %} selected{% endif %}>{{ y }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <div class="table-wrapper">
+        <table DIR="RTL">
+            <thead style="border-bottom:0">
+                <tr>
+
+                    <th>{{form.start.errors}}<label style="text-align: right; margin:0;"
+                            for="start">بداية الحصة</label>
+                        <div style="text-align: right;"><input type="time" style="color:black"
+                                name="start">
+                        </div>
+                    </th>
+                    <th>
+                        {{form.end.errors}}
+
+                        <label style="text-align: right; margin:0;" for="start">وقت انتهاء
+                            الحصة</label>
+                        <div style="text-align: right;"><input type="time" style="color:black"
+                                name="end">
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <!-- {{form.end.errors}} -->
+        <!-- {{ form.as_p }} -->
+        <input type="submit" class="button primary" value="انشاء الحصة"
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+</form>
+
+{% endblock content %}

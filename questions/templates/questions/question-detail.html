@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>السؤال</h2>
+{% endblock %}
+div cladiv class="check"></div>ss="check"></div>
+
+{% block content2 %}
+<h3>السؤال:</h3>
+<p>{{ object.question }}</p>
+
+{% if object.image_question %}
+<a href="{{ object.image_question.url}}">    
+
+    <span class="image fit">
+            <img src="{{ object.image_question.url}}"  href="{{object.image_question.url}}" alt={{ object.image_question }}>    
+        </span>
+    </a>
+{% else  %}
+{% endif %}
+
+
+{% if object.is_answered %}
+<h2>الإجابة:</h2>
+    {% else  %} 
+    
+    {% endif %}
+
+{% if object.answer %}
+<p>{{ object.answer }}</p>
+    {% else  %} 
+    {% endif %}
+
+
+
+{% if object.image_answer %}
+<a href="{{ object.image_answer.url}}">    
+
+    <span class="image fit">
+            <img src="{{ object.image_answer.url}}"  href="{{object.image_answer.url}}" alt={{ object.image_answer }}>    
+        </span>
+    </a>
+{% else  %}
+{% endif %}
+
+
+
+{% endblock content2 %}

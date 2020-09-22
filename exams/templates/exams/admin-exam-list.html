@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>الامتحانات</h2>
+{% endblock %}
+{% block content2 %}
+<!-- <a href="#">{{class}}</a> <br> -->
+<form method="get" action="{% url 'admin_exam_list' %}">
+    <select name="class_filter" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار حصة</option>
+
+        {% for class in classes %}
+
+        <option value="{{class.name}}" {% if class_filter == class.name %} selected{% endif %}>
+            {{class.name}}
+        </option>
+        {% endfor %}
+    </select>
+    <select name="is_checked_filter" onchange="this.form.submit()">
+        <option value="">التصحيح؟ </option>
+        <option value="True" {% if is_checked_filter == "True" %} selected{% endif %}>تم تصحيحه
+        </option>
+        <option value="False" {% if is_checked_filter == "False" %} selected{% endif %}>لم يتم
+            تصحيحه
+        </option>
+    </select>
+</form>
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>الطالب</th>
+                <th>الامتحان</th>
+                <th>الحصة</th>
+                <th>التصحيح</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student_exam in object_list %}
+
+            <tr>
+                <td>
+                    <a style="color: lightblue;"
+                        href="{% url 'admin_first_choice_question' student_exam.id %}">
+                        {{ student_exam.user }}</a>
+                </td>
+                <td>{{ student_exam.exam.name }}</td>
+                <td>{{ student_exam.user.student_class }}</td>
+                <td>
+                    {% if student_exam.is_graded %}
+                    &nbsp&nbsp<div class="check"></div>
+                    {% else %}
+                    &#10060;
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+    </table>
+    {% endblock content2 %}

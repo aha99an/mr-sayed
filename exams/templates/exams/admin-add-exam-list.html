@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>الامتحانات</h2>
+{% endblock %}
+{% block content2 %}
+
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>الامتحان</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in object_list %}
+
+            <tr>
+
+                <td>{{ exam }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+    </table>
+    {% endblock content2 %}

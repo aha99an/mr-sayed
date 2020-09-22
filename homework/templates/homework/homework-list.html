@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block head %}
 <h2>Homeworks</h2>
-{% endblock %}{% block content %}
-
+{% endblock %}
+{% block content %}
 <div class="table-wrapper">
     <table>
         <thead>
@@ -15,9 +15,7 @@
             {% for homework in homeworks %}
 
             <tr>
-
                 <td>
-
                     <a style="color: lightblue;" href="{% url 'homework' homework.homework.id %}">
                         {{ homework.homework }}</a>
                 </td>
@@ -36,15 +34,4 @@
         <tfoot>
 
     </table>
-
-    {% if exam_time_expired %}
-    <script>
-        swal({
-            type: 'error',
-            title: 'انتهى وقت الامتحان',
-            text: 'برجاء انتظار النتيجة ونموذج الاجابة الاسبوع القادم',
-            // footer: '<a href>Why do I have this issue?</a>'
-        })
-    </script>
-    {% endif %}
     {% endblock content %}

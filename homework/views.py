@@ -27,7 +27,7 @@ class HomeworkListView(ListView):
         homeworks = self.get_queryset()
         for i in homeworks:
             answered = "not answered yet"
-            if i.student_homework.get(user=self.request.user).student_homework_file.all():
+            if i.student_homework.filter(user=self.request.user).student_homework_file.all():
                 answered = "answered"
             all_homeworks.append({"homework": i,
                                   "answered": answered})

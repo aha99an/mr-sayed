@@ -112,7 +112,7 @@ class ChoiceQuestion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.question
+        return self.question or " "
 
 
 class StudentChoiceAnswer(models.Model):

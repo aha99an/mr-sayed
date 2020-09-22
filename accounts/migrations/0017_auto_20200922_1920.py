@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='customuser',
             name='student_class',
-            field=models.ForeignKey(blank=True, default='لم يتم تحديد مجموعة', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='student_class', to='classes.Class', verbose_name='المجموعة'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='student_class', to='classes.Class', verbose_name='المجموعة'),
         ),
     ]

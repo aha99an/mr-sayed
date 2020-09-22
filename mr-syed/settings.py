@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "homework",
     "lectures",
     # 3rd Party
+    'whitenoise.runserver_nostatic',
     # "storages",
     # 'crispy_forms',
 ]
@@ -42,6 +43,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,7 +123,6 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'accounts.CustomUser'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -134,7 +135,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
 
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # aws credintials
 # AWS_ACCESS_KEY_ID = "AKIAVATIJWXIW7INOAFP"
 # AWS_SECRET_ACCESS_KEY = "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"

@@ -8,7 +8,7 @@
         <thead>
             <tr>
                 <th>المحاضرة</th>
-                <th>المشاهدة؟</th>
+                {% comment %} <th>المشاهدة؟</th> {% endcomment %}
             </tr>
         </thead>
         <tbody>
@@ -21,14 +21,14 @@
                     <a style="color: lightblue;" href="{% url 'lecture' lecture.id %}">
                         {{ lecture.name }}</a>
                 </td>
-                <td>
+                {% comment %} <td>
                     &#10060;
                     <!-- {% if homework.answered == "answered" %}
                     &nbsp&nbsp<div class="check"></div>
                     {% else %}
                     &#10060;
                     {% endif %} -->
-                </td>
+                </td> {% endcomment %}
 
             </tr>
             {% endfor %}

@@ -60,25 +60,20 @@
 						</ul>
 					</li>
 					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>
+					<li><a href="{% url 'logout' %}">الخروج</a></li>
 
-					{% endif %}
-					
-					{% if user.is_authenticated %}
 	
+
+					{% elif user.is_student %}
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
+					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
+					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
+					<li><a href="{% url 'student_questions' %}">اسأل استاذ سيد</a></li>
+					<li><a href="{% url 'lectures_list' %}">المحاضرات</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
 					<li><a href="{% url 'login' %}" class="button primary">تسجيل دخول/انشاء حساب</a></li>
 					{% endif %}
-
-					{% if user.is_student %}
-					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
-					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
-					<li><a href="{% url 'student_questions' %}">اسأل مستر سيد</a></li>
-					{% comment %} <li><a href="#">Student</a></li> {% endcomment %}
-					{% endif %}
-
-
 				</ul>
 			</nav>
 		</header>

@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
     phoneNumber = models.IntegerField(default=0)
     profile_pic = models.ImageField(null=True, blank=True)
     student_class = models.ForeignKey(Class, null=True, blank=True, on_delete=models.SET_NULL,
-                                      related_name="student_class", verbose_name="المجموعة", default="لم يتم تحديد مجموعة")
+                                      related_name="student_class", verbose_name="المجموعة")
     user_type = models.IntegerField(choices=USER_TYPE_CHOICES, default=0)
     student_is_active = models.BooleanField(default=False)
     random_password = models.CharField(max_length=10, null=True, blank=True)

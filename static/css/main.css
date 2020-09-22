@@ -2314,8 +2314,10 @@ input, select, textarea {
 			display: inline-block;
 			font-size: 1em;
 			font-weight: 100;
-			padding-left: 2.55em;
-			padding-right: 0.75em;
+			/* padding-left: 2.55em;
+			padding-right: 0.75em; */
+			padding-left: 0.75em;
+			padding-right: 2.55em;
 			position: relative;
 		}
 
@@ -2341,7 +2343,8 @@ input, select, textarea {
 				display: inline-block;
 				font-size: 0.8em;
 				height: 2.25em;
-				left: 0;
+				/* left: 0; */
+				right: 0;
 				line-height: 2.25em;
 				position: absolute;
 				text-align: center;
@@ -2563,6 +2566,9 @@ input, select, textarea {
 			.image.fit img {
 				width: 100%;
 			}
+		img {
+				border-radius: 50%;
+		}
 
 /* List */
 
@@ -2904,8 +2910,7 @@ input, select, textarea {
 			background-color: #3a37f0;
 			box-shadow: none;
 			color: #ffffff !important;
-			padding: 0px 10px 10px 10px;
-			
+			padding: 0px 10px 10px 10px; 
 		}
 
 			input[type="submit"].primary:hover,
@@ -2913,6 +2918,7 @@ input, select, textarea {
 			input[type="button"].primary:hover,
 			.button.primary:hover {
 				background-color: #000000;
+
 			}
 
 			input[type="submit"].primary:active,
@@ -2920,6 +2926,8 @@ input, select, textarea {
 			input[type="button"].primary:active,
 			.button.primary:active {
 				background-color: #e1ab36;
+				padding: 20px 20px 20px 20px;
+
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
@@ -3241,7 +3249,9 @@ input, select, textarea {
 			.wrapper.style2 input[type="button"].primary,
 			.wrapper.style2 .button.primary {
 				background-color: #ffffff;
-				color: lightblue !important;
+				color: #3a37f0 !important;
+				padding: 20px 20px;
+
 			}
 
 				.wrapper.style2 input[type="submit"].primary:hover, .wrapper.style2 input[type="submit"].primary:active,
@@ -3254,6 +3264,8 @@ input, select, textarea {
 					background-color: rgba(255, 255, 255, 0.075) !important;
 					box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
 					color: #ffffff !important;
+					padding: 20px 20px 20px 20px;
+
 				}
 
 				.wrapper.style2 input[type="submit"].primary:active,
@@ -3261,6 +3273,8 @@ input, select, textarea {
 				.wrapper.style2 input[type="button"].primary:active,
 				.wrapper.style2 .button.primary:active {
 					background-color: rgba(255, 255, 255, 0.25) !important;
+					padding: 20px 20px 20px 20px;
+
 				}
 
 		.wrapper.fade-down > .container {
@@ -4114,7 +4128,19 @@ input, select, textarea {
 					}
 
 	}
-    .check {
+	.form-section {
+		margin:0px 200px 0px 200px;
+	}
+	
+	.circular--square {
+		border-radius: 50%;
+		width: 300px;
+		height: 300px;
+		position: relative;
+		margin-left: 1200px;
+	  }
+	  
+	  .check {
         /* padding: 20px; */
         text-align: center;
         display: inline-block;

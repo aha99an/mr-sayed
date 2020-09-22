@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>الاسئلة السابقة</h2>
+{% endblock %}
+
+
+{% block content %}
+{% endblock content %}
+
+
+{% block content2 %}
+<a href="{% url 'question_new' %}" class="button primary">  انشاء سؤال جديد  </a>
+
+<div class="table-wrapper" dir="rtl" style="text-align: right;">
+    <table>
+        <thead>
+            <tr>
+                <th>الاسئلة</th>
+                <th>مجابة؟</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qu in object_list %}
+            <tr> 
+                <td> 
+                    <a href="{% url 'question_detail' qu.id %}">
+                        
+                        {{ qu.question }}    
+                    </a>   
+                </td>
+
+                <td>                     
+                    {% if qu.is_answered == False  %}
+                    &#10060;
+                    {% else  %} <div class="check"></div>
+                    {% endif %}
+                   
+                 </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+                
+{% endblock content2 %}
+
+
+
+
+<!-- 
+
+
+
+<a href="{{ qu.image_question.url}}">    
+
+    <span class="image fit">
+            <img src="{{ qu.image_question.url}}"  href="{{qu.image_question.url}}" alt={{ qu.image_question }}>    
+        </span>
+    </a>
+     -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>exam</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,exam in exams.items %}
+
+            <tr>
+
+                <td>
+
+                    <a href="{% url 'question' exam.exam.id 1 %}"> {{ exam.exam }}</a>
+                </td>
+                <td>
+                    <span style="color:yellow;">{{ exam.answered }}</span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+
+    {% if exam_time_expired %}
+    <script>
+        swal({
+            type: 'error',
+            title: 'انتهى وقت الامتحان',
+            text: 'برجاء انتظار النتيجة ونموذج الاجابة الاسبوع القادم',
+            // footer: '<a href>Why do I have this issue?</a>'
+        })
+    </script>
+    {% endif %} -->

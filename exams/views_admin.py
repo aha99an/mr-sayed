@@ -137,3 +137,7 @@ def update_view(request, student_essay_answer_pk, question_pk):
 
     else:
         return HttpResponseRedirect("/"+student_essay_answer_pk)
+
+class AdminAddExamListView(ListView):
+    template_name = "exams/admin-add-exam-list.html"
+    model = Exam

@@ -5,7 +5,7 @@ import math
 from django.utils import timezone
 from accounts.models import CustomUser
 from datetime import timedelta
-
+from classes.models import Week
 
 class Exam(models.Model):
     CHOICE_EXAM = 0
@@ -15,6 +15,7 @@ class Exam(models.Model):
         (CHOICE_EXAM, 'امتحان اختياري'),
         (VARIETY_EXAM, 'امتحان اختياري و مقالي'),
     )
+    week = models.ForeignKey(Week, on_delete=models.SET_NULL, verbose_name="الحصة", null=True, blank=True)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
     total_question = models.IntegerField(default=0)

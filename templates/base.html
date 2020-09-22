@@ -29,8 +29,6 @@
 				<ul>
 					<li><a href="{% url 'home' %}">الرئيسية</a></li>
 					{% if user.is_admin %}
-					<li><a href="{% url 'class_list' %}">الحصص</a></li>
-					<li><a href="{% url 'week_list' %}">الاسابيع</a></li>
 					<li class="opener"
 						style="user-select: none; cursor: pointer; white-space: nowrap; opacity: 1;">
 						<a href="#">التصحيح</a>

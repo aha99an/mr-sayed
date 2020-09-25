@@ -4,29 +4,30 @@ from accounts.models import CustomUser
 import os
 
 
+
 class Homework(models.Model):
-    name = models.CharField(max_length=200)
-    week = models.ForeignKey(
-        Week, on_delete=models.CASCADE, related_name="homework")
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200, verbose_name="اسم الواجب")
+    week = models.ForeignKey(Week, on_delete=models.SET_NULL, related_name="homework",  null=True, blank=True , verbose_name="الأسبوع")
+    homework_file = models.FileField(null=True, blank=True , verbose_name="ملف الواجب")
+    homework_text = models.CharField(max_length=200, null=True, blank=True , verbose_name="الواجب" )
+    homework_answer_file = models.FileField(null=True, blank=True, verbose_name="ملف حل الواجب")
     updated_at = models.DateTimeField(auto_now=True)
-    homework_text = models.TextField(null=True, blank=True)
-    homework_answer_file = models.FileField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
 
-class HomeworkFile(models.Model):
-    homework = models.ForeignKey(
-        Homework, on_delete=models.CASCADE, related_name="homework_file")
-    homework_file = models.FileField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class HomeworkFile(models.Model):
+#     homework = models.ForeignKey(
+#         Homework, on_delete=models.CASCADE, related_name="homework_file")
+#     homework_file = models.FileField(null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
-    def extension(self):
-        name, extension = os.path.splitext(self.homework_file.name)
-        return extension
+#     def extension(self):
+#         name, extension = os.path.splitext(self.homework_file.name)
+#         return extension
 
 
 # class HomeworkNotebook(models.Model):

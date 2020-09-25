@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>جميع الواجبات</h2>
+{% endblock %}
+
+
+{% block content %}
+{% endblock content %}
+
+
+{% block content2 %}
+<a href="{% url 'admin_create_homework' %}" class="button primary">  اضافة واجب  </a>
+
+<div class="table-wrapper" dir="rtl" style="text-align: right;">
+    <table>
+        <thead>
+            <tr>
+                <th>الواجبات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for homework in object_list %}
+            <tr> 
+                <td> 
+                    <a href="{% url 'admin_update_homework' homework.id %}">
+                        
+                        {{ homework.name }}    
+                    </a>   
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+                
+{% endblock content2 %}

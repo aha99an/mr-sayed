@@ -1,5 +1,5 @@
 from django import forms
-from .models import StudentChoiceAnswer, StudentEssayAnswer, Exam
+from .models import StudentChoiceAnswer, StudentEssayAnswer, Exam, ChoiceQuestion, EssayQuestion
 
 
 class StudentChoiceAnswerForm(forms.ModelForm):
@@ -36,3 +36,30 @@ class ExamCreateForm(forms.ModelForm):
     class Meta:
         model = Exam
         fields = ("name", "week", "is_active", "time", "grade")
+
+
+class ChoiceQuestionCreateForm(forms.ModelForm):
+    question = forms.CharField(label="السؤال", required=False)
+    image_question = forms.ImageField(label="صورة سؤال", required=False)
+    option1 = forms.CharField(label="الاختيار الاول")
+    option2 = forms.CharField(label="الاختيار الثاني")
+    option3 = forms.CharField(label="الاختيار الثالث")
+    option4 = forms.CharField(label="الاختيار الرابع")
+    right_answer_choice = forms.ChoiceField(
+        choices=ChoiceQuestion.QUESTION_ANSWER_CHOICES, label="اختار الاجابة الصحيحة ")
+    grade = forms.IntegerField(label="الدرجة")
+
+    class Meta:
+        model = ChoiceQuestion
+        fields = ("question", "image_question", "option1", "option2",
+                  "option3", "option4", "right_answer_choice", "grade")
+
+
+class EssayQuestionCreateForm(forms.ModelForm):
+    question = forms.CharField(label="السؤال", required=False)
+    image_question = forms.ImageField(label="صورة سؤال", required=False)
+    grade = forms.IntegerField(label="الدرجة")
+
+    class Meta:
+        model = EssayQuestion
+        fields = ("question", "image_question", "grade")

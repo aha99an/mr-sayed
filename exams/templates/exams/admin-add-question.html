@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block head %}
+{% if request.resolver_match.url_name == "admin_create_choice_question" %}
+<h2>إنشاء سؤال</h2>
+{% elif request.resolver_match.url_name == "admin_create_essay_question" %}
+<h2>إنشاء سؤال</h2>
+{% elif request.resolver_match.url_name == "admin_update_essay_question" %}
+<h2>تعديل سؤال</h2>
+{% elif request.resolver_match.url_name == "admin_update_choice_question" %}
+<h2>تعديل سؤال</h2>
+{% endif %}
+{% endblock %}
+{% block content2 %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+   {{form}}
+
+   <hr>
+           <input type="submit" class="button primary"
+            
+            {% if request.resolver_match.url_name == "admin_create_choice_question" %}
+            value="اضافة السؤال"
+            {% elif request.resolver_match.url_name == "admin_create_essay_question" %}
+            value="اضافة السؤال"
+            {% elif request.resolver_match.url_name == "admin_update_essay_question" %}
+            value="تعديل السؤال"
+            {% elif request.resolver_match.url_name == "admin_update_choice_question" %}
+            value="تعديل السؤال"
+            {% endif %}
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+
+</form>
+{% if request.resolver_match.url_name == "admin_update_essay_question" %}
+    {% if not object %}
+    <form method="post" action="{% url 'admin_delete_essay_question' 1 %}" style="margin: 0 0 0 0;">
+    {% else %}
+    <form method="post" action="{% url 'admin_delete_essay_question' object.id %}" style="margin: 0 0 0 0;">
+    {% endif %}
+    {% csrf_token %}
+        <input type="submit" value="&nbsp; مسح السؤال &nbsp;" class="btn btn-danger"
+            style="background-color: red; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+    </form>
+
+
+{% elif request.resolver_match.url_name == "admin_update_choice_question" %}
+    {% if not object %}
+    <form method="post" action="{% url 'admin_delete_choice_question' 1 %}" style="margin: 0 0 0 0;">
+    {% else %}
+    <form method="post" action="{% url 'admin_delete_choice_question' object.id %}" style="margin: 0 0 0 0;">
+    {% endif %}
+        {% csrf_token %}
+        <input type="submit" value="&nbsp; مسح السؤال &nbsp;" class="btn btn-danger"
+            style="background-color: red; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+    </form>
+{% endif %}
+{% endblock content2 %}

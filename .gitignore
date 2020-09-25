@@ -17,3 +17,4 @@ mr-syed/__pycache__/settings.cpython-35.pyc
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+/migrations

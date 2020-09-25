@@ -2924,14 +2924,14 @@ input, select, textarea {
 
 			}
 
-			input[type="submit"].primary:active,
+			/* input[type="submit"].primary:active,
 			input[type="reset"].primary:active,
 			input[type="button"].primary:active,
 			.button.primary:active {
 				background-color: #e1ab36;
 				padding: 20px 20px 20px 20px;
 
-			}
+			} */
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
 		input[type="reset"].disabled,

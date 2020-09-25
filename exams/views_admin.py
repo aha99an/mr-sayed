@@ -2,11 +2,11 @@ from django.shortcuts import (
     get_object_or_404,
     render,
     HttpResponseRedirect)
-from django.views.generic import ListView, UpdateView, DetailView, DeleteView, FormView
+from django.views.generic import ListView, UpdateView, DetailView, DeleteView, FormView, CreateView
 from .models import (Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion,
                      StudentExam, StudentChoiceAnswer, StudentEssayAnswer)
 from classes.models import Class
-from .forms import StudentEssayGradingForm
+from .forms import StudentEssayGradingForm, ExamCreateForm
 from django.urls import reverse_lazy
 from collections import OrderedDict
 
@@ -141,3 +141,35 @@ def update_view(request, student_essay_answer_pk, question_pk):
 class AdminAddExamListView(ListView):
     template_name = "exams/admin-add-exam-list.html"
     model = Exam
+
+
+class AdminExamCreateView(CreateView):
+    form_class = ExamCreateForm
+    success_url = reverse_lazy('admin_add_exam_list')
+    template_name = 'exams/admin-create-exam.html'
+
+
+    def get_success_url(self):
+        print(self.object.id)
+        # import ipdb; ipdb.set_trace()
+        print(self.request.POST.get("is_checked_filter"))
+        print(Exam.objects.all())
+        return self.success_url
+
+class AdminExamUpdateView(UpdateView):
+    model = Exam
+    form_class = ExamCreateForm
+    success_url = reverse_lazy('admin_add_exam_list')
+    template_name = 'exams/admin-create-exam.html'
+
+
+    # def get_success_url(self):
+    #     print(self.object.id)
+    #     # import ipdb; ipdb.set_trace()
+    #     print(self.request.POST.get("is_checked_filter"))
+    #     print(Exam.objects.all())
+    #     return self.success_url
+
+class AdminExamDeleteView(DeleteView):
+    model = Exam
+    success_url = reverse_lazy('admin_add_exam_list')

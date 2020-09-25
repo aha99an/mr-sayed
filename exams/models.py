@@ -19,8 +19,8 @@ class Exam(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
     total_question = models.IntegerField(default=0)
-    grade = models.DecimalField(max_digits=10, default=0, decimal_places=1)
-    time = models.IntegerField(default=0, help_text="In minutes")
+    grade = models.DecimalField(max_digits=10, default=0, decimal_places=1, verbose_name="الدرجة")
+    time = models.IntegerField(default=0, verbose_name="الوقت بالدقايق")
     exam_type = models.IntegerField(
         choices=EXAM_TYPE_CHOICES, default=0)
     # mandatory = models.BooleanField(default=False)

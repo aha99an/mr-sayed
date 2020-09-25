@@ -104,6 +104,9 @@ input, select, textarea {
 		font-weight: 100;
 		line-height: 1.75em;
 	}
+	input[type="number"]{
+		color:rgba(0, 0, 0);
+	}
 
 	a {
 		-moz-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;

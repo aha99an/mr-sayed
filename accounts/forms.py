@@ -46,8 +46,8 @@ class StudentChangeForm(forms.ModelForm):
         (False, 'غير مفعل')
     )
     # student_class = forms.CharField(label="المجموعة")
-    is_active = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="التفعيل")
+    student_is_active = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="التفعيل")
 
     class Meta:
         model = CustomUser
-        fields = ('student_class', 'is_active',)
+        fields = ('student_class', 'student_is_active',)

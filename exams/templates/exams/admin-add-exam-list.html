@@ -10,17 +10,41 @@
         <thead>
             <tr>
                 <th>الامتحان</th>
+                <th scope="col" style="text-align: center;">
+                    <h4>مسح</h4>
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for exam in object_list %}
 
             <tr>
-
-                <td>{{ exam }}</td>
+                
+                <td>
+                <a href="{% url 'admin_update_exam' exam.id %}">
+                {{ exam }}
+                </a>
+                </td>
+                <td style="text-align: center;">
+                    <span>
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'admin_delete_exam' exam.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
             </tr>
+                         
+
             {% endfor %}
         </tbody>
         <tfoot>
     </table>
+    <a href="{% url 'admin_create_exam' %}">
+        <button class="button primary" style="background-color:#4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">إنشاء
+            امتحان جديد</button>
+    </a>
     {% endblock content2 %}

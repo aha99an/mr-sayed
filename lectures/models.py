@@ -6,7 +6,9 @@ from accounts.models import CustomUser
 class Lecture(models.Model):
     name = models.CharField(max_length=255)
     week = models.ForeignKey(
-        Week, on_delete=models.CASCADE, related_name="lecture")
+        Week, on_delete=models.SET_NULL, related_name="lecture", null=True, blank=True)
+    lecture_allowed_time = models.IntegerField(default=0)
+    lecture_manual_allow = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

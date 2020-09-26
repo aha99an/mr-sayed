@@ -7,6 +7,7 @@ from accounts.models import CustomUser
 from datetime import timedelta
 from classes.models import Week
 
+
 class Exam(models.Model):
     CHOICE_EXAM = 0
     VARIETY_EXAM = 1
@@ -15,11 +16,13 @@ class Exam(models.Model):
         (CHOICE_EXAM, 'امتحان اختياري'),
         (VARIETY_EXAM, 'امتحان اختياري و مقالي'),
     )
-    week = models.ForeignKey(Week, on_delete=models.SET_NULL, verbose_name="الحصة", null=True, blank=True)
+    week = models.ForeignKey(
+        Week, on_delete=models.SET_NULL, verbose_name="الحصة", null=True, blank=True)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
     total_question = models.IntegerField(default=0)
-    grade = models.DecimalField(max_digits=10, default=0, decimal_places=1, verbose_name="الدرجة")
+    grade = models.DecimalField(
+        max_digits=10, default=0, decimal_places=1, verbose_name="الدرجة")
     time = models.IntegerField(default=0, verbose_name="الوقت بالدقايق")
     exam_type = models.IntegerField(
         choices=EXAM_TYPE_CHOICES, default=0)
@@ -92,11 +95,11 @@ class ChoiceQuestion(models.Model):
     OPTION3 = 2
     OPTION4 = 3
 
-    Question_Answer = (
-        (OPTION1, 'option1'),
-        (OPTION2, 'option2'),
-        (OPTION3, 'option3'),
-        (OPTION4, 'option4'),
+    QUESTION_ANSWER_CHOICES = (
+        (OPTION1, "الاختيار الاول"),
+        (OPTION2, "الاختيار الثاني"),
+        (OPTION3, "الاختيار الثالث"),
+        (OPTION4, "الاختيار الرابع"),
     )
     exam = models.ForeignKey(
         Exam, on_delete=models.CASCADE, related_name="choice_question")
@@ -104,9 +107,9 @@ class ChoiceQuestion(models.Model):
     image_question = models.ImageField(null=True, blank=True)
     option1 = models.CharField(max_length=300)
     option2 = models.CharField(max_length=300)
-    option3 = models.CharField(max_length=300, null=True, blank=True)
-    option4 = models.CharField(max_length=300, null=True, blank=True)
-    right_answer_choice = models.IntegerField(choices=Question_Answer)
+    option3 = models.CharField(max_length=300)
+    option4 = models.CharField(max_length=300)
+    right_answer_choice = models.IntegerField(choices=QUESTION_ANSWER_CHOICES)
     grade = models.FloatField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -9,16 +9,85 @@
    {{form}}
 
    <hr>
-{% if request.resolver_match.url_name == "admin_update_exam" %}
-           <input type="submit" class="button primary" value="تعديل الامتحان"
-            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+{% if request.resolver_match.url_name == "admin_create_exam" %}
+    <select name="question_type" onchange="this.form.submit()">
+        <option value="">اضافة سؤال </option>
+        <option value="choice" >اختياري</option>
+        <option value="essay">مقالي</option>
+    </select>
+         
 {% else %}
-                  <select name="is_checked_filter" onchange="this.form.submit()">
+  <input type="submit" class="button primary" value="تعديل الامتحان"
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+               
+               <br><br>
+    <select name="question_type" onchange="this.form.submit()">
         <option value="">اضافة سؤال </option>
         <option value="choice" >اختياري</option>
         <option value="essay">مقالي</option>
     </select>
 {% endif %}
 </form>
+
+{% if object.essay_question.all %}
+    <!-- questions table -->
+   <h3> الاسئلة المقالي </h3>
+   <br>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>رقم السؤال</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in object.essay_question.all %}
+                <tr>
+
+                    <td>
+                        <a href="{% url 'admin_update_essay_question' question.id %}">
+                            <button type="button" class="button primary">السؤال
+                                {{ forloop.counter }}</button>
+                        </a>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+
+        </table>
+{% endif %}
+
+{% if object.choice_question.all %}
+    <!-- questions table -->
+  <h3>  الاسئلة الاختياري</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>رقم السؤال</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in object.choice_question.all %}
+                <tr>
+
+                    <td>
+                        <a href="{% url 'admin_update_choice_question' question.id %}">
+                            <button type="button" class="button primary">السؤال
+                                {{ forloop.counter }}</button>
+                        </a>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+
+        </table>
+{% endif %}
 
 {% endblock content2 %}

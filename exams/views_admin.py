@@ -2,11 +2,11 @@ from django.shortcuts import (
     get_object_or_404,
     render,
     HttpResponseRedirect)
-from django.views.generic import ListView, UpdateView, DetailView, DeleteView, FormView, CreateView
+from django.views.generic import ListView, UpdateView, DetailView, DeleteView, CreateView
 from .models import (Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion,
                      StudentExam, StudentChoiceAnswer, StudentEssayAnswer)
 from classes.models import Class
-from .forms import StudentEssayGradingForm, ExamCreateForm
+from .forms import StudentEssayGradingForm, ExamCreateForm, ChoiceQuestionCreateForm, EssayQuestionCreateForm
 from django.urls import reverse_lazy
 from collections import OrderedDict
 
@@ -138,6 +138,7 @@ def update_view(request, student_essay_answer_pk, question_pk):
     else:
         return HttpResponseRedirect("/"+student_essay_answer_pk)
 
+
 class AdminAddExamListView(ListView):
     template_name = "exams/admin-add-exam-list.html"
     model = Exam
@@ -148,28 +149,101 @@ class AdminExamCreateView(CreateView):
     success_url = reverse_lazy('admin_add_exam_list')
     template_name = 'exams/admin-create-exam.html'
 
-
     def get_success_url(self):
-        print(self.object.id)
-        # import ipdb; ipdb.set_trace()
-        print(self.request.POST.get("is_checked_filter"))
-        print(Exam.objects.all())
+        question_type = self.request.POST.get("question_type")
+        if question_type == "choice":
+            return reverse_lazy("admin_create_choice_question", kwargs={"pk": self.object.id})
+        elif question_type == "essay":
+            return reverse_lazy("admin_create_essay_question", kwargs={"pk": self.object.id})
+
         return self.success_url
+
 
 class AdminExamUpdateView(UpdateView):
     model = Exam
     form_class = ExamCreateForm
-    success_url = reverse_lazy('admin_add_exam_list')
     template_name = 'exams/admin-create-exam.html'
 
+    def get_success_url(self):
 
-    # def get_success_url(self):
-    #     print(self.object.id)
-    #     # import ipdb; ipdb.set_trace()
-    #     print(self.request.POST.get("is_checked_filter"))
-    #     print(Exam.objects.all())
-    #     return self.success_url
+        question_type = self.request.POST.get("question_type")
+        print(question_type)
+        if question_type == "choice":
+            return reverse_lazy("admin_create_choice_question", kwargs={"pk": self.object.id})
+        elif question_type == "essay":
+            return reverse_lazy("admin_create_essay_question", kwargs={"pk": self.object.id})
+        else:
+            return reverse_lazy('admin_add_exam_list')
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        # essay_question = EssayQuestion.objects
+        # ctx
+        return ctx
+
 
 class AdminExamDeleteView(DeleteView):
     model = Exam
     success_url = reverse_lazy('admin_add_exam_list')
+
+
+class AdminChoiceQuestionCreateView(CreateView):
+    form_class = ChoiceQuestionCreateForm
+    template_name = 'exams/admin-add-question.html'
+
+    def form_valid(self, form):
+        form.instance.exam = Exam.objects.filter(
+            id=self.kwargs.get("pk")).last()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("admin_update_exam", kwargs={"pk": self.kwargs.get("pk")})
+
+
+class AdminEssayQuestionCreateView(CreateView):
+    form_class = EssayQuestionCreateForm
+    template_name = 'exams/admin-add-question.html'
+
+    def form_valid(self, form):
+        form.instance.exam = Exam.objects.filter(
+            id=self.kwargs.get("pk")).last()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("admin_update_exam", kwargs={"pk": self.kwargs.get("pk")})
+
+
+class AdminChoiceQuestionUpdateView(UpdateView):
+    model = ChoiceQuestion
+    form_class = ChoiceQuestionCreateForm
+    template_name = 'exams/admin-add-question.html'
+
+    def get_success_url(self):
+        exam = ChoiceQuestion.objects.get(id=self.kwargs.get("pk")).exam
+        return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
+
+
+class AdminEssayQuestionUpdateView(UpdateView):
+    model = EssayQuestion
+    form_class = EssayQuestionCreateForm
+    template_name = 'exams/admin-add-question.html'
+
+    def get_success_url(self):
+        exam = EssayQuestion.objects.get(id=self.kwargs.get("pk")).exam
+        return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
+
+
+class AdminChoiceQuestionDeleteView(DeleteView):
+    model = ChoiceQuestion
+
+    def get_success_url(self):
+        exam = ChoiceQuestion.objects.get(id=self.kwargs.get("pk")).exam
+        return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
+
+
+class AdminEssayQuestionDeleteView(DeleteView):
+    model = EssayQuestion
+
+    def get_success_url(self):
+        exam = EssayQuestion.objects.get(id=self.kwargs.get("pk")).exam
+        return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})

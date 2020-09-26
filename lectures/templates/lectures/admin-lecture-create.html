@@ -12,15 +12,15 @@
 
 
 <div class="after-add-more" style="text-align:right;" dir="rtl">
-  
+     <div class="form-group change">
+            <a class="btn btn-success add-more">اضافة لينك اخر</a>
+        </div>
     {% comment %} <div class="col-md-4">                                 {% endcomment %}
         <div class="form-group">
             <label class="control-label">لينك المحاضرة</label>
-            <input maxlength="200" type="text" class="form-control" placeholder="Enter Logger Name" name="lecture_links" />
+            <input maxlength="200" type="url" class="form-control" placeholder="ادخل لينك المحاضرة" name="lecture_links" />
         </div>
-        <div class="form-group change">
-            <a class="btn btn-success add-more">اضافة لينك اخر</a>
-        </div>
+     
     </div>
 {% comment %} </div> {% endcomment %}
 
@@ -34,7 +34,7 @@
 $(document).ready(function() {
     $("body").on("click",".add-more",function(){ 
         var html = $(".after-add-more").first().clone();      
-          $(html).find(".change").html("<label for=''>&nbsp;</label><a class='btn btn-danger remove'>مسح اللينك</a>");
+          $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
       
       
         $(".after-add-more").last().after(html);

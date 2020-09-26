@@ -1,5 +1,5 @@
 from django.views.generic import ListView, UpdateView
-from django.views.generic.edit import FormView, DeleteView
+from django.views.generic.edit import DeleteView
 from .models import (Homework, HomeworkFile, StudentHomework,
                      StudentHomeworkFile)
 from classes.models import Class

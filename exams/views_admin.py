@@ -2,7 +2,7 @@ from django.shortcuts import (
     get_object_or_404,
     render,
     HttpResponseRedirect)
-from django.views.generic import ListView, UpdateView, DetailView, DeleteView, FormView, CreateView
+from django.views.generic import ListView, UpdateView, DetailView, DeleteView, CreateView
 from .models import (Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion,
                      StudentExam, StudentChoiceAnswer, StudentEssayAnswer)
 from classes.models import Class

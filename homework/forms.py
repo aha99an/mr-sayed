@@ -1,5 +1,5 @@
 from django import forms
-from .models import (Homework, HomeworkFile, StudentHomework,
+from .models import (Homework, StudentHomework,
                      StudentHomeworkFile)
 
 

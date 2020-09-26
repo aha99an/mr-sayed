@@ -1,6 +1,6 @@
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
-from .models import (Homework, HomeworkFile, StudentHomework,
+from .models import (Homework, StudentHomework,
                      StudentHomeworkFile)
 from collections import OrderedDict
 from django.urls import reverse_lazy

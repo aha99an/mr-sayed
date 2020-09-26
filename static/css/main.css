@@ -2910,7 +2910,7 @@ input, select, textarea {
 		input[type="reset"].primary,
 		input[type="button"].primary,
 		.button.primary {
-			background-color: #3a37f0;
+			background-color: #5cb85c;
 			box-shadow: none;
 			color: #ffffff !important;
 			padding: 0px 10px 10px 10px; 
@@ -2924,14 +2924,14 @@ input, select, textarea {
 
 			}
 
-			input[type="submit"].primary:active,
+			/* input[type="submit"].primary:active,
 			input[type="reset"].primary:active,
 			input[type="button"].primary:active,
 			.button.primary:active {
 				background-color: #e1ab36;
 				padding: 20px 20px 20px 20px;
 
-			}
+			} */
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
 		input[type="reset"].disabled,

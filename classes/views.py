@@ -13,7 +13,7 @@ class ClassListView(ListView):
 class ClassCreateView(CreateView):
     template_name = "classes/create-class.html"
     form_class = ClassForm
-    success_url = reverse_lazy('create_class')
+    success_url = reverse_lazy('class_list')
 
     # def form_valid(self, form):
     #     self.object = form.save(commit=False)

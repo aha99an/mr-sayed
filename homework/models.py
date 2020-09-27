@@ -16,30 +16,9 @@ class Homework(models.Model):
         null=True, blank=True, verbose_name="ملف حل الواجب")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    new = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
         return self.name
-
-
-# class HomeworkFile(models.Model):
-#     homework = models.ForeignKey(
-#         Homework, on_delete=models.CASCADE, related_name="homework_file")
-#     homework_file = models.FileField(null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def extension(self):
-#         name, extension = os.path.splitext(self.homework_file.name)
-#         return extension
-
-
-# class HomeworkNotebook(models.Model):
-#     homework = models.ForeignKey(
-#         Homework, on_delete=models.CASCADE, related_name="homework_notebook")
-#     homework_text = models.TextField(null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
 
 
 class StudentHomework(models.Model):

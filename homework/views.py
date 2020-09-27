@@ -66,7 +66,7 @@ class HomeworkMultipleUpdateView(FormView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         homework = Homework.objects.get(id=self.kwargs.get("homework_pk"))
-        homework_questions = homework.homework_file.all()
+        homework_questions = homework.homework_file
 
         student_homework = StudentHomework.objects.filter(
             homework__id=self.kwargs.get("homework_pk"), user=self.request.user).last()

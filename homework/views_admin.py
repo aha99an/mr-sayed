@@ -51,7 +51,8 @@ class AdminCheckHomeworkUpdateView(AdminPermission, UpdateView):
         ctx["student_homework"] = student_homework.homework
         ctx["student_homework_files"] = student_homework.student_homework_file.all()
 
-        ctx["homework_questions"] = student_homework.homework.homework_file.all()
+        ctx["homework_question"] = student_homework.homework.homework_file
+        print(ctx["homework_question"])
         return ctx
 
 

@@ -63,6 +63,7 @@
 							
 						</ul>
 					</li>
+					<li><a href="{% url 'all_questions' %}">اسئلة الطلبة</a></li>
 					<li><a href="{% url 'admin_student_list' %}">الطلاب</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 
@@ -74,6 +75,7 @@
 					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
 					<li><a href="{% url 'student_questions' %}">اسأل استاذ سيد</a></li>
 					<li><a href="{% url 'lectures_list' %}">المحاضرات</a></li>
+
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
 					<li><a href="{% url 'login' %}" class="button primary">تسجيل دخول/انشاء حساب</a></li>

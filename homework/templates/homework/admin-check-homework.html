@@ -12,16 +12,14 @@
     </p>
     {% endfor %}
     {% endif %}
-    {% if homework_questions %}
+    {% if homework_question %}
     <h3>ملفات الواجب</h3>
-    {% for question in homework_questions %}
-
-    <a href="{{ question.homework_file.url }}" style="color: lightblue;">
-        {{question.homework_file.name}}
+    
+    <a href="{{ homework_question.url }}" style="color: lightblue;">
+        {{homework_question.name}}
 
     </a>
     <br><br><br>
-    {% endfor %}
     {% endif %}
 
 

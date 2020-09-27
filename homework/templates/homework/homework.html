@@ -9,23 +9,21 @@
 </p>
 {% endif %}
 {% if homework_questions %}
-{% for question in homework_questions %}
-{% if question.extension in image_extensions %}
+{% if homework_questions.extension in image_extensions %}
 <span class="image fit">
-    <a href="{{ question.homework_file.url }}">
-        <img src="{{ question.homework_file.url}}">
+    <a href="{{ homework_questions.url }}">
+        <img src="{{ homework_questions.url}}">
     </a>
 </span>
 {% else %}
 <h3>ملفات الواجب</h3>
 
-<a href="{{ question.homework_file.url }}" style="color: lightblue;">
-    {{question.homework_file.name}}
+<a href="{{ homework_questions.url }}" style="color: lightblue;">
+    {{homework_questions.name}}
 
 </a>
 <br><br><br>
 {% endif %}
-{% endfor %}
 {% endif %}
 <!-- uploaded files -->
 

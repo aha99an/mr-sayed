@@ -1,5 +1,5 @@
 from django import forms
-from .models import Class
+from .models import Class,Week
 
 
 class ClassForm(forms.ModelForm):
@@ -13,3 +13,15 @@ class ClassForm(forms.ModelForm):
     class Meta:
         model = Class
         fields = ("name", "week_day", "start", "end")
+
+
+
+class WeekForm(forms.ModelForm):
+    name = forms.CharField(label="اسم الأسبوع", widget=forms.TextInput(
+        attrs={"text-align": "right"}), required=True)
+    start = forms.DateField(widget=forms.DateInput(format='%d-%m-%Y'))
+    end =  forms.DateField(widget=forms.DateInput(format='%d-%m-%Y'))
+
+    class Meta: 
+        model = Week
+        fields = ("name", "start", "end")

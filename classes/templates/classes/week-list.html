@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block head %}
+<h2>الحِصص</h2>
+{% endblock %}
+{% block content %}
+<div class="table-wrapper">
+    <table DIR="RTL">
+        <thead>
+            <tr>
+                <th>الحصة</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in object_list %}
+
+            <tr>
+                <td>
+                    <a style="color: lightblue;" href="{% url 'week_update' week.id %}">
+                        {{ week.name }}</a>
+                </td>
+            
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'week_new' %}">
+        <button class="button primary"
+            style="background-color:#4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">إنشاء
+            حصة جديدة</button>
+    </a>
+    {% endblock content %}

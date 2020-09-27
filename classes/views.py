@@ -4,29 +4,26 @@ from .forms import ClassForm, WeekForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from home.permissions import StudentPermission
 
 
-class ClassListView(ListView):
+class ClassListView(StudentPermission, ListView):
     model = Class
     template_name = "classes/class-list.html"
 
-class ClassCreateView(CreateView):
+
+class WeekListView(StudentPermission, ListView):
+    model = Week
+    template_name = "classes/class-list.html"
+
+
+class ClassCreateView(StudentPermission, CreateView):
     template_name = "classes/create-class.html"
     form_class = ClassForm
     success_url = reverse_lazy('class_list')
 
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     print(form.instance.end)
-    #     # form.instance.user = self.request.user
-    #     self.object.save()
-    #     return HttpResponseRedirect(self.get_success_url())
 
-    # def form_invalid(self, form):
-    #     return self.render_to_response(self.get_context_data(form=form))
-
-
-class ClassUpdateView(UpdateView):
+class ClassUpdateView(StudentPermission, UpdateView):
     model = Class
     template_name = "classes/update-class.html"
     form_class = ClassForm
@@ -37,11 +34,10 @@ class ClassUpdateView(UpdateView):
         ctx["object_id"] = self.object.id
         return ctx
 
-class ClassDeleteView(DeleteView):
+
+class ClassDeleteView(StudentPermission, DeleteView):
     model = Class
     success_url = reverse_lazy('class_list')
-
-
 
 
 class WeekCreateView(CreateView):
@@ -50,15 +46,18 @@ class WeekCreateView(CreateView):
     fields = ['name', 'start', 'end']
     success_url = reverse_lazy('week_list')
 
+
 class WeekListView(ListView):
     model = Week
     template_name = "classes/week-list.html"
+
 
 class WeekUpdateView(UpdateView):
     model = Week
     template_name = "classes/week-update.html"
     form_class = WeekForm
     success_url = reverse_lazy('week_list')
+
 
 class WeekDeleteView(DeleteView):
     model = Week

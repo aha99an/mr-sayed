@@ -7,7 +7,7 @@
 <form method="get" action="{% url 'admin_homework_list' %}">
     <!-- <p>Filter: <input type="text" value="{{class.name}}" name="filter" />{{class.name}}</p> -->
     <select name="class_filter" dir="rtl" onchange="this.form.submit()">
-        <option value="">اختار حصة</option>
+        <option value="">اختار مجموعة</option>
 
         {% for class in classes %}
 

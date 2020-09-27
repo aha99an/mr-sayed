@@ -5,9 +5,10 @@ from .models import (Homework, StudentHomework,
 from classes.models import Class
 from .forms import AdminHomeworkForm
 from django.urls import reverse_lazy
+from home.permissions import AdminPermission
 
 
-class AdminCheckHomeworkListView(ListView):
+class AdminCheckHomeworkListView(AdminPermission, ListView):
     model = StudentHomework
     template_name = "homework/admin-homework-list.html"
     # queryset = StudentHomework.objects.all()
@@ -37,21 +38,11 @@ class AdminCheckHomeworkListView(ListView):
         return ctx
 
 
-class AdminCheckHomeworkUpdateView(UpdateView):
+class AdminCheckHomeworkUpdateView(AdminPermission, UpdateView):
     model = StudentHomework
     template_name = 'homework/admin-check-homework.html'
     form_class = AdminHomeworkForm
     success_url = reverse_lazy('admin_homework_list')
-
-    # def get_object(self):
-
-    #     all_questions = get_all_questions(self.exam.id, self.request.user)
-    #     question_content = all_questions[self.kwargs.get("question_pk")]
-
-    #     # get or create student answer
-    #     answer, created = question_content["answer_model"].objects.get_or_create(
-    #         question=question_content["question"], student_exam=self.student_exam)
-    #     return answer
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -64,7 +55,7 @@ class AdminCheckHomeworkUpdateView(UpdateView):
         return ctx
 
 
-class AdminCreateHomeworkView(CreateView):
+class AdminCreateHomeworkView(AdminPermission, CreateView):
     model = Homework
     template_name = 'homework/admin-create-homework.html'
     fields = ['name', 'week', 'homework_file',
@@ -72,7 +63,7 @@ class AdminCreateHomeworkView(CreateView):
     success_url = reverse_lazy('admin_add_homework_list')
 
 
-class AdminUpdateHomeworkView(UpdateView):
+class AdminUpdateHomeworkView(AdminPermission, UpdateView):
     model = Homework
     template_name = 'homework/admin-update-homework.html'
     fields = ['name', 'week', 'homework_file',
@@ -80,11 +71,11 @@ class AdminUpdateHomeworkView(UpdateView):
     success_url = reverse_lazy('admin_add_homework_list')
 
 
-class AdminAddHomeworkListView (ListView):
+class AdminAddHomeworkListView (AdminPermission, ListView):
     model = Homework
     template_name = "homework/admin-add-homework-list.html"
 
 
-class AdminDeleteHomework(DeleteView):
+class AdminDeleteHomework(AdminPermission, DeleteView):
     model = Homework
     success_url = reverse_lazy('admin_add_homework_list')

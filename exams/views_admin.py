@@ -9,6 +9,7 @@ from classes.models import Class
 from .forms import StudentEssayGradingForm, ExamCreateForm, ChoiceQuestionCreateForm, EssayQuestionCreateForm
 from django.urls import reverse_lazy
 from collections import OrderedDict
+from home.permissions import AdminPermission
 
 
 def get_all_questions(exam_id, user):
@@ -59,7 +60,7 @@ def get_all_questions(exam_id, user):
     return questions
 
 
-class ExamAdminListView(ListView):
+class ExamAdminListView(AdminPermission, ListView):
     template_name = "exams/admin-exam-list.html"
 
     def get_queryset(self):
@@ -86,7 +87,7 @@ class ExamAdminListView(ListView):
         return ctx
 
 
-class AdminChoiceQuestion(DetailView):
+class AdminChoiceQuestion(AdminPermission, DetailView):
     template_name = 'exams/admin-question.html'
 
     def get_object(self):
@@ -139,12 +140,12 @@ def update_view(request, student_essay_answer_pk, question_pk):
         return HttpResponseRedirect("/"+student_essay_answer_pk)
 
 
-class AdminAddExamListView(ListView):
+class AdminAddExamListView(AdminPermission, ListView):
     template_name = "exams/admin-add-exam-list.html"
     model = Exam
 
 
-class AdminExamCreateView(CreateView):
+class AdminExamCreateView(AdminPermission, CreateView):
     form_class = ExamCreateForm
     success_url = reverse_lazy('admin_add_exam_list')
     template_name = 'exams/admin-create-exam.html'
@@ -159,7 +160,7 @@ class AdminExamCreateView(CreateView):
         return self.success_url
 
 
-class AdminExamUpdateView(UpdateView):
+class AdminExamUpdateView(AdminPermission, UpdateView):
     model = Exam
     form_class = ExamCreateForm
     template_name = 'exams/admin-create-exam.html'
@@ -182,12 +183,12 @@ class AdminExamUpdateView(UpdateView):
         return ctx
 
 
-class AdminExamDeleteView(DeleteView):
+class AdminExamDeleteView(AdminPermission, DeleteView):
     model = Exam
     success_url = reverse_lazy('admin_add_exam_list')
 
 
-class AdminChoiceQuestionCreateView(CreateView):
+class AdminChoiceQuestionCreateView(AdminPermission, CreateView):
     form_class = ChoiceQuestionCreateForm
     template_name = 'exams/admin-add-question.html'
 
@@ -200,7 +201,7 @@ class AdminChoiceQuestionCreateView(CreateView):
         return reverse_lazy("admin_update_exam", kwargs={"pk": self.kwargs.get("pk")})
 
 
-class AdminEssayQuestionCreateView(CreateView):
+class AdminEssayQuestionCreateView(AdminPermission, CreateView):
     form_class = EssayQuestionCreateForm
     template_name = 'exams/admin-add-question.html'
 
@@ -213,7 +214,7 @@ class AdminEssayQuestionCreateView(CreateView):
         return reverse_lazy("admin_update_exam", kwargs={"pk": self.kwargs.get("pk")})
 
 
-class AdminChoiceQuestionUpdateView(UpdateView):
+class AdminChoiceQuestionUpdateView(AdminPermission, UpdateView):
     model = ChoiceQuestion
     form_class = ChoiceQuestionCreateForm
     template_name = 'exams/admin-add-question.html'
@@ -223,7 +224,7 @@ class AdminChoiceQuestionUpdateView(UpdateView):
         return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
 
 
-class AdminEssayQuestionUpdateView(UpdateView):
+class AdminEssayQuestionUpdateView(AdminPermission, UpdateView):
     model = EssayQuestion
     form_class = EssayQuestionCreateForm
     template_name = 'exams/admin-add-question.html'
@@ -233,7 +234,7 @@ class AdminEssayQuestionUpdateView(UpdateView):
         return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
 
 
-class AdminChoiceQuestionDeleteView(DeleteView):
+class AdminChoiceQuestionDeleteView(AdminPermission, DeleteView):
     model = ChoiceQuestion
 
     def get_success_url(self):
@@ -241,7 +242,7 @@ class AdminChoiceQuestionDeleteView(DeleteView):
         return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
 
 
-class AdminEssayQuestionDeleteView(DeleteView):
+class AdminEssayQuestionDeleteView(AdminPermission, DeleteView):
     model = EssayQuestion
 
     def get_success_url(self):

@@ -8,6 +8,8 @@ from django.db.models import Sum
 from django.utils import timezone
 from collections import OrderedDict
 from homework.models import StudentHomework
+from home.permissions import StudentPermission
+
 
 def get_all_questions(exam_id, user):
     exam = Exam.objects.get(id=exam_id)
@@ -67,13 +69,13 @@ def grade_choice_exam(student_exam_id):
     return
 
 
-class SignUpView(CreateView):
+class SignUpView(StudentPermission, CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'accounts/signup.html'
 
 
-class ProfileView(TemplateView):
+class ProfileView(StudentPermission, TemplateView):
     template_name = 'accounts/profile.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -89,11 +91,12 @@ class ProfileView(TemplateView):
                             user=self.request.user)
 
         ctx["student_exams"] = student_exams
-        ctx["student_homeworks"] = StudentHomework.objects.filter(user=self.request.user)
+        ctx["student_homeworks"] = StudentHomework.objects.filter(
+            user=self.request.user)
         return ctx
 
 
-class ExamQuestionDetailView(DetailView):
+class ExamQuestionDetailView(StudentPermission, DetailView):
     template_name = 'accounts/profile-exam.html'
 
     def get_object(self):
@@ -118,27 +121,7 @@ class ExamQuestionDetailView(DetailView):
             ctx["question_pk"] = 1
         return ctx
 
-class HomeworkDetailView(DetailView):
+
+class HomeworkDetailView(StudentPermission, DetailView):
     template_name = 'accounts/profile-homework.html'
     model = StudentHomework
-    # def get_object(self):
-    #     self.student_exam_pk = self.kwargs.get("student_exam_pk")
-    #     student_exam = StudentExam.objects.get(id=self.student_exam_pk)
-    #     student_exam.is_graded = True
-    #     student_exam.save()
-    #     self.question_pk = self.kwargs.get("question_pk")
-    #     self.all_questions = get_all_questions(
-    #         student_exam.exam.id, student_exam.user)
-    #     question_content = self.all_questions[self.question_pk]
-
-    #     return question_content
-
-    # def get_context_data(self, *args, **kwargs):
-    #     ctx = super().get_context_data(*args, **kwargs)
-    #     ctx["all_questions"] = self.all_questions
-    #     ctx["student_exam_pk"] = self.student_exam_pk
-    #     if self.question_pk:
-    #         ctx["question_pk"] = self.question_pk
-    #     else:
-    #         ctx["question_pk"] = 1
-    #     return ctx

@@ -69,7 +69,7 @@ def grade_choice_exam(student_exam_id):
     return
 
 
-class SignUpView(StudentPermission, CreateView):
+class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'accounts/signup.html'

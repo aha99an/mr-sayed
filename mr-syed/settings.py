@@ -1,3 +1,4 @@
+import django_heroku
 import os
 from pathlib import Path
 import os
@@ -146,8 +147,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
-# if 'DATABASE_URL' in os.environ:
-#     import dj_database_url
-#     DATABASES = {'default': dj_database_url.config()}
-# import django_heroku
-# django_heroku.settings(locals())
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+django_heroku.settings(locals())

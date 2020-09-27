@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from datetime import timedelta
 from django.shortcuts import redirect
 from django.utils import timezone
+from home.permissions import StudentPermission
 
 
 def get_all_questions(exam_id, user):
@@ -64,7 +65,7 @@ def set_expiry_date(student_exam):
     return
 
 
-class ExamListView(ListView):
+class ExamListView(StudentPermission, ListView):
     model = Exam
     template_name = "exams/exam-list.html"
 
@@ -94,6 +95,8 @@ class QuestionUpdateView(UpdateView):
     # form_class = StudentEssayAnswerForm
 
     def dispatch(self, request, *args, **kwargs):
+        if self.request.user.student_is_active is False:
+            return redirect('login')
         self.exam = Exam.objects.get(id=self.kwargs.get("exam_pk"))
         self.student_exam, created = StudentExam.objects.get_or_create(
             user=self.request.user, exam=self.exam)

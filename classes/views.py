@@ -1,38 +1,29 @@
 from .models import Class, Week
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
-from .forms import ClassForm
+from .forms import ClassForm, WeekForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from home.permissions import AdminPermission
 
 
-class ClassListView(ListView):
+class ClassListView(AdminPermission, ListView):
     model = Class
     template_name = "classes/class-list.html"
 
 
-class WeekListView(ListView):
+class WeekListView(AdminPermission, ListView):
     model = Week
     template_name = "classes/class-list.html"
 
 
-class ClassCreateView(CreateView):
+class ClassCreateView(AdminPermission, CreateView):
     template_name = "classes/create-class.html"
     form_class = ClassForm
-    success_url = reverse_lazy('create_class')
-
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     print(form.instance.end)
-    #     # form.instance.user = self.request.user
-    #     self.object.save()
-    #     return HttpResponseRedirect(self.get_success_url())
-
-    # def form_invalid(self, form):
-    #     return self.render_to_response(self.get_context_data(form=form))
+    success_url = reverse_lazy('class_list')
 
 
-class ClassUpdateView(UpdateView):
+class ClassUpdateView(AdminPermission, UpdateView):
     model = Class
     template_name = "classes/update-class.html"
     form_class = ClassForm
@@ -44,6 +35,30 @@ class ClassUpdateView(UpdateView):
         return ctx
 
 
-class ClassDeleteView(DeleteView):
+class ClassDeleteView(AdminPermission, DeleteView):
     model = Class
     success_url = reverse_lazy('class_list')
+
+
+class WeekCreateView(AdminPermission, CreateView):
+    model = Week
+    template_name = 'classes/week-new.html'
+    fields = ['name', 'start', 'end']
+    success_url = reverse_lazy('week_list')
+
+
+class WeekListView(AdminPermission, ListView):
+    model = Week
+    template_name = "classes/week-list.html"
+
+
+class WeekUpdateView(AdminPermission, UpdateView):
+    model = Week
+    template_name = "classes/week-update.html"
+    form_class = WeekForm
+    success_url = reverse_lazy('week_list')
+
+
+class WeekDeleteView(AdminPermission, DeleteView):
+    model = Week
+    success_url = reverse_lazy('week_list')

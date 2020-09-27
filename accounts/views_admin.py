@@ -5,14 +5,15 @@ from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
+from home.permissions import AdminPermission
 
 
-class AdminStudentListView(ListView):
+class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
     template_name = "accounts/admin-students-list.html"
 
 
-class AdminStudentUpdateView(UpdateView):
+class AdminStudentUpdateView(AdminPermission, UpdateView):
     model = CustomUser
     form_class = StudentChangeForm
     template_name = "accounts/admin-student-update.html"

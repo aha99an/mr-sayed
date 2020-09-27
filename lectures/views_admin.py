@@ -2,14 +2,15 @@ from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 from .models import Lecture, StudentLecture, StudentLectureQuestion, LectureLink
 from .forms import LectureCreateForm
 from django.urls import reverse_lazy
+from home.permissions import AdminPermission
 
 
-class AdminLectureListView(ListView):
+class AdminLectureListView(AdminPermission, ListView):
     model = Lecture
     template_name = "lectures/admin-lecture-list.html"
 
 
-class AdminLectureCreateView(CreateView):
+class AdminLectureCreateView(AdminPermission, CreateView):
     template_name = "lectures/admin-lecture-create.html"
     form_class = LectureCreateForm
     success_url = reverse_lazy("admin_lectures_list")
@@ -22,7 +23,7 @@ class AdminLectureCreateView(CreateView):
         return self.success_url
 
 
-class AdminLectureUpdateView(UpdateView):
+class AdminLectureUpdateView(AdminPermission, UpdateView):
     template_name = "lectures/admin-lecture-update.html"
     form_class = LectureCreateForm
     success_url = reverse_lazy("admin_lectures_list")
@@ -41,14 +42,14 @@ class AdminLectureUpdateView(UpdateView):
         return context
 
 
-class AdminLectureDeleteView(DeleteView):
+class AdminLectureDeleteView(AdminPermission, DeleteView):
     model = Lecture
 
     def get_success_url(self):
         return reverse_lazy("admin_lectures_list")
 
 
-class AdminLectureLinkDeleteView(DeleteView):
+class AdminLectureLinkDeleteView(AdminPermission, DeleteView):
     model = LectureLink
 
     def get_success_url(self):

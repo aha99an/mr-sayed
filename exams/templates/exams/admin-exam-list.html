@@ -6,7 +6,7 @@
 <!-- <a href="#">{{class}}</a> <br> -->
 <form method="get" action="{% url 'admin_exam_list' %}">
     <select name="class_filter" dir="rtl" onchange="this.form.submit()">
-        <option value="">اختار حصة</option>
+        <option value="">اختار مجموعة</option>
 
         {% for class in classes %}
 

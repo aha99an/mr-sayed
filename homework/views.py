@@ -1,3 +1,4 @@
+from home.permissions import StudentPermission
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
 from .models import (Homework, StudentHomework,
@@ -14,7 +15,7 @@ image_extensions = ('.djvu', '.art', '.cpt', '.tif', '.jpe', '.rgb', '.svgz', '.
                     '.svg', '.jp2', '.pbm', '.djv', '.cr2', '.png', '.xwd', '.ppm', '.jng', '.jpg2', '.orf', '.cdr', '.gif', '.psd', '.ras', '.pnm', '.crw', '.wbmp', '.pat', '.tiff', '.jpf', '.jpg')
 
 
-class HomeworkListView(ListView):
+class HomeworkListView(StudentPermission, ListView):
     model = Homework
     template_name = "homework/homework-list.html"
 
@@ -41,6 +42,8 @@ class HomeworkMultipleUpdateView(FormView):
     form_class = StudentHomeworkMultipleFileForm
 
     def dispatch(self, request, *args, **kwargs):
+        if self.request.user.student_is_active is False:
+            return redirect('login')
         self.homwork = Homework.objects.get(id=self.kwargs.get("homework_pk"))
         self.student_homework, created = StudentHomework.objects.get_or_create(
             homework=self.homwork, user=self.request.user)
@@ -80,7 +83,7 @@ class HomeworkMultipleUpdateView(FormView):
         return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})
 
 
-class UploadedFileDeleteView(DeleteView):
+class UploadedFileDeleteView(StudentPermission, DeleteView):
     model = StudentHomeworkFile
 
     def get_object(self):

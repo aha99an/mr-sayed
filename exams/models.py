@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.dispatch import receiver
 import math
 from django.utils import timezone
 from accounts.models import CustomUser
@@ -90,10 +89,10 @@ class StudentEssayAnswer(models.Model):
 
 
 class ChoiceQuestion(models.Model):
-    OPTION1 = 0
-    OPTION2 = 1
-    OPTION3 = 2
-    OPTION4 = 3
+    OPTION1 = 1
+    OPTION2 = 2
+    OPTION3 = 3
+    OPTION4 = 4
 
     QUESTION_ANSWER_CHOICES = (
         (OPTION1, "الاختيار الاول"),

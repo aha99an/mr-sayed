@@ -11,53 +11,54 @@
 <br>
 
 <!-- Question -->
-{% if question_content.question.question %}
+{% if object.question %}
 
-<h3>{{question_content.question.question}}</h3>
+<h3>{{object.question}}</h3>
 
 <br>
 {% endif %}
-{% if question_content.question.image_question %}
+{% if object.question.image_question %}
 <span class="image fit">
-    <img src="{{ question_content.question.image_question.url}}"
-        alt={{ question_content.question.question }}>
+    <img src="{{ object.question.image_question.url}}"
+        alt={{ object.question.question }}>
 </span>
 {% endif %}
 
 
 <!-- Choice form -->
 {% if question_content.type == "choice_question"%}
+
 <form method="post">
     {% csrf_token %}
 
 
     <div class="col-4 col-12-medium">
-        <input type="radio" name="answer" id="{{question_content.question.option1}}"
-            value="{{question_content.question.option1}}"
-            {% if form.answer.value == question_content.question.option1 %} checked{% endif %}>
-        <label for="{{question_content.question.option1}}">1-
-            {{question_content.question.option1}}</label><br>
+        <input type="radio" name="answer" id="{{object.question.option1}}"
+            value="{{object.question.option1}}"
+            {% if form.answer.value == object.question.option1 %} checked{% endif %}>
+        <label for="{{object.question.option1}}">1-
+            {{object.question.option1}}</label><br>
     </div>
     <div class="col-4 col-12-medium">
-        <input type="radio" name="answer" id="{{question_content.question.option2}}"
-            value="{{question_content.question.option2}}"
-            {% if form.answer.value == question_content.question.option2 %} checked{% endif %}>
-        <label for="{{question_content.question.option2}}">2-
-            {{question_content.question.option2}}</label><br>
+        <input type="radio" name="answer" id="{{object.question.option2}}"
+            value="{{object.question.option2}}"
+            {% if form.answer.value == object.question.option2 %} checked{% endif %}>
+        <label for="{{object.question.option2}}">2-
+            {{object.question.option2}}</label><br>
     </div>
     <div class="col-4 col-12-medium">
-        <input type="radio" name="answer" id="{{question_content.question.option3}}"
-            value="{{question_content.question.option3}}"
-            {% if form.answer.value == question_content.question.option3 %} checked{% endif %}>
-        <label for="{{question_content.question.option3}}">3-
-            {{question_content.question.option3}}</label><br>
+        <input type="radio" name="answer" id="{{object.question.option3}}"
+            value="{{object.question.option3}}"
+            {% if form.answer.value == object.question.option3 %} checked{% endif %}>
+        <label for="{{object.question.option3}}">3-
+            {{object.question.option3}}</label><br>
     </div>
     <div class="col-4 col-12-medium">
-        <input type="radio" name="answer" id="{{question_content.question.option4}}"
-            value="{{question_content.question.option4}}"
-            {% if form.answer.value == question_content.question.option4 %} checked{% endif %}>
-        <label for="{{question_content.question.option4}}">4-
-            {{question_content.question.option4}}</label><br>
+        <input type="radio" name="answer" id="{{object.question.option4}}"
+            value="{{object.question.option4}}"
+            {% if form.answer.value == object.question.option4 %} checked{% endif %}>
+        <label for="{{object.question.option4}}">4-
+            {{object.question.option4}}</label><br>
 
     </div>
 
@@ -74,7 +75,7 @@
 
 
 <!-- essay form -->
-{% if question_content.type == "essay_question"%}
+{% if object.type == "essay_question"%}
 <form method="post" enctype="multipart/form-data" class="md-form">
     {% csrf_token %}
 
@@ -116,7 +117,7 @@
 
                 <td>
                     <a
-                        href="{% url 'question' question_content.question.exam.id question_number   %}">
+                        href="{% url 'question' question_content.question question_number   %}">
                         <button type="button" class="button primary">السؤال
                             {{question_number}}</button>
                     </a>

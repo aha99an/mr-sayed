@@ -168,7 +168,6 @@ class AdminExamUpdateView(AdminPermission, UpdateView):
     def get_success_url(self):
 
         question_type = self.request.POST.get("question_type")
-        print(question_type)
         if question_type == "choice":
             return reverse_lazy("admin_create_choice_question", kwargs={"pk": self.object.id})
         elif question_type == "essay":

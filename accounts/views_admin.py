@@ -22,10 +22,9 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx["classes"] = Class.objects.all()
-        ctx["user"] = CustomUser.objects.get(id=self.kwargs["pk"])
-        print(ctx["user"].check_password(ctx["user"].random_password))
-        ctx["reseted_password"] = ctx["user"].check_password(
-            ctx["user"].random_password)
+        ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
+        ctx["reseted_password"] = ctx["student_user"].check_password(
+            ctx["student_user"].random_password)
         return ctx
 
 

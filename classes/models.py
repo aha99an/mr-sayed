@@ -15,18 +15,16 @@ class Week(models.Model):
 
 class Class(models.Model):
     DAYS_OF_WEEK = (
-        (0, 'السبت'),
-        (1, 'الأحد'),
-        (2, 'الاثنين'),
-        (3, 'الثلاثاء'),
-        (4, 'الاربعاء'),
-        (5, 'الخميس'),
-        (6, 'الجمعة'),
+        (5, 'السبت'),
+        (6, 'الأحد'),
+        (0, 'الاثنين'),
+        (1, 'الثلاثاء'),
+        (2, 'الاربعاء'),
+        (3, 'الخميس'),
+        (4, 'الجمعة'),
     )
 
     name = models.CharField(max_length=200, null=True, blank=True)
-    week = models.ForeignKey(
-        Week, on_delete=models.CASCADE, related_name="week_class", null=True, blank=True)
     week_day = models.IntegerField(
         choices=DAYS_OF_WEEK, null=True, blank=True)
     start = models.TimeField(null=True, blank=True)
@@ -36,4 +34,3 @@ class Class(models.Model):
 
     def __str__(self):
         return self.name
-

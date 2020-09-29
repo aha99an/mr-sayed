@@ -151,3 +151,14 @@ if 'DATABASE_URL' in os.environ:
     import dj_database_url
     DATABASES = {'default': dj_database_url.config()}
 django_heroku.settings(locals())
+
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Africa/Cairo'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True

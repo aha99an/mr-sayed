@@ -11,6 +11,7 @@ from datetime import datetime
 from django.shortcuts import redirect
 from django.utils import timezone
 from .forms import StudentHomeworkFileForm, StudentHomeworkMultipleFileForm
+from datetime import datetime
 image_extensions = ('.djvu', '.art', '.cpt', '.tif', '.jpe', '.rgb', '.svgz', '.nef', '.xbm', '.jpeg', '.jpm', '.erf', '.cdt', '.bmp', '.pgm', '.ico', '.xpm', '.jpx', '.pcx', '.ief',
                     '.svg', '.jp2', '.pbm', '.djv', '.cr2', '.png', '.xwd', '.ppm', '.jng', '.jpg2', '.orf', '.cdr', '.gif', '.psd', '.ras', '.pnm', '.crw', '.wbmp', '.pat', '.tiff', '.jpf', '.jpg')
 
@@ -18,9 +19,12 @@ image_extensions = ('.djvu', '.art', '.cpt', '.tif', '.jpe', '.rgb', '.svgz', '.
 class HomeworkListView(StudentPermission, ListView):
     model = Homework
     template_name = "homework/homework-list.html"
+    now = datetime.now()
 
     def get_queryset(self):
-        return Homework.objects.all()
+        if self.request.user.student_class.week_day == self.now.weekday():
+            return Homework.objects.filter(week__start__lte=self.now.date(), week__end__gte=self.now.date())
+        return Homework.objects.none()
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -34,6 +38,9 @@ class HomeworkListView(StudentPermission, ListView):
             all_homeworks.append({"homework": i,
                                   "answered": answered})
         ctx["homeworks"] = all_homeworks
+        if self.request.session.get('homework_is_checked'):
+            ctx["homework_is_checked"] = True
+            del self.request.session["homework_is_checked"]
         return ctx
 
 
@@ -42,11 +49,19 @@ class HomeworkMultipleUpdateView(FormView):
     form_class = StudentHomeworkMultipleFileForm
 
     def dispatch(self, request, *args, **kwargs):
+        now = datetime.now()
         if self.request.user.student_is_active is False:
             return redirect('login')
-        self.homwork = Homework.objects.get(id=self.kwargs.get("homework_pk"))
+        self.homwork = Homework.objects.filter(id=self.kwargs.get("homework_pk"),
+                                               week__start__lte=now.date(),
+                                               week__end__gte=now.date()).last()
+        if not self.homwork:
+            return redirect("homework_list")
         self.student_homework, created = StudentHomework.objects.get_or_create(
             homework=self.homwork, user=self.request.user)
+        if self.student_homework.is_checked is True:
+            self.request.session['homework_is_checked'] = True
+            return redirect("homework_list")
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

@@ -6,9 +6,40 @@
 <form method="post" class="md-form">
     {% csrf_token %}
 
-    {{form.as_p}}
+    {{form.name.errors}}
+    <div style="text-align: right; padding: .5em 0em .5em 0em ;">اسم الحصة</div>
+    <input type="text" style="text-align:right;" name="name" value="{{form.name.value}}">
+
+    {{form.name.errors}}
+
+    
+    <div class="table-wrapper">
+        <table DIR="RTL">
+            <thead style="border-bottom:0">
+                <tr>
+        
+                    <th>{{form.start.errors}}<label style="text-align: right; margin:0;"
+                            for="start">بداية الحصة</label>
+                            
+                        <div style="text-align: right;"><input type="date" style="color:black"
+                                name="start" value="{{form.start.value|date:"Y-m-d"}}">
+                        </div>
+                    </th>
+                    <th>
+                        {{form.end.errors}}
+
+                        <label style="text-align: right; margin:0;" for="start"> نهاية الحصة</label>
+                        <div style="text-align: right;"><input type="Date" style="color:black"
+                                name="end" value="{{form.end.value|date:"Y-m-d"}}">
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+
     <input type="submit" class="button primary" value="تعديل الحصة"
         style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
+    </div>
 </form>
  <form method="post" action="{% url 'delete_week' object.id %}" style="margin: 0 0 0 0;">
     {% csrf_token %}

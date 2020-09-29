@@ -43,8 +43,6 @@ def get_all_questions(exam_id, user):
         # question status
         answer = ""
         student_essay_answer = question.student_essay_answer.last()
-        print(question)
-        print(student_essay_answer)
         if student_essay_answer:
             if student_essay_answer.answer or student_essay_answer.image_answer:
                 answer = student_essay_answer

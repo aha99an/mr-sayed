@@ -5,10 +5,13 @@ from collections import OrderedDict
 from .forms import StudentChoiceAnswerForm, StudentEssayAnswerForm
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.shortcuts import redirect
 from django.utils import timezone
 from home.permissions import StudentPermission
+import json
+import collections
+from django.forms.models import model_to_dict
 
 
 def get_all_questions(exam_id, user):
@@ -33,9 +36,9 @@ def get_all_questions(exam_id, user):
 
         questions[question_index] = {"url": "choice_question",
                                      "type": "choice_question",
-                                     "question": question,
+                                     "question": question.id,
                                      "answered": answered,
-                                     "answer_model": StudentChoiceAnswer,
+                                     #  "answer_model": StudentChoiceAnswer,
                                      }
         question_index += 1
 
@@ -50,11 +53,11 @@ def get_all_questions(exam_id, user):
 
         questions[question_index] = {"url": "essay_question",
                                      "type": "essay_question",
-                                     "question": question,
+                                     "question": question.id,
                                      "answered": answered,
-                                     "answer_model": StudentEssayAnswer}
+                                     #  "answer_model": StudentEssayAnswer
+                                     }
         question_index += 1
-
     return questions
 
 
@@ -65,12 +68,17 @@ def set_expiry_date(student_exam):
     return
 
 
+now = datetime.now()
+
+
 class ExamListView(StudentPermission, ListView):
-    model = Exam
     template_name = "exams/exam-list.html"
 
     def get_queryset(self):
-        return Exam.objects.filter(is_active=True)
+        if self.request.user.student_class.week_day == now.weekday():
+            return Exam.objects.filter(week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
+        else:
+            return Exam.objects.none()
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -95,9 +103,15 @@ class QuestionUpdateView(UpdateView):
     # form_class = StudentEssayAnswerForm
 
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.student_is_active is False:
+        if self.request.user.is_authenticated is False:
             return redirect('login')
-        self.exam = Exam.objects.get(id=self.kwargs.get("exam_pk"))
+        if self.request.user.student_is_active is False:
+            return redirect('home')
+        self.exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"),
+                                        week__start__lte=now.date(),
+                                        week__end__gte=now.date(), is_active=True).last()
+        if not self.exam:
+            return redirect('exam_list')
         self.student_exam, created = StudentExam.objects.get_or_create(
             user=self.request.user, exam=self.exam)
         if not self.student_exam.expiry_time:
@@ -105,47 +119,60 @@ class QuestionUpdateView(UpdateView):
         if self.student_exam.expiry_time < timezone.now():
             self.request.session['exam_time_expired'] = True
             return redirect("exam_list")
+        self.all_questions = get_all_questions(
+            self.kwargs.get("exam_pk"), self.request.user)
+
+        # save the random order of questions in student_exam model
+        if not self.student_exam.questions:
+            self.student_exam.questions = self.all_questions
+            self.student_exam.save()
+        # self.all_questions = self.student_exam.questions
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
-        all_questions = get_all_questions(
-            self.kwargs.get("exam_pk"), self.request.user)
-        if all_questions[self.kwargs.get("question_pk")]["type"] == "choice_question":
+        # all_questions = get_all_questions(
+        #     self.kwargs.get("exam_pk"), self.request.user)
+        if self.all_questions[self.kwargs.get("question_pk")]["type"] == "choice_question":
             return StudentChoiceAnswerForm
         else:
             return StudentEssayAnswerForm
 
     def get_object(self):
+        question_content = self.all_questions[self.kwargs.get("question_pk")]
 
-        all_questions = get_all_questions(self.exam.id, self.request.user)
-        question_content = all_questions[self.kwargs.get("question_pk")]
-
-        # get or create student answer
-        answer, created = question_content["answer_model"].objects.get_or_create(
-            question=question_content["question"], student_exam=self.student_exam)
+        if question_content["type"] == "choice_question":
+            question = ChoiceQuestion.objects.get(
+                id=question_content["question"])
+            answer, created = StudentChoiceAnswer.objects.get_or_create(
+                question=question, student_exam=self.student_exam)
+        else:
+            question = EssayQuestion.objects.get(
+                id=question_content["question"])
+            answer, created = StudentEssayAnswer.objects.get_or_create(
+                question=question, student_exam=self.student_exam)
         return answer
-
-    def form_valid(self, form):
-        return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        all_questions = get_all_questions(self.exam.id, self.request.user)
-        ctx["question_content"] = all_questions[self.kwargs.get("question_pk")]
+        # all_questions = get_all_questions(self.exam.id, self.request.user)
+        ctx["question_content"] = self.all_questions[self.kwargs.get(
+            "question_pk")]
         ctx["exam"] = self.exam
-        ctx["all_questions"] = all_questions
+
+        ctx["all_questions"] = eval(self.student_exam.questions)
+        # ctx["all_questions"] = self.all_questions
         ctx["exam_time"] = self.exam.time
         ctx["student_exam"] = self.student_exam
         ctx["question_id"] = self.kwargs.get("question_pk")
         return ctx
 
     def get_success_url(self):
-        all_questions = get_all_questions(
-            self.kwargs.get("exam_pk"), self.request.user)
+        # all_questions = get_all_questions(
+        #     self.kwargs.get("exam_pk"), self.request.user)
         question_number = self.kwargs.get("question_pk")
-        question = all_questions[question_number]["question"]
+        question = self.all_questions[question_number]["question"]
 
-        if question_number == len(all_questions):
+        if question_number == len(self.all_questions):
             question_number = 1
         else:
             question_number += 1

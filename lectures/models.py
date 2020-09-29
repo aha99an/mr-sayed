@@ -22,7 +22,10 @@ class LectureLink(models.Model):
         Lecture, on_delete=models.CASCADE, related_name="lecture_link")
 
     def link_number(self):
-        return self.link.split(".com/")[1]
+        try:
+            return self.link.split(".com/")[1]
+        except:
+            return "Invalid Link"
 
 
 class StudentLecture(models.Model):

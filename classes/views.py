@@ -12,11 +12,6 @@ class ClassListView(AdminPermission, ListView):
     template_name = "classes/class-list.html"
 
 
-class WeekListView(AdminPermission, ListView):
-    model = Week
-    template_name = "classes/class-list.html"
-
-
 class ClassCreateView(AdminPermission, CreateView):
     template_name = "classes/create-class.html"
     form_class = ClassForm
@@ -55,7 +50,7 @@ class WeekListView(AdminPermission, ListView):
 class WeekUpdateView(AdminPermission, UpdateView):
     model = Week
     template_name = "classes/week-update.html"
-    form_class = WeekForm
+    fields = ['name', 'start', 'end']
     success_url = reverse_lazy('week_list')
 
 

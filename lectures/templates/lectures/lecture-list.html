@@ -37,14 +37,4 @@
 
     </table>
 
-    {% if exam_time_expired %}
-    <script>
-        swal({
-            type: 'error',
-            title: 'انتهى وقت الامتحان',
-            text: 'برجاء انتظار النتيجة ونموذج الاجابة الاسبوع القادم',
-            // footer: '<a href>Why do I have this issue?</a>'
-        })
-    </script>
-    {% endif %}
     {% endblock content %}

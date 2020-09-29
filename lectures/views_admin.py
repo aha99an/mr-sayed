@@ -19,7 +19,8 @@ class AdminLectureCreateView(AdminPermission, CreateView):
         lecture_links = self.request.POST.getlist("lecture_links")
         if lecture_links:
             for link in lecture_links:
-                LectureLink.objects.create(link=link, lecture=self.object)
+                if link != "":
+                    LectureLink.objects.create(link=link, lecture=self.object)
         return self.success_url
 
 
@@ -33,7 +34,8 @@ class AdminLectureUpdateView(AdminPermission, UpdateView):
         lecture_links = self.request.POST.getlist("lecture_links")
         if lecture_links:
             for link in lecture_links:
-                LectureLink.objects.create(link=link, lecture=self.object)
+                if link != "":
+                    LectureLink.objects.create(link=link, lecture=self.object)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

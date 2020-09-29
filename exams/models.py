@@ -1,10 +1,12 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 import math
+import collections
 from django.utils import timezone
 from accounts.models import CustomUser
 from datetime import timedelta
 from classes.models import Week
+from django.contrib.postgres.fields import JSONField
 
 
 class Exam(models.Model):
@@ -50,10 +52,8 @@ class StudentExam(models.Model):
     answered_questions = models.IntegerField(null=True, blank=True, default=0)
     is_graded = models.BooleanField(default=False)
     expiry_time = models.DateTimeField(null=True, blank=True)
-    # status = models.CharField(
-    #     max_length=100, choices=STATUS_CHOICES, blank=True, null=True)
-    # try_number = models.IntegerField(null=True, blank=True, default=0)
-    # is_reset = models.BooleanField(default=False, null=True, blank=True)
+    questions = models.TextField(null=True, blank=True)
+    questions_json = JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

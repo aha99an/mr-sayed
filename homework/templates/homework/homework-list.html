@@ -34,4 +34,15 @@
         <tfoot>
 
     </table>
+
+ {% if homework_is_checked %}
+    <script>
+        swal({
+            type: 'info',
+            title: 'تم تصحيح الواجب ولا يمكن تغيره',
+            text: 'برجاء التحقق من الواجب والملاحظات من صفحتك الشخصية',
+            // footer: '<a href>Why do I have this issue?</a>'
+        })
+    </script>
+    {% endif %}
     {% endblock content %}

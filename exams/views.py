@@ -20,8 +20,8 @@ def get_all_questions(exam_id, user):
 
     # get questions
     questions = OrderedDict()
-    exam_choice_qs = exam.choice_question.all()
-    exam_essay_qs = exam.essay_question.all()
+    exam_choice_qs = exam.choice_question.all().order_by("?")
+    exam_essay_qs = exam.essay_question.all().order_by("?")
     question_index = 1
 
     # Choice questions
@@ -38,6 +38,7 @@ def get_all_questions(exam_id, user):
                                      "type": "choice_question",
                                      "question": question.id,
                                      "answered": answered,
+                                     "grade": question.grade
                                      #  "answer_model": StudentChoiceAnswer,
                                      }
         question_index += 1
@@ -55,6 +56,7 @@ def get_all_questions(exam_id, user):
                                      "type": "essay_question",
                                      "question": question.id,
                                      "answered": answered,
+                                     "grade": question.grade,
                                      #  "answer_model": StudentEssayAnswer
                                      }
         question_index += 1
@@ -119,14 +121,15 @@ class QuestionUpdateView(UpdateView):
         if self.student_exam.expiry_time < timezone.now():
             self.request.session['exam_time_expired'] = True
             return redirect("exam_list")
-        self.all_questions = get_all_questions(
-            self.kwargs.get("exam_pk"), self.request.user)
 
-        # save the random order of questions in student_exam model
+        # save RANDOM order of questions in student_exam model
         if not self.student_exam.questions:
-            self.student_exam.questions = self.all_questions
+            self.student_exam.questions = self.all_questions = get_all_questions(
+                self.kwargs.get("exam_pk"), self.request.user)
             self.student_exam.save()
-        # self.all_questions = self.student_exam.questions
+            self.student_exam.refresh_from_db()
+        self.all_questions = eval(self.student_exam.questions)
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
@@ -157,18 +160,12 @@ class QuestionUpdateView(UpdateView):
         # all_questions = get_all_questions(self.exam.id, self.request.user)
         ctx["question_content"] = self.all_questions[self.kwargs.get(
             "question_pk")]
-        ctx["exam"] = self.exam
-
-        ctx["all_questions"] = eval(self.student_exam.questions)
-        # ctx["all_questions"] = self.all_questions
-        ctx["exam_time"] = self.exam.time
+        ctx["all_questions"] = self.all_questions
         ctx["student_exam"] = self.student_exam
         ctx["question_id"] = self.kwargs.get("question_pk")
         return ctx
 
     def get_success_url(self):
-        # all_questions = get_all_questions(
-        #     self.kwargs.get("exam_pk"), self.request.user)
         question_number = self.kwargs.get("question_pk")
         question = self.all_questions[question_number]["question"]
 

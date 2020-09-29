@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block head %}
-<h2>{{exam.name}}</h2>
+<h2>{{object.question.exam.name}}</h2>
 {% endblock %}
 {% block content %}
 <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
 <!-- Timer -->
 
-<h2 style=" text-align: center;   text-shadow:  0 0 5px red;" id="demo">{{exam.exam_time}}</h2>
+<h2 style=" text-align: center;   text-shadow:  0 0 5px red;" id="demo">{{object.question.exam.exam_time}}</h2>
 
 <br>
 
@@ -117,7 +117,7 @@
 
                 <td>
                     <a
-                        href="{% url 'question' question_content.question question_number   %}">
+                        href="{% url 'question' object.question.exam.id question_number %}">
                         <button type="button" class="button primary">السؤال
                             {{question_number}}</button>
                     </a>
@@ -132,7 +132,7 @@
                 </td>
                 <td>
                     <span
-                        style="color:yellow;">{{question_content.question.grade|floatformat}}</span>
+                        style="color:yellow;">{{question_content.grade|floatformat}}</span>
                 </td>
 
             </tr>

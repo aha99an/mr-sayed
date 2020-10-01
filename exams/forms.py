@@ -32,10 +32,11 @@ class ExamCreateForm(forms.ModelForm):
         (False, 'غير مفعل')
     )
     is_active = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="التفعيل")
+    answer = forms.FileField(label="نموذج الاجابة")
 
     class Meta:
         model = Exam
-        fields = ("name", "week", "is_active", "time", "grade")
+        fields = ("name", "week", "is_active", "time", "grade", "answer")
 
 
 class ChoiceQuestionCreateForm(forms.ModelForm):

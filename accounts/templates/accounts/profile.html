@@ -64,7 +64,7 @@
                     <thead>
                         <tr>
                             <th>الامتحان</th>
-                            <th>الدرجة</th>
+                            <th>الدرجة (درجة الامتحان/درجتك)</th>
                             <th>نموذج الاجابة</th>
                         </tr>
                     </thead>
@@ -84,10 +84,13 @@
                             </td>
                             <td>
                                 {% if exam.is_graded %}
+                                <div style="text-align:center;">
                                 {{exam.grade|floatformat}}/{{exam.exam.grade|floatformat}}
+                                </div>
                                 {% else %}
                                 جاري تصحيح الامتحان
                                 {% endif %}
+                                
                             </td>
                             <td>
                                 {% if exam.exam.show_answer and exam.exam.answer %}

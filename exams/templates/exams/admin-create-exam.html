@@ -3,7 +3,7 @@
 <h2>انشاء امتحان</h2>
 {% endblock %}
 {% block content2 %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
    {{form}}

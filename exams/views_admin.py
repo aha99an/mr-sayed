@@ -93,8 +93,6 @@ class AdminChoiceQuestion(AdminPermission, DetailView):
     def get_object(self):
         self.student_exam_pk = self.kwargs.get("student_exam_pk")
         student_exam = StudentExam.objects.get(id=self.student_exam_pk)
-        student_exam.is_graded = True
-        student_exam.save()
         self.question_pk = self.kwargs.get("question_pk")
         self.all_questions = get_all_questions(
             student_exam.exam.id, student_exam.user)
@@ -131,6 +129,7 @@ def update_view(request, student_essay_answer_pk, question_pk):
     # save the data from the form and
     # redirect to detail_view
     if form.is_valid():
+        form.instance.is_graded = True
         form.save()
         return HttpResponseRedirect(reverse_lazy('admin_choice_question', kwargs={"student_exam_pk": obj.student_exam.id,
                                                                                   'question_pk': question_pk,

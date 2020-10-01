@@ -90,6 +90,26 @@ class ProfileView(StudentPermission, TemplateView):
                         grade_choice_exam(student_exam.id)
                         student_exams = StudentExam.objects.filter(
                             user=self.request.user)
+        # Variety Exam
+        for student_exam in student_exams:
+            if now.date() > student_exam.exam.week.end:
+                if not student_exam.is_graded:
+                    if student_exam.exam.exam_type == Exam.VARIETY_EXAM:
+                        for question in student_exam.student_essay_answer.all():
+                            if not question.is_graded:
+                                break
+                            essay_answers_grade = StudentEssayAnswer.objects.filter(
+                                student_exam=student_exam).aggregate(
+                                Sum('grade'))["grade__sum"]
+                            if student_exam.student_choice_answer.all():
+                                choice_answers_grade = StudentChoiceAnswer.objects.filter(
+                                    student_exam=student_exam).aggregate(
+                                    Sum('grade'))["grade__sum"]
+                            else:
+                                choice_answers_grade = 0
+                            student_exam.grade = essay_answers_grade + choice_answers_grade
+                            student_exam.is_graded = True
+                            student_exam.save()
         # Exams
         # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
         for student_exam in student_exams:

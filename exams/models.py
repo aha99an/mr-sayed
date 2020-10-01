@@ -27,15 +27,21 @@ class Exam(models.Model):
     time = models.IntegerField(default=0, verbose_name="الوقت بالدقايق")
     exam_type = models.IntegerField(
         choices=EXAM_TYPE_CHOICES, default=0)
-    # mandatory = models.BooleanField(default=False)
-    # max_tries = models.IntegerField(default=1)
-    # availabe_from = models.DateTimeField(blank=True, null=True)
-    # availabe_to = models.DateTimeField(blank=True, null=True)
     answer = models.FileField(blank=True, null=True)
     show_answer = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    been_a_week = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def is_past_week(self):
+        if self.been_a_week:
+            return True
+        if timezone.now().date() > self.week.end:
+            self.been_a_week = True
+            self.save()
+            return True
+        return False
 
     def __str__(self):
         return self.name
@@ -82,16 +88,20 @@ class EssayQuestion(models.Model):
             self.exam.save()
         super(EssayQuestion, self).delete(*args, **kwargs)
 
+    def __str__(self):
+        return self.question + "--" + self.exam.name
+
 
 class StudentEssayAnswer(models.Model):
     question = models.ForeignKey(
         EssayQuestion, on_delete=models.CASCADE, related_name="student_essay_answer")
     student_exam = models.ForeignKey(
-        StudentExam, on_delete=models.CASCADE)
+        StudentExam, on_delete=models.CASCADE, related_name="student_essay_answer")
     answer = models.TextField(max_length=100, null=True, blank=True)
     image_answer = models.ImageField(null=True, blank=True)
 
     grade = models.FloatField(max_length=100, null=True, blank=True)
+    is_graded = models.BooleanField(default=False)
     is_answered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -101,6 +111,9 @@ class StudentEssayAnswer(models.Model):
             self.is_answered = True
         else:
             self.is_answered = False
+        print(self.grade)
+        if self.grade:
+            print("HELLO THERE")
         super(StudentEssayAnswer, self).save(*args, **kwargs)
 
 
@@ -137,7 +150,7 @@ class StudentChoiceAnswer(models.Model):
     question = models.ForeignKey(
         ChoiceQuestion, on_delete=models.CASCADE, related_name="student_choice_answer")
     student_exam = models.ForeignKey(
-        StudentExam, on_delete=models.CASCADE)
+        StudentExam, on_delete=models.CASCADE, related_name="student_choice_answer")
     answer = models.CharField(max_length=100, null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True, default=0)
     is_answered = models.BooleanField(default=False)

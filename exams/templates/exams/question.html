@@ -11,9 +11,8 @@
 <br>
 
 <!-- Question -->
-{% if object.question %}
-
-<h3>{{object.question}}</h3>
+{% if object.question.question %}
+<h3>{{object.question.question}}</h3>
 
 <br>
 {% endif %}
@@ -72,10 +71,8 @@
 {% endif%}
 
 
-
-
 <!-- essay form -->
-{% if object.type == "essay_question"%}
+{% if question_content.type == "essay_question"%}
 <form method="post" enctype="multipart/form-data" class="md-form">
     {% csrf_token %}
 
@@ -94,7 +91,6 @@
 
 </form>
 {% endif %}
-<!-- <a href="{% url 'exam_list' %}" onclick="return confirm('تسليم الامتحان والخروج؟');"> -->
 <a href="#" onclick="myFunction()">
 
     <button type="submit" class="button primary"

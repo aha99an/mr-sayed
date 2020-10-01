@@ -5,13 +5,15 @@ from accounts.models import CustomUser
 from django.shortcuts import redirect
 import datetime
 
+
 def check_lecture_time(user):
     now = datetime.datetime.now()
     student_class = user.student_class
     today = datetime.date.today()
-    now_minus_start_minutes = (datetime.datetime.combine(today, now.time())\
+    now_minus_start_minutes = (datetime.datetime.combine(today, now.time())
                                - datetime.datetime.combine(today, student_class.start)).total_seconds() / 60
     return now_minus_start_minutes
+
 
 class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
@@ -27,6 +29,7 @@ class LectureListView(StudentPermission, ListView):
         else:
             return Lecture.objects.none()
 
+
 class LectureDetailView(StudentPermission, DetailView):
     model = Lecture
     template_name = "lectures/lecture.html"
@@ -36,7 +39,7 @@ class LectureDetailView(StudentPermission, DetailView):
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
             now = datetime.datetime.now()
             student_class = self.request.user.student_class
-            
+
             if student_class.week_day == now.weekday() and student_class.start < now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes:

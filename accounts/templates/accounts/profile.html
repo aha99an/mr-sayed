@@ -85,7 +85,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if exam.exam.answer %}
+                                {% if exam.exam.show_answer and exam.exam.answer %}
                                 
                                 <a href="{{exam.exam.answer.url}}" download>
                                     <button type="button" class="button primary">تنزيل نموذج
@@ -132,7 +132,7 @@
                             </td>
                             <td>
                             
-                                {% if homework.homework.homework_answer_file %}
+                                {% if homework.homework.show_answer and homework.homework.homework_answer_file %}
                                 
                                 <a href="{{homework.homework.homework_answer_file.url}}" download>
                                     <button type="button" class="button primary">تنزيل نموذج

@@ -9,6 +9,9 @@ from django.utils import timezone
 from collections import OrderedDict
 from homework.models import StudentHomework
 from home.permissions import StudentPermission
+from datetime import datetime
+
+now = datetime.now()
 
 
 def get_all_questions(exam_id, user):
@@ -78,8 +81,8 @@ class ProfileView(StudentPermission, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        # Exams
         student_exams = StudentExam.objects.filter(user=self.request.user)
+        # Check exams, first make sure student exam time is done, then if not graded try grading it
         for student_exam in student_exams:
             if student_exam.expiry_time < timezone.now():
                 if not student_exam.is_graded:
@@ -87,10 +90,24 @@ class ProfileView(StudentPermission, TemplateView):
                         grade_choice_exam(student_exam.id)
                         student_exams = StudentExam.objects.filter(
                             user=self.request.user)
+        # Exams
+        # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
+        for student_exam in student_exams:
+            if not student_exam.exam.show_answer:
+                if now.date() > student_exam.exam.week.end:
+                    student_exam.exam.show_answer = True
+                    student_exam.exam.save()
 
-        ctx["student_exams"] = student_exams
-        ctx["student_homeworks"] = StudentHomework.objects.filter(
+        # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
+        student_homeworks = StudentHomework.objects.filter(
             user=self.request.user)
+        for student_homework in student_homeworks:
+            if not student_homework.homework.show_answer:
+                if now.date() > student_homework.homework.week.end:
+                    student_homework.homework.show_answer = True
+                    student_homework.homework.save()
+        ctx["student_exams"] = student_exams
+        ctx["student_homeworks"] = student_homeworks
         return ctx
 
 

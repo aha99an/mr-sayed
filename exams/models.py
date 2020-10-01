@@ -75,6 +75,13 @@ class EssayQuestion(models.Model):
         self.exam.save()
         super(EssayQuestion, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        # This means that it is the only essay question in this exam
+        if not self.exam.essay_question.count == 1:
+            self.exam.exam_type = Exam.CHOICE_EXAM
+            self.exam.save()
+        super(EssayQuestion, self).delete(*args, **kwargs)
+
 
 class StudentEssayAnswer(models.Model):
     question = models.ForeignKey(
@@ -83,9 +90,18 @@ class StudentEssayAnswer(models.Model):
         StudentExam, on_delete=models.CASCADE)
     answer = models.TextField(max_length=100, null=True, blank=True)
     image_answer = models.ImageField(null=True, blank=True)
+
     grade = models.FloatField(max_length=100, null=True, blank=True)
+    is_answered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.answer or self.image_answer:
+            self.is_answered = True
+        else:
+            self.is_answered = False
+        super(StudentEssayAnswer, self).save(*args, **kwargs)
 
 
 class ChoiceQuestion(models.Model):
@@ -124,6 +140,7 @@ class StudentChoiceAnswer(models.Model):
         StudentExam, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100, null=True, blank=True)
     grade = models.FloatField(max_length=100, null=True, blank=True, default=0)
+    is_answered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -131,8 +148,14 @@ class StudentChoiceAnswer(models.Model):
         answers_list = [self.question.option1, self.question.option2,
                         self.question.option3, self.question.option4]
 
-        if self.answer == answers_list[self.question.right_answer_choice]:
+        if self.answer == answers_list[self.question.right_answer_choice - 1]:
             self.grade = self.question.grade
+        else:
+            self.grade = 0
+        if self.answer:
+            self.is_answered = True
+        else:
+            self.is_answered = False
         super(StudentChoiceAnswer, self).save(*args, **kwargs)
 
 

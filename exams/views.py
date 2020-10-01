@@ -39,12 +39,11 @@ def get_all_questions(exam_id, user):
                                      "question": question.id,
                                      "answered": answered,
                                      "grade": question.grade
-                                     #  "answer_model": StudentChoiceAnswer,
                                      }
         question_index += 1
 
     for question in exam_essay_qs:
-        # question status
+
         answered = "not answered"
         student_essay_answer = question.student_essay_answer.filter(
             student_exam=student_exam).last()
@@ -57,7 +56,6 @@ def get_all_questions(exam_id, user):
                                      "question": question.id,
                                      "answered": answered,
                                      "grade": question.grade,
-                                     #  "answer_model": StudentEssayAnswer
                                      }
         question_index += 1
     return questions
@@ -122,7 +120,7 @@ class QuestionUpdateView(UpdateView):
             self.request.session['exam_time_expired'] = True
             return redirect("exam_list")
 
-        # save RANDOM order of questions in student_exam model
+        # SAVE RANDOM order of questions in student_exam model
         if not self.student_exam.questions:
             self.student_exam.questions = self.all_questions = get_all_questions(
                 self.kwargs.get("exam_pk"), self.request.user)
@@ -133,8 +131,7 @@ class QuestionUpdateView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
-        # all_questions = get_all_questions(
-        #     self.kwargs.get("exam_pk"), self.request.user)
+
         if self.all_questions[self.kwargs.get("question_pk")]["type"] == "choice_question":
             return StudentChoiceAnswerForm
         else:
@@ -157,9 +154,22 @@ class QuestionUpdateView(UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        # all_questions = get_all_questions(self.exam.id, self.request.user)
         ctx["question_content"] = self.all_questions[self.kwargs.get(
             "question_pk")]
+
+        # CHANGE STATUS FOR ANSWERED QUESTIONS
+        for v, k in self.all_questions.items():
+            if k["type"] == "choice_question":
+                question = ChoiceQuestion.objects.get(id=k["question"])
+                if question.student_choice_answer.exists():
+                    if question.student_choice_answer.last().is_answered:
+                        k["answered"] = "answered"
+            if k["type"] == "essay_question":
+                question = EssayQuestion.objects.get(id=k["question"])
+                if question.student_essay_answer.exists():
+                    if question.student_essay_answer.last().is_answered:
+                        k["answered"] = "answered"
+
         ctx["all_questions"] = self.all_questions
         ctx["student_exam"] = self.student_exam
         ctx["question_id"] = self.kwargs.get("question_pk")

@@ -14,6 +14,7 @@ class Homework(models.Model):
         max_length=200, null=True, blank=True, verbose_name="الواجب")
     homework_answer_file = models.FileField(
         null=True, blank=True, verbose_name="ملف حل الواجب")
+    show_answer = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

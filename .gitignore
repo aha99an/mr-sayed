@@ -17,11 +17,11 @@ mr-syed/__pycache__/settings.cpython-35.pyc
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-/homework/migrations
-/classes/migrations
-/exams/migrations
-/home/migrations
-/accounts/migrations
-/lectures/migrations
-/questions/migrations
-/home/migrations
+# /homework/migrations
+# /classes/migrations
+# /exams/migrations
+# /home/migrations
+# /accounts/migrations
+# /lectures/migrations
+# /questions/migrations
+# /home/migrations

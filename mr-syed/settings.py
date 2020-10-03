@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "lectures",
     # 3rd Party
     'whitenoise.runserver_nostatic',
-    # "storages",
+    "storages",
     # 'crispy_forms',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -126,7 +126,7 @@ LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -137,15 +137,15 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# aws credintials
-# AWS_ACCESS_KEY_ID = "AKIAVATIJWXIW7INOAFP"
-# AWS_SECRET_ACCESS_KEY = "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"
-# AWS_STORAGE_BUCKET_NAME = "website-try"
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+#S3 BUCKETS CONFIG
 
+AWS_ACCESS_KEY_ID = 'AKIAQKW72FGFKP7AXDV4'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 if 'DATABASE_URL' in os.environ:
     import dj_database_url

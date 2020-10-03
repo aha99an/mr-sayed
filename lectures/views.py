@@ -1,5 +1,5 @@
 from django.views.generic import ListView, UpdateView, DetailView
-from .models import Lecture, StudentLecture, StudentLectureQuestion
+from .models import Lecture, StudentLecture, StudentLectureQuestion, StudentLectureMakeup
 from home.permissions import StudentPermission
 from accounts.models import CustomUser
 from django.shortcuts import redirect
@@ -21,13 +21,20 @@ class LectureListView(StudentPermission, ListView):
     def get_queryset(self):
         now = datetime.datetime.now()
         student_class = self.request.user.student_class
+        queryset = Lecture.objects.none()
+        mackup_lectures = StudentLectureMakeup.objects.filter(user=self.request.user)
+
+        if mackup_lectures:
+            for lecture in mackup_lectures:
+                queryset |= Lecture.objects.filter(id=lecture.lecture.id)
+
         if student_class.week_day == now.weekday() and student_class.start < now.time():
             now_minus_start_minutes = check_lecture_time(self.request.user)
-            return Lecture.objects.filter(week__start__lte=now.date(),
-                                          week__end__gte=now.date(),
-                                          lecture_allowed_time__gte=now_minus_start_minutes)
-        else:
-            return Lecture.objects.none()
+            queryset |= Lecture.objects.filter(week__start__lte=now.date(),
+                                               week__end__gte=now.date(),
+                                               lecture_allowed_time__gte=now_minus_start_minutes)
+
+        return queryset
 
 
 class LectureDetailView(StudentPermission, DetailView):
@@ -39,6 +46,10 @@ class LectureDetailView(StudentPermission, DetailView):
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
             now = datetime.datetime.now()
             student_class = self.request.user.student_class
+
+            # Makeup Lecture 
+            if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):
+                return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start < now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)

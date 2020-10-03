@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
+
+
+
 {% block head %}
 <h2>الطلاب</h2>
 {% endblock %}
 {% block content2 %}
+
+<form  action="{% url 'admin_student_list' %}" method="get">
+    <input width= "auto" id="al-search" type="text" 
+           name="account" value="{{ request.GET.account }}"
+           class="form-control" />
+    <input type="submit"
+           value="Search" class="btn btn-success" />
+</form>
+
 
 <div class="table-wrapper">
     <table>
@@ -40,4 +52,23 @@
         <tfoot>
 
     </table>
+
+
+
+     {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/accounts/students?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} 
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/accounts/students?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+
+            </span>
+        </div>
+    {% endif %}
     {% endblock %}

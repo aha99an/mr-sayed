@@ -8,10 +8,24 @@ import random
 from home.permissions import AdminPermission
 
 
+
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
     template_name = "accounts/admin-students-list.html"
+    paginate_by = 20
+    def get_queryset(self):
+        try:
+            a = self.request.GET.get('account',)
+        except KeyError:
+            a = None
+        if a:
+            admin_student_list = CustomUser.objects.filter(first_name=a,user_type=CustomUser.STUDENT)
+            admin_student_list = CustomUser.objects.filter(username=a,user_type=CustomUser.STUDENT)
+            # admin_student_list = CustomUser.objects.filter(student_class=a,user_type=CustomUser.STUDENT)
 
+        else:
+            admin_student_list = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
+        return admin_student_list
 
 class AdminStudentUpdateView(AdminPermission, UpdateView):
     model = CustomUser

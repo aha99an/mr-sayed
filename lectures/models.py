@@ -52,3 +52,8 @@ class StudentSeenLecture(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     link = models.ForeignKey(LectureLink, on_delete=models.CASCADE)
     seen =  models.BooleanField(default=False)
+
+class StudentLectureMakeup(models.Model):
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+

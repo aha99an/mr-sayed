@@ -22,9 +22,9 @@ class HomeworkListView(StudentPermission, ListView):
     now = datetime.now()
 
     def get_queryset(self):
-        if self.request.user.student_class.week_day == self.now.weekday():
-            return Homework.objects.filter(week__start__lte=self.now.date(), week__end__gte=self.now.date())
-        return Homework.objects.none()
+        # if self.request.user.student_class.week_day == self.now.weekday():
+        return Homework.objects.filter(week__start__lte=self.now.date(), week__end__gte=self.now.date())
+        # return Homework.objects.none()
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)

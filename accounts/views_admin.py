@@ -21,7 +21,7 @@ class AdminStudentListView(AdminPermission, ListView):
         if a:
             admin_student_list = CustomUser.objects.filter(first_name=a,user_type=CustomUser.STUDENT)
             admin_student_list = CustomUser.objects.filter(username=a,user_type=CustomUser.STUDENT)
-            # admin_student_list = CustomUser.objects.filter(student_class=a,user_type=CustomUser.STUDENT)
+            admin_student_list = CustomUser.objects.filter(student_class__name=a,user_type=CustomUser.STUDENT)
 
         else:
             admin_student_list = CustomUser.objects.filter(user_type=CustomUser.STUDENT)

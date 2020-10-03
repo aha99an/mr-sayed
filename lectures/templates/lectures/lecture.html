@@ -5,11 +5,8 @@
 {% endblock %}
 
 {% block content %}
+
 {% for link in links %}
-
-
-
-
 
 <div style="padding:56.25% 0 0 0;position:relative;">
     <iframe src="https://player.vimeo.com/video/{{link.link_number}}?loop=1&color=ff9933"
@@ -20,7 +17,7 @@
 
 
 
-<div id="status" class="incomplete">
+{% comment %} <div id="status" class="incomplete">
 <span>Play status: </span>
 <span class="status complete">COMPLETE</span>
 <span class="status incomplete">INCOMPLETE</span>
@@ -30,7 +27,7 @@
 <span id="played">0</span> seconds out of 
 <span id="duration"></span> seconds. (only updates when the video pauses)
 </div>
-<br>
+<br> {% endcomment %}
 {% endfor %}
 
 <script src="https://player.vimeo.com/api/player.js"></script>

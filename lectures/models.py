@@ -46,3 +46,9 @@ class StudentLectureQuestion(models.Model):
     time = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class StudentSeenLecture(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    link = models.ForeignKey(LectureLink, on_delete=models.CASCADE)
+    seen =  models.BooleanField(default=False)

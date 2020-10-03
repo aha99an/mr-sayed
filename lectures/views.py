@@ -1,5 +1,5 @@
 from django.views.generic import ListView, UpdateView, DetailView
-from .models import Lecture, StudentLecture, StudentLectureQuestion
+from .models import Lecture, StudentLecture, StudentLectureQuestion 
 from home.permissions import StudentPermission
 from accounts.models import CustomUser
 from django.shortcuts import redirect

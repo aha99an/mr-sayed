@@ -11,11 +11,14 @@ def check_size(value):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    parentPhoneNumber = forms.CharField(
-        validators=[check_size, ], label="Parent mobile")
-    phoneNumber = forms.CharField(
-        validators=[check_size, ], label="Your mobile")
-    username = forms.EmailField(label="email")
+    username = forms.EmailField(label="الايميل")
+    first_name = forms.CharField(validators=[check_size, ], label="الأسم ثلاثي")
+    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    school = forms.CharField(validators=[check_size, ], label="المدرسة")
+    profile_pic= forms.ImageField(validators=[check_size, ], label="صوره الطالب")
+    
+  
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
@@ -27,7 +30,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
      #  fields = UserCreationForm.Meta.fields +("school", "parentPhoneNumber", "phoneNumber", "profile_pic")
         # fields = UserCreationForm.Meta.fields
-        fields = ('username', 'first_name', 'last_name', 'school',
+        fields = ('username', 'first_name', 'school',
                   "parentPhoneNumber", "phoneNumber", "profile_pic")
 
 

@@ -71,11 +71,10 @@
 
 					{% elif user.is_student %}
 					<li><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
-					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
-					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>
-					<li><a href="{% url 'student_questions' %}">اسأل استاذ سيد</a></li>
 					<li><a href="{% url 'lectures_list' %}">المحاضرات</a></li>
-
+					<li><a href="{% url 'homework_list' %}">الواجبات</a></li>					
+					<li><a href="{% url 'exam_list' %}">الامتحانات</a></li>
+					<li><a href="{% url 'student_questions' %}">اسأل استاذ سيد</a></li>
 					<li><a href="{% url 'logout' %}">الخروج</a></li>
 					{% else %}
 					<li><a href="{% url 'login' %}" class="button primary">تسجيل دخول/انشاء حساب</a></li>
@@ -113,16 +112,24 @@
 		<footer id="footer">
 			<ul class="icons">
 				<!--	<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li> -->
-				<li><a href="#" class="icon brands alt fa-facebook-f"><span
+				<li><a href="https://www.facebook.com/groups/2633503433564779" class="icon brands alt fa-facebook-f"><span
 							class="label">Facebook</span></a></li>
 				<!-- <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
 				<!--  <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
 				<!--  <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>-->
 				<!--  <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>-->
 			</ul>
+							<li> او التواصل من خلال الهاتف المحمول </li>
+
+							<li> 01007477284 - 01007477284 - 01114317192 </li>
+
 			<ul class="copyright">
 				<li>All rights reserved.</li>
 				<li>Mr sayed</li>
+			</ul>
+			<ul class="copyright">
+				<li>All rights reserved.</li>
+				<li>Eng. yasser Abo Alghate</li>
 			</ul>
 		</footer>
 

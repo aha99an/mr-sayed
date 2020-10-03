@@ -13,6 +13,8 @@ class CustomUser(AbstractUser):
     )
 
     username = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
     school = models.CharField(max_length=200)
     parentPhoneNumber = models.IntegerField(default=0)
     phoneNumber = models.IntegerField(default=0)

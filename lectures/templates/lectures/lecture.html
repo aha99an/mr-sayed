@@ -1,23 +1,83 @@
 {% extends 'base.html' %}
-<!-- <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/455874729?loop=1&color=ff9933" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script> -->
 
 {% block head %}
-<!-- <div style="padding:56.25% 0 0 0;position:relative;">
-<iframe src="https://player.vimeo.com/video/455874729?loop=1&color=ff9933" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
-</iframe>
-</div> -->
 <h2>{{object.name}}</h2>
 {% endblock %}
+
 {% block content %}
 
 {% for link in links %}
+
 <div style="padding:56.25% 0 0 0;position:relative;">
     <iframe src="https://player.vimeo.com/video/{{link.link_number}}?loop=1&color=ff9933"
         style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen"
         allowfullscreen>
     </iframe>
 </div>
-<br>
+
+
+
+{% comment %} <div id="status" class="incomplete">
+<span>Play status: </span>
+<span class="status complete">COMPLETE</span>
+<span class="status incomplete">INCOMPLETE</span>
+<br />
+</div>
+<div>
+<span id="played">0</span> seconds out of 
+<span id="duration"></span> seconds. (only updates when the video pauses)
+</div>
+<br> {% endcomment %}
 {% endfor %}
 
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+var timeStarted = -1;
+var timePlayed = 0;
+var duration = 0;
+
+var iframe = document.querySelector('iframe');
+var player = new Vimeo.Player(iframe);
+
+player.getDuration().then(function(d) {
+  duration = d;
+  document.getElementById("duration").appendChild(new Text(Math.round(duration)+""));
+});
+
+player.on('play', videoStartedPlaying);
+player.on('pause', videoStoppedPlaying);
+player.on('ended', videoStoppedPlaying);
+
+
+player.getVideoTitle().then(function(title) {
+  console.log('title:', title);
+});
+
+function videoStartedPlaying() {
+  console.log('videoStartedPlaying')
+  timeStarted = new Date().getTime()/1000;
+}
+function videoStoppedPlaying(event) {
+  console.log('videoStoppedPlaying')
+  // Start time less then zero means stop event was fired without start event
+  if(timeStarted>0) {
+    var playedFor = new Date().getTime()/1000 - timeStarted;
+    timeStarted = -1;
+    // add the new number of seconds played
+    timePlayed+=playedFor;
+  }
+  document.getElementById("played").innerHTML = Math.round(timePlayed)+"";
+  // Count as complete only if end of video was reached
+  if(timePlayed>=duration && event.type=="ended") {
+    document.getElementById("status").className="complete";
+  }
+}
+
+function getDuration() {
+  duration = video.duration;
+  document.getElementById("duration").appendChild(new Text(Math.round(duration)+""));
+  console.log("Duration: ", duration);
+}
+ endcomment %}
+</script>
 {% endblock content %}

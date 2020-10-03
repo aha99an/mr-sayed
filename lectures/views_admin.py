@@ -1,4 +1,4 @@
-from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView, DetailView
 from .models import Lecture, StudentLecture, StudentLectureQuestion, LectureLink
 from .forms import LectureCreateForm
 from django.urls import reverse_lazy

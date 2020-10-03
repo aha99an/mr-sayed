@@ -4154,3 +4154,33 @@ input, select, textarea {
         border-right: 7px solid #78b13f;
     }
 	
+
+
+	#status span.status {
+		display: none;
+		font-weight: bold;
+	  }
+	  span.status.complete {
+		color: green;
+	  }
+	  span.status.incomplete {
+		color: red;
+	  }
+	  #status.complete span.status.complete {
+		display: inline;
+	  }
+	  #status.incomplete span.status.incomplete {
+		display: inline;
+	  }
+
+	  video::-internal-media-controls-download-button {
+		display:none;
+	}
+	
+	video::-webkit-media-controls-enclosure {
+		overflow:hidden;
+	}
+	
+	video::-webkit-media-controls-panel {
+		width: calc(100% + 30px); /* Adjust as needed */
+	}

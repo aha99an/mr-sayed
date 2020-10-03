@@ -25,8 +25,7 @@ class Class(models.Model):
     )
 
     name = models.CharField(max_length=200, null=True, blank=True)
-    week_day = models.IntegerField(
-        choices=DAYS_OF_WEEK, null=True, blank=True)
+    week_day = models.IntegerField(choices=DAYS_OF_WEEK, null=True, blank=True)
     start = models.TimeField(null=True, blank=True)
     end = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

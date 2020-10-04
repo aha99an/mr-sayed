@@ -6,26 +6,31 @@ from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
+from django.db.models import Q
 
 
 
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
     template_name = "accounts/admin-students-list.html"
-    paginate_by = 20
+    paginate_by = 10
+
     def get_queryset(self):
         try:
             a = self.request.GET.get('account',)
         except KeyError:
             a = None
+
         if a:
-            admin_student_list = CustomUser.objects.filter(first_name=a,user_type=CustomUser.STUDENT)
-            admin_student_list = CustomUser.objects.filter(username=a,user_type=CustomUser.STUDENT)
-            admin_student_list = CustomUser.objects.filter(student_class__name=a,user_type=CustomUser.STUDENT)
+
+            admin_student_list1 = Q(first_name__contains=a,user_type=CustomUser.STUDENT) 
+            admin_student_list2 = Q(username__contains=a,user_type=CustomUser.STUDENT)
+            admin_student_list3 = Q(student_class__name__contains=a,user_type=CustomUser.STUDENT)
+            q = CustomUser.objects.filter(admin_student_list1 | admin_student_list2 | admin_student_list3)
 
         else:
-            admin_student_list = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
-        return admin_student_list
+            q = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
+        return q
 
 class AdminStudentUpdateView(AdminPermission, UpdateView):
     model = CustomUser

@@ -6,27 +6,60 @@ from classes.models import Class
 from .forms import AdminHomeworkForm
 from django.urls import reverse_lazy
 from home.permissions import AdminPermission
+from accounts.models import CustomUser
+from django.db.models import Q
 
 
 class AdminCheckHomeworkListView(AdminPermission, ListView):
     model = StudentHomework
     template_name = "homework/admin-homework-list.html"
     # queryset = StudentHomework.objects.all()
+    paginate_by = 10
+
 
     def get_queryset(self):
-        queryset = StudentHomework.objects.all()
+        try:
+            a = self.request.GET.get('homework',)
+        except KeyError:
+            a = None
+
+        q = StudentHomework.objects.all()
+
+        if a:
+
+            admin_student_list1 = Q(user__first_name__contains=a)
+            admin_student_list2 = Q(user__username__contains=a)
+            admin_student_list3 = Q(homework__name__contains=a)
+            q = q.filter(admin_student_list1 | admin_student_list2 | admin_student_list3 )
+
         class_filter = self.request.GET.get('class_filter')
         is_checked_filter = self.request.GET.get('is_checked_filter')
         if class_filter:
-            queryset = queryset.filter(
-                user__student_class__name=class_filter)
+            q = q.filter(
+            user__student_class__name=class_filter)
         if is_checked_filter:
             if is_checked_filter == "True":
-                queryset = queryset.filter(is_checked=True)
+                q = q.filter(is_checked=True)
             else:
-                queryset = queryset.filter(is_checked=False)
+                q = q.filter(is_checked=False)
 
-        return queryset
+        return q
+
+
+    # def get_queryset(self):
+    #     queryset = StudentHomework.objects.all()
+    #     class_filter = self.request.GET.get('class_filter')
+    #     is_checked_filter = self.request.GET.get('is_checked_filter')
+    #     if class_filter:
+    #         queryset = queryset.filter(
+    #             user__student_class__name=class_filter)
+    #     if is_checked_filter:
+    #         if is_checked_filter == "True":
+    #             queryset = queryset.filter(is_checked=True)
+    #         else:
+    #             queryset = queryset.filter(is_checked=False)
+
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminCheckHomeworkListView,

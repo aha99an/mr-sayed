@@ -16,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
     parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
     phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
-    profile_pic= forms.ImageField(validators=[check_size, ], label="صوره الطالب")
+    profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
     
   
 

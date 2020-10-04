@@ -17,6 +17,9 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
     paginate_by = 10
 
 
+
+
+
     def get_queryset(self):
         try:
             a = self.request.GET.get('homework',)

@@ -17,7 +17,7 @@
 
 
 
- <div id="status" class="incomplete">
+ {% comment %} <div id="status" class="incomplete">
 <span>Play status: </span>
 <span class="status complete">COMPLETE</span>
 <span class="status incomplete">INCOMPLETE</span>
@@ -26,11 +26,11 @@
 <div>
 <span id="played">0</span> seconds out of 
 <span id="duration"></span> seconds. 
-</div>
+</div> {% endcomment %}
 <br> 
 {% endfor %}
 
-<script src="https://player.vimeo.com/api/player.js"></script>
+{% comment %} <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
 var timeStarted = -1;
 var timePlayed = 0;
@@ -79,5 +79,5 @@ function getDuration() {
   console.log("Duration: ", d);
 }
  endcomment %}
-</script>
+</script> {% endcomment %}
 {% endblock content %}

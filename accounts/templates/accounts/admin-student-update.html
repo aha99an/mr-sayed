@@ -15,19 +15,64 @@
 </form>
 <a href ="{% url 'student_reset_password' student_user.id %}" class="button primary" 
     style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تغيير الباسورد</a>
+  <hr />
 
-<form method="get" action="{% url 'student_update_view' student_user.id %}">
+<form method="post" action="{% url 'admin_add_makeup_lecture' student_user.id %}">
 {% csrf_token %}
 
-    <select name="class_filter" dir="rtl" onchange="this.form.submit()">
-        <option value="">اختار حصة</option>
+    <select name="lecture_id" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار محاضرة تعويضية</option>
 
-        {% for class in lectures %}
+        {% for lecture in lectures %}
 
-        <option value="{{class.name}}" {% if class_filter == class.name %} selected{% endif %}>
-            {{class.name}}
+        <option value="{{lecture.id}}" {% if lecture_id == lecture.name %} selected{% endif %}>
+            {{lecture.name}}
         </option>
         {% endfor %}
     </select>
-<form>
+</form>
+
+{% if makeup_lectures %}
+<h3>المحاضرات التعويضية</h3>
+<div class="table-responsive table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <h4>الاسم</h4>
+                </th>
+                <th scope="col" style="text-align: center;">
+                    <h4>مسح</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lecture in makeup_lectures %}
+
+            <tr>
+
+                <td>
+                    
+                <div style="color: lightblue;">{{lecture.lecture.name}}</div>
+
+                </td>
+                <td style="text-align: center;">
+                    <span>
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'delete_makeup_lecture' lecture.id  student_user.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+{% endif %}
     {% endblock %}

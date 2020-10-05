@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView
-from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password
+from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password, index2, LectureMakeupDeleteView
 
 
 urlpatterns = [
@@ -15,4 +15,9 @@ urlpatterns = [
          name="student_update_view"),
     path("admin-reset-password/<int:pk>", reset_password,
          name="student_reset_password"),
+    path("admin-add-makeup-lecture/<int:pk>", index2,
+         name="admin_add_makeup_lecture"),
+    path('admin-delete-makeup-lecture/delete/<int:makeup_lecture_pk>/<int:student_pk>', LectureMakeupDeleteView.as_view(),
+         name="delete_makeup_lecture"),
+
 ]

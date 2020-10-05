@@ -15,8 +15,8 @@ urlpatterns = [
     path('choice-question/<int:student_exam_pk>/<int:question_pk>/',
          AdminChoiceQuestion.as_view(), name='admin_choice_question'),
 
-    path('choice-question/<int:student_exam_pk>/',
-         AdminChoiceQuestion.as_view(), name='admin_first_choice_question'),
+    #     path('choice-question/<int:student_exam_pk>/',
+    #          AdminChoiceQuestion.as_view(), name='admin_first_choice_question'),
 
     path('update_grade/<int:student_essay_answer_pk>/<int:question_pk>/',
          update_view, name='update_grade'),

@@ -16,10 +16,6 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
     # queryset = StudentHomework.objects.all()
     paginate_by = 10
 
-
-
-
-
     def get_queryset(self):
         try:
             a = self.request.GET.get('homework',)
@@ -33,13 +29,14 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
             admin_student_list1 = Q(user__first_name__contains=a)
             admin_student_list2 = Q(user__username__contains=a)
             admin_student_list3 = Q(homework__name__contains=a)
-            q = q.filter(admin_student_list1 | admin_student_list2 | admin_student_list3 )
+            q = q.filter(admin_student_list1 |
+                         admin_student_list2 | admin_student_list3)
 
         class_filter = self.request.GET.get('class_filter')
         is_checked_filter = self.request.GET.get('is_checked_filter')
         if class_filter:
             q = q.filter(
-            user__student_class__name=class_filter)
+                user__student_class__name=class_filter)
         if is_checked_filter:
             if is_checked_filter == "True":
                 q = q.filter(is_checked=True)
@@ -47,22 +44,6 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
                 q = q.filter(is_checked=False)
 
         return q
-
-
-    # def get_queryset(self):
-    #     queryset = StudentHomework.objects.all()
-    #     class_filter = self.request.GET.get('class_filter')
-    #     is_checked_filter = self.request.GET.get('is_checked_filter')
-    #     if class_filter:
-    #         queryset = queryset.filter(
-    #             user__student_class__name=class_filter)
-    #     if is_checked_filter:
-    #         if is_checked_filter == "True":
-    #             queryset = queryset.filter(is_checked=True)
-    #         else:
-    #             queryset = queryset.filter(is_checked=False)
-
-    #     return queryset
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminCheckHomeworkListView,

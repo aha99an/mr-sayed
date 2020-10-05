@@ -12,6 +12,7 @@ from collections import OrderedDict
 from home.permissions import AdminPermission
 from django.db.models import Q
 
+
 def get_all_questions(exam_id, user):
     exam = Exam.objects.get(id=exam_id)
     student_exam = exam.student_exam.filter(user=user).last()
@@ -31,6 +32,9 @@ def get_all_questions(exam_id, user):
         if student_choice_answer:
             if student_choice_answer.answer:
                 answer = student_choice_answer.answer
+        else:
+            StudentChoiceAnswer.objects.create(
+                question=question, student_exam=student_exam)
 
         questions[question_index] = {"url": "choice_question",
                                      "type": "choice_question",
@@ -48,6 +52,9 @@ def get_all_questions(exam_id, user):
         if student_essay_answer:
             if student_essay_answer.answer or student_essay_answer.image_answer:
                 answered = "answered"
+        else:
+            StudentEssayAnswer.objects.create(
+                question=question, student_exam=student_exam)
 
         questions[question_index] = {"url": "essay_question",
                                      "type": "essay_question",
@@ -63,7 +70,7 @@ def get_all_questions(exam_id, user):
 class ExamAdminListView(AdminPermission, ListView):
     template_name = "exams/admin-exam-list.html"
     paginate_by = 10
-    
+
     def get_queryset(self):
         try:
             a = self.request.GET.get('exam',)
@@ -75,14 +82,14 @@ class ExamAdminListView(AdminPermission, ListView):
             admin_student_list1 = Q(user__first_name__contains=a)
             admin_student_list2 = Q(user__username__contains=a)
             admin_student_list3 = Q(exam__name__contains=a)
-            q = q.filter(admin_student_list1 | admin_student_list2 | admin_student_list3 )
-
+            q = q.filter(admin_student_list1 |
+                         admin_student_list2 | admin_student_list3)
 
         class_filter = self.request.GET.get('class_filter')
         is_checked_filter = self.request.GET.get('is_checked_filter')
         if class_filter:
             q = q.filter(
-            user__student_class__name=class_filter)
+                user__student_class__name=class_filter)
         if is_checked_filter:
             if is_checked_filter == "True":
                 q = q.filter(is_graded=True)
@@ -90,7 +97,6 @@ class ExamAdminListView(AdminPermission, ListView):
                 q = q.filter(is_graded=False)
 
         return q
-
 
     def get_context_data(self, **kwargs):
         ctx = super(ExamAdminListView, self).get_context_data(**kwargs)
@@ -112,10 +118,9 @@ class AdminChoiceQuestion(AdminPermission, DetailView):
             student_exam.exam.id, student_exam.user)
         if self.question_pk:
             question_content = self.all_questions[self.question_pk]
-
         else:
             question_content = list(self.all_questions.values())[0]
-
+        print(question_content, "AAAAAAAAAAAAA")
         return question_content
 
     def get_context_data(self, *args, **kwargs):

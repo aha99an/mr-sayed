@@ -16,5 +16,18 @@
 <a href ="{% url 'student_reset_password' student_user.id %}" class="button primary" 
     style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تغيير الباسورد</a>
 
+<form method="get" action="{% url 'student_update_view' student_user.id %}">
+{% csrf_token %}
 
+    <select name="class_filter" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار حصة</option>
+
+        {% for class in lectures %}
+
+        <option value="{{class.name}}" {% if class_filter == class.name %} selected{% endif %}>
+            {{class.name}}
+        </option>
+        {% endfor %}
+    </select>
+<form>
     {% endblock %}

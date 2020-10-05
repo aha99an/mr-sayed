@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
+from lectures.models import Lecture, StudentLectureMakeup
 
 # DataFlair #Custom_Validator
 
@@ -54,3 +55,10 @@ class StudentChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('student_class', 'student_is_active',)
+
+class test(forms.ModelForm):
+    lecture = forms.ModelChoiceField(queryset=Lecture.objects.all())
+
+    class Meta:
+        model = StudentLectureMakeup
+        fields = ("lecture",)

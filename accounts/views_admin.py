@@ -1,12 +1,12 @@
 from django.views.generic import UpdateView, ListView
 from .models import CustomUser
-from .forms import StudentChangeForm
+from .forms import StudentChangeForm, test
 from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
-
+from lectures.models import Lecture
 
 
 class AdminStudentListView(AdminPermission, ListView):
@@ -39,6 +39,8 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
         ctx["reseted_password"] = ctx["student_user"].check_password(
             ctx["student_user"].random_password)
+        ctx["lectures"] = Lecture.objects.all()
+        ctx["formo"] = test
         return ctx
 
 
@@ -48,3 +50,19 @@ def reset_password(request, pk):
     user.set_password(user.random_password)
     user.save()
     return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
+
+
+
+
+# def index2(request):
+#     if request.method == 'POST':
+
+#         # form = InvoiceForm(request.POST)
+#         # if form.is_valid():
+#         #     instance = form.save(commit=False)
+#         #     instance.save()
+#         #     return redirect('home2')
+#     # else:
+#     #     form = InvoiceForm()
+
+#     return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))

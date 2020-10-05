@@ -33,6 +33,7 @@ class Exam(models.Model):
     been_a_week = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    description1 = models.CharField(max_length=200, null=True, blank=True)
 
     def is_past_week(self):
         if self.been_a_week:

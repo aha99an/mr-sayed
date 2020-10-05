@@ -6,11 +6,11 @@
 {% block content2 %}
 
 <form  action="{% url 'admin_student_list' %}" method="get">
-    <input width= "auto" id="al-search" type="text" 
+    <input style = "width: auto;" id="al-search" type="text" 
            name="account" value="{{ request.GET.account }}"
            class="form-control" />
     <input type="submit"
-           value="Search" class="btn btn-success" />
+            value="بحث" class="button primary" />
 </form>
 
 
@@ -48,25 +48,34 @@
             {% endfor %}
         </tbody>
         <tfoot>
-
     </table>
 
 
 
-     {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="/accounts/students?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} 
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="/accounts/students?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-
-            </span>
-        </div>
+      <ul>
+    <div c lass="prev_next">
+    <div class="pages">
+    {% if page_obj.has_previous %}
+      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">لسابق</a>
     {% endif %}
+      {% for pg in page_obj.paginator.page_range %}
+        {% if page_obj.number == pg %}
+          <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+        {% else %}
+          <a href="?page={{pg}}" class="btn">{{pg}}</a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <a class="next btn btn-info" href="?page={{page_obj.next_page_number}}">التالي</a>
+    {% endif %}
+      </ul>
+    </div>
+    </div>
+    <span class="clear_both"></span>
+
     {% endblock %}
+
+
+
+
+

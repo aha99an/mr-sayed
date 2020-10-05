@@ -17,7 +17,7 @@
 
 
 
-{% comment %} <div id="status" class="incomplete">
+ <div id="status" class="incomplete">
 <span>Play status: </span>
 <span class="status complete">COMPLETE</span>
 <span class="status incomplete">INCOMPLETE</span>
@@ -25,9 +25,9 @@
 </div>
 <div>
 <span id="played">0</span> seconds out of 
-<span id="duration"></span> seconds. (only updates when the video pauses)
+<span id="duration"></span> seconds. 
 </div>
-<br> {% endcomment %}
+<br> 
 {% endfor %}
 
 <script src="https://player.vimeo.com/api/player.js"></script>
@@ -76,7 +76,7 @@ function videoStoppedPlaying(event) {
 function getDuration() {
   duration = video.duration;
   document.getElementById("duration").appendChild(new Text(Math.round(duration)+""));
-  console.log("Duration: ", duration);
+  console.log("Duration: ", d);
 }
  endcomment %}
 </script>

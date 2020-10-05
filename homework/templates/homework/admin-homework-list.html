@@ -3,10 +3,16 @@
 <h2>الواجبات</h2>
 {% endblock %}
 {% block content2 %}
-<!-- <a href="#">{{class}}</a> <br> -->
+
+
 <form method="get" action="{% url 'admin_homework_list' %}">
-    <!-- <p>Filter: <input type="text" value="{{class.name}}" name="filter" />{{class.name}}</p> -->
-    <select name="class_filter" dir="rtl" onchange="this.form.submit()">
+ <input style = "width: auto;"  id="al-search" type="text"  
+           name="homework" value="{{ request.GET.homework }}"
+           class="form-control" />
+    <input type="submit"
+           value="بحث" class="button primary" />
+           
+               <select name="class_filter" dir="rtl" onchange="this.form.submit()">
         <option value="">اختار مجموعة</option>
 
         {% for class in classes %}
@@ -30,7 +36,8 @@
     <table>
         <thead>
             <tr>
-                <th>الطالب</th>
+                <th>اسم الطالب</th>
+                <th>ايميل الطالب</th>
                 <th>الواجب</th>
                 <th>الحصة</th>
                 <th>التصحيح</th>
@@ -40,6 +47,11 @@
             {% for homework in object_list %}
 
             <tr>
+             <td>
+             <a style="color: lightblue;"
+                 href="{% url 'admin_check_homework' homework.id %}">
+                        {{ homework.user.first_name }} </a>
+             </td>
                 <td>
                     <a style="color: lightblue;"
                         href="{% url 'admin_check_homework' homework.id %}">
@@ -61,5 +73,27 @@
 
     </table>
 
+
+
+<ul>
+    <div c lass="prev_next">
+    <div class="pages">
+    {% if page_obj.has_previous %}
+      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">لسابق</a>
+    {% endif %}
+      {% for pg in page_obj.paginator.page_range %}
+        {% if page_obj.number == pg %}
+          <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+        {% else %}
+          <a href="?page={{pg}}" class="btn">{{pg}}</a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <a class="next btn btn-info" href="?page={{page_obj.next_page_number}}">التالي</a>
+    {% endif %}
+      </ul>
+    </div>
+    </div>
+    <span class="clear_both"></span>
 
     {% endblock content2 %}

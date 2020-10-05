@@ -154,19 +154,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-<<<<<<< HEAD
-=======
-
-
-
 
 #S3 BUCKETS CONFIG
 
-# AWS_ACCESS_KEY_ID = 'AKIAQKW72FGFKP7AXDV4'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
->>>>>>> 88e062feb5f1667a0762165ac64d57a2c0553cfd
+AWS_ACCESS_KEY_ID = 'AKIAQKW72FGFKP7AXDV4'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

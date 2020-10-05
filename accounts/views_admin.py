@@ -6,12 +6,9 @@ from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
-<<<<<<< HEAD
 from lectures.models import Lecture
-=======
 from django.db.models import Q
 
->>>>>>> 88e062feb5f1667a0762165ac64d57a2c0553cfd
 
 
 class AdminStudentListView(AdminPermission, ListView):

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView
-from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password, index2, LectureMakeupDeleteView
+from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password, index2, LectureMakeupDeleteView,AdminAccountDeleteView
 
 
 urlpatterns = [
@@ -19,5 +19,7 @@ urlpatterns = [
          name="admin_add_makeup_lecture"),
     path('admin-delete-makeup-lecture/delete/<int:makeup_lecture_pk>/<int:student_pk>', LectureMakeupDeleteView.as_view(),
          name="delete_makeup_lecture"),
+    path('delete-account/<int:pk>/', AdminAccountDeleteView.as_view(),
+         name="delete_account"),
 
 ]

@@ -29,7 +29,7 @@
         </option>
     </select>
 </form>
-
+    
 <div class="table-wrapper">
     <table>
         <thead>
@@ -44,7 +44,8 @@
         <tbody>
             {% for student_exam in object_list %}
 
-            <tr><td>
+            <tr>
+                <td>
                     <a style="color: lightblue;"
                         href="{% url 'admin_choice_question' student_exam.id 1 %}">
                         {{ student_exam.user.first_name }}</a>

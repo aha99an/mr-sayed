@@ -5,10 +5,27 @@
 
 
 {% block content2 %}
+
+<form method="get" action="{% url 'all_questions' %}">
+<select name="is_answered" onchange="this.form.submit()">
+        <option value="">التصحيح؟ </option>
+        <option value="True" {% if is_answered == "True" %} selected{% endif %}>تم تصحيحه
+        </option>
+        <option value="False" {% if is_answered == "False" %} selected{% endif %}>لم يتم
+            تصحيحه
+        </option>
+    </select>
+</form>
+
+
+
+
 <div class="table-wrapper" dir="rtl" style="text-align: right;">
     <table>
         <thead>
             <tr>
+                <th>اسم الطالب</th>
+                <th>ايميل الطالب</th>
                 <th>الاسئلة</th>
                 <th>مجابة؟</th>
             </tr>
@@ -17,11 +34,22 @@
             {% for qu in object_list %}
             <tr> 
                 <td> 
-                    <a href="{% url 'answer_question' qu.id %}">
-                        
-                        {{ qu.question }}    
-                    </a>   
+                    <a style="color: lightblue;"
+                        href="{% url 'answer_question' qu.id %}">
+                        {{ qu.user.first_name }}</a>
                 </td>
+
+<td> 
+                    <a style="color: lightblue;"
+                        href="{% url 'answer_question' qu.id %}">
+                        {{ qu.user }}</a>
+                </td>
+
+                <td>
+                    <a style="color: lightblue;"
+                        href="{% url 'answer_question' qu.id %}">
+                        {{qu.question }}</a>
+                </td> 
 
                 <td>                     
                     {% if qu.is_answered == False  %}
@@ -34,5 +62,34 @@
             {% endfor %}
         </tbody>
     </table>
-                
+
+
+
+ {% comment %} <td> 
+                    <a href="{% url 'answer_question' qu.id %}">
+                        {{ qu.question }}    
+                    </a>   
+                </td>
+               {% endcomment %}
+
+      <ul>
+    <div c lass="prev_next">
+    <div class="pages">
+    {% if page_obj.has_previous %}
+      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">لسابق</a>
+    {% endif %}
+      {% for pg in page_obj.paginator.page_range %}
+        {% if page_obj.number == pg %}
+          <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+        {% else %}
+          <a href="?page={{pg}}" class="btn">{{pg}}</a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <a class="next btn btn-info" href="?page={{page_obj.next_page_number}}">التالي</a>
+    {% endif %}
+      </ul>
+    </div>
+    </div>
+    <span class="clear_both"></span>  
 {% endblock content2 %}

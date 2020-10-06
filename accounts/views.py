@@ -111,7 +111,7 @@ class ProfileView(StudentPermission, TemplateView):
                             student_exam.is_graded = True
                             student_exam.save()
         # Exams
-        # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
+        # we will check for l field and make it true in case of we exceeded el end time bta3 el week (7esa)
         for student_exam in student_exams:
             if not student_exam.exam.show_answer:
                 if now.date() > student_exam.exam.week.end:

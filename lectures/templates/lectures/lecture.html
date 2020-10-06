@@ -16,7 +16,7 @@
   </div>
 
 
-
+{% comment %}
   <div id="status" class="incomplete">
     <span>Play status: </span>
     <span class="status complete">COMPLETE</span>
@@ -28,18 +28,17 @@
     <span id="duration"></span> seconds. 
   </div>
   <br>
-
+{% endcomment %}
 {% endfor %}
 
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
-{% comment %} 
 var iframes = document.querySelectorAll('iframe');
 for(var i = 0; i < iframes.length; i++) {
   (new Vimeo.Player(iframes[i])).getVideoId().then(function(id) {
     console.log('id ', id);
   })
-} {% endcomment %}
+} 
 
 
 </script>
@@ -105,4 +104,5 @@ function getDuration() {
   console.log("Duration: ", d);
 }
 </script>
+
 {% endblock content %}

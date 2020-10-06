@@ -63,7 +63,7 @@
 
 اجابة الطالب:-
 <br />
-{{object.student_answer.answer}}
+{{object.student_answer.answer|default:""}}
 {% if object.student_answer.image_answer %}
 <a href="{{ object.student_answer.image_answer.url}}">
     <span class="image fit">
@@ -86,15 +86,12 @@
         <form method="POST"
             action="{% url 'update_grade' object.student_answer.id question_pk|add:1 %}">
             {% endif %}
-
             {% csrf_token %}
             {{form.grade.errors}}<label style="text-align: right; margin:0;"
                 for="number">الدرجة:</label>
             <div style="text-align: right;"><input type="number" style="color:black" name="grade"
                     step="any" value="{{object.student_answer.grade|floatformat}}">
-
                 <br>
-
                 <input type="submit" value="&nbsp&nbspضع الدرجة&nbsp&nbsp">
         </form>
         <br /><br />

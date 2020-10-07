@@ -90,13 +90,13 @@ function videoPaused() {
   increaseTimePlayed();
 }
 
-function videoEnded() {
+{% comment %} function videoEnded() {
   increaseTimePlayed();
   // Count as complete only if end of video was reached
   if(timePlayed>=duration) {
     document.getElementById("status").className="complete";
   }
-}
+} {% endcomment %}
 
 function getDuration() {
   duration = video.duration;

@@ -11,7 +11,9 @@ class Week(models.Model):
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        ordering = ('created_at',)
+ 
 
 class Class(models.Model):
     DAYS_OF_WEEK = (

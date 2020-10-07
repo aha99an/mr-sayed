@@ -8,6 +8,49 @@ from home.permissions import AdminPermission
 class AdminQuestionListView (AdminPermission, ListView):
     model = MrQuestion
     template_name = "questions/all-questions.html"
+    paginate_by = 10
+
+    # def get_queryset(self):
+    #     try:
+    #         a = self.request.GET.get('exam',)
+    #     except KeyError:
+    #         a = None
+    #     q = MrQuestion.objects.all()
+
+    #     class_filter = self.request.GET.get('class_filter')
+    #     is_answered = self.request.GET.get('is_answered')
+    #     if class_filter:
+    #         q = q.filter(
+    #             user__student_class__name=class_filter)
+    #     if is_answered:
+    #         if is_answered == "True":
+    #             q = q.filter(is_graded=True)
+    #         else:
+    #             q = q.filter(is_graded=False)
+
+    #     return q
+
+
+
+
+
+
+    def get_queryset(self):
+        queryset = MrQuestion.objects.all()
+        class_filter = self.request.GET.get('class_filter')
+        is_answered = self.request.GET.get('is_answered')
+        if class_filter:
+            queryset = queryset.filter(
+                user__is_answered=class_filter)
+        if is_answered:
+            if is_answered == "True":
+                queryset = queryset.filter(is_answered=True)
+            else:
+                queryset = queryset.filter(is_answered=False)
+        return queryset
+
+
+
 
 
 class AdminQuestionUpdateView(AdminPermission, UpdateView):

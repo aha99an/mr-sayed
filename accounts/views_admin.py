@@ -80,3 +80,9 @@ class LectureMakeupDeleteView(AdminPermission, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
+
+class AdminAccountDeleteView(AdminPermission, DeleteView):
+    model = CustomUser
+
+    def get_success_url(self):
+        return reverse_lazy("admin_student_list")

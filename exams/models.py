@@ -18,7 +18,7 @@ class Exam(models.Model):
         (VARIETY_EXAM, 'امتحان اختياري و مقالي'),
     )
     week = models.ForeignKey(
-        Week, on_delete=models.SET_NULL, verbose_name="الحصة", null=True, blank=True)
+        Week, on_delete=models.SET_NULL, verbose_name="الأسبوع", null=True, blank=True)
     name = models.CharField(max_length=200)
     total_question = models.IntegerField(default=0)
     grade = models.DecimalField(

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block head %}
-<h2>تعديل حصة</h2>
+<h2>تعديل أسبوع</h2>
 {% endblock %}
 {% block content %}
 <form method="post" class="md-form">
     {% csrf_token %}
 
     {{form.name.errors}}
-    <div style="text-align: right; padding: .5em 0em .5em 0em ;">اسم الحصة</div>
+    <div style="text-align: right; padding: .5em 0em .5em 0em ;">اسم الأسبوع</div>
     <input type="text" style="text-align:right;" name="name" value="{{form.name.value}}">
 
     {{form.name.errors}}
@@ -28,7 +28,7 @@
                     <th>
                         {{form.end.errors}}
 
-                        <label style="text-align: right; margin:0;" for="start"> نهاية الحصة</label>
+                        <label style="text-align: right; margin:0;" for="start"> نهاية الأسبوع</label>
                         <div style="text-align: right;"><input type="Date" style="color:black"
                                 name="end" value="{{form.end.value|date:"Y-m-d"}}">
                         </div>
@@ -37,13 +37,13 @@
             </thead>
         </table>
 
-    <input type="submit" class="button primary" value="تعديل الحصة"
+    <input type="submit" class="button primary" value="تعديل الأسبوع"
         style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
     </div>
 </form>
  <form method="post" action="{% url 'delete_week' object.id %}" style="margin: 0 0 0 0;">
     {% csrf_token %}
-    <input type="submit" value="&nbsp; مسح الحصة &nbsp;" class="btn btn-danger"
+    <input type="submit" value="&nbsp; مسح الأسبوع &nbsp;" class="btn btn-danger"
         style="background-color: red; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
 </form>
 {% endblock content %}

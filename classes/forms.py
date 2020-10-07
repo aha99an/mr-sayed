@@ -17,7 +17,7 @@ class ClassForm(forms.ModelForm):
 
 
 class WeekForm(forms.ModelForm):
-    name = forms.CharField(label="اسم الحصة", widget=forms.TextInput(
+    name = forms.CharField(label="اسم الأسبوع", widget=forms.TextInput(
         attrs={"text-align": "right"}), required=True)
     start = forms.DateField(widget=forms.DateInput(format='%d-%m-%Y'))
     end =  forms.DateField(widget=forms.DateInput(format='%d-%m-%Y'))

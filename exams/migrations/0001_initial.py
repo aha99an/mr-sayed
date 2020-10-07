@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('description1', models.CharField(blank=True, max_length=200, null=True)),
-                ('week', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='classes.Week', verbose_name='الحصة')),
+                ('week', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='classes.Week', verbose_name='الأسبوع')),
             ],
         ),
         migrations.CreateModel(

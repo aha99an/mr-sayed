@@ -126,7 +126,7 @@ LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

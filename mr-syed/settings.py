@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "storages",
     'django.contrib.staticfiles',
     # local apps
     'home',
@@ -36,7 +37,6 @@ INSTALLED_APPS = [
     "lectures",
     # 3rd Party
     # 'whitenoise.runserver_nostatic',
-    "storages",
     # 'crispy_forms',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -163,4 +163,4 @@ AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'mr-syed.storages.StaticStorage'

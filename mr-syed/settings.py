@@ -163,4 +163,4 @@ AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'mr-syed.storages.S3Boto3Storage'
+STATICFILES_STORAGE = 'mr-syed.storages.StaticStorage'

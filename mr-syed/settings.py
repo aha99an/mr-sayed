@@ -161,6 +161,8 @@ AWS_ACCESS_KEY_ID = 'AKIAQKW72FGFKP7AXDV4'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
 AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_OBJECT_PARAMETERS = {
+"ACL": "public-read"
+}
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

@@ -60,8 +60,6 @@ class QuestionCreateView(StudentPermission, CreateView):
             context['data'] = presigned_post
             context['url'] = 'https://%s.s3.amazonaws.com/%s' % (
                 S3_BUCKET, file_name)
-            print(context['data'])
-            print(context['url'])
             # return json.dumps({
             #     'data': presigned_post,
             #     'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
@@ -70,7 +68,6 @@ class QuestionCreateView(StudentPermission, CreateView):
 
 
 def index2(request):
-    print("HELLO VIEW1")
     lowercase_str = uuid.uuid4().hex
     S3_BUCKET = 'mr-sayedabdelhamed2'
     file_name = request.GET.get('file_name')
@@ -102,7 +99,6 @@ def index2(request):
             question=question, user=request.user, image_question=image_name)
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
-        print("ANA FE EL ELSE")
         MrQuestion.objects.create(
             question=question, user=request.user)
         return redirect('student_questions')

@@ -47,6 +47,12 @@ class HomeworkListView(StudentPermission, ListView):
 class HomeworkMultipleUpdateView(FormView):
     template_name = 'homework/homework.html'
     form_class = StudentHomeworkMultipleFileForm
+    success_url = reverse_lazy("homework_list")
+
+    def form_invalid(self, form, error_message):
+        ctx = self.get_context_data()
+        ctx["error_message"] = error_message
+        return self.render_to_response(ctx)
 
     def dispatch(self, request, *args, **kwargs):
         now = datetime.now()
@@ -70,6 +76,12 @@ class HomeworkMultipleUpdateView(FormView):
         files = request.FILES.getlist('student_homework_file')
 
         if form.is_valid():
+            files_length = len(files)
+            uploaded_files_length = self.student_homework.student_homework_file.all().count()
+            if files_length + uploaded_files_length < 1:
+                return self.form_invalid(form, 'عدد الملفات لا يجب أن تقل عن 1')
+            elif files_length + uploaded_files_length > 6:
+                return self.form_invalid(form, 'عدد الملفات لا يجب أن تزيد عن 6')
             for f in files:
                 StudentHomeworkFile.objects.create(
                     student_homework=self.student_homework, student_homework_file=f)
@@ -94,8 +106,6 @@ class HomeworkMultipleUpdateView(FormView):
 
         return ctx
 
-    def get_success_url(self):
-        return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})
 
 
 class UploadedFileDeleteView(StudentPermission, DeleteView):

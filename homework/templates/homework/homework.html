@@ -71,6 +71,7 @@
     </table>
     {% endif %}
 
+    <h1>{{error_message}}<h1>
 
     <form method="post" enctype="multipart/form-data" class="md-form">
         {% csrf_token %}
@@ -78,6 +79,6 @@
         {{form}}
         <br><br>
         <button type="submit" class="button primary"
-            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">submit</button>
+            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تسليم الواجب</button>
     </form>
     {% endblock content %}

@@ -11,7 +11,7 @@ class StudentHomeworkFileForm(forms.ModelForm):
 
 class StudentHomeworkMultipleFileForm(forms.Form):
     student_homework_file = forms.FileField(label=" رفع ملفات الواجب", 
-        widget=forms.ClearableFileInput(attrs={'multiple': True}))
+        widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
 
 class AdminHomeworkForm(forms.ModelForm):

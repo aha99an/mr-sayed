@@ -1,7 +1,5 @@
 from django.urls import path
-from .views import QuestionListView
-from .views import QuestionDetailView
-from .views import QuestionCreateView
+from .views import QuestionListView, QuestionCreateView, QuestionDetailView, index2
 from .views_admin import AdminQuestionUpdateView, AdminQuestionListView
 
 urlpatterns = [
@@ -12,4 +10,5 @@ urlpatterns = [
     path('all-questions', AdminQuestionListView.as_view(), name='all_questions'),
     path('answer-question/<int:pk>/',
          AdminQuestionUpdateView.as_view(), name='answer_question'),
+    path('generate-s3-signature', index2, name="generate_s3_signature")
 ]

@@ -4,10 +4,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import MrQuestion
 from django.urls import reverse_lazy
 from home.permissions import StudentPermission
+from django.shortcuts import redirect
 import os
 import json
 import boto3
-# import urllib2
+import random
+import uuid
 
 
 class QuestionListView (StudentPermission, ListView):
@@ -30,7 +32,6 @@ class QuestionCreateView(StudentPermission, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        print("HELLO")
         S3_BUCKET = 'mr-sayedabdelhamed2'
 
         # context['data'] = presigned_post
@@ -39,7 +40,6 @@ class QuestionCreateView(StudentPermission, CreateView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        print("HELLO")
         context = super().get_context_data(**kwargs)
         # ctx["is_checked_filter"] = self.request.GET.get('is_checked_filter')
         S3_BUCKET = 'mr-sayedabdelhamed2'
@@ -70,14 +70,23 @@ class QuestionCreateView(StudentPermission, CreateView):
 
 
 def index2(request):
+    print("HELLO VIEW1")
+    lowercase_str = uuid.uuid4().hex
     S3_BUCKET = 'mr-sayedabdelhamed2'
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
+    question = request.GET.get('question')
+    if not question:
+        question = "سؤال صورة"
+    file_only_name, file_extension = os.path.splitext(file_name)
+    image_name = "images/questions/" + file_only_name + \
+        request.user.username + "-" + lowercase_str[:6] + str(file_extension)
+
     if file_name:
         s3 = boto3.client('s3')
         presigned_post = s3.generate_presigned_post(
             Bucket=S3_BUCKET,
-            Key=file_name,
+            Key="static/" + image_name,
             Fields={"acl": "public-read", "Content-Type": file_type},
             Conditions=[
                 {"acl": "public-read"},
@@ -89,8 +98,14 @@ def index2(request):
             'data': presigned_post,
             'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
         }
-        print(data["data"])
+        MrQuestion.objects.create(
+            question=question, user=request.user, image_question=image_name)
         return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        print("ANA FE EL ELSE")
+        MrQuestion.objects.create(
+            question=question, user=request.user)
+        return redirect('student_questions')
 
     # if request.method == 'GET':
         # form = InvoiceForm(request.POST)

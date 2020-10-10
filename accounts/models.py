@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from classes.models import Class
+import random
 
 
 class CustomUser(AbstractUser):
@@ -36,3 +37,12 @@ class CustomUser(AbstractUser):
     def is_admin(self):
         if self.user_type:
             return True
+
+    def reset_password(self):
+        self.random_password = random.randint(0, 999999)
+        self.set_password(self.random_password)
+        self.save()
+
+
+class Counter(models.Model):
+    counter = models.IntegerField(null=True, blank=True, default=0)

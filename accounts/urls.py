@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView, MyProfileDataUpdateView
-from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password, index2, LectureMakeupDeleteView,AdminAccountDeleteView, AdminMyProfileData,AdminMyProfileDataUpdateView
+from .views_admin import (AdminStudentListView, AdminStudentUpdateView, reset_password,
+                          add_makeup_lecture, LectureMakeupDeleteView, AdminAccountDeleteView, AdminMyProfileData,
+                          AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam)
 
 
 urlpatterns = [
@@ -15,14 +17,18 @@ urlpatterns = [
          name="student_update_view"),
     path("admin-reset-password/<int:pk>", reset_password,
          name="student_reset_password"),
-    path("admin-add-makeup-lecture/<int:pk>", index2,
+    path("admin-add-makeup-lecture/<int:pk>", add_makeup_lecture,
          name="admin_add_makeup_lecture"),
     path('admin-delete-makeup-lecture/delete/<int:makeup_lecture_pk>/<int:student_pk>', LectureMakeupDeleteView.as_view(),
          name="delete_makeup_lecture"),
+    path("admin-add-makeup-exam/<int:pk>", add_makeup_exam,
+         name="admin_add_makeup_exam"),
+    path('admin-delete-makeup-exam/delete/<int:makeup_exam_pk>/<int:student_pk>', ExamMakeupDeleteView.as_view(),
+         name="delete_makeup_exam"),
     path('delete-account/<int:pk>/', AdminAccountDeleteView.as_view(),
          name="delete_account"),
-     path("my-profile-data/<int:pk>", MyProfileDataUpdateView.as_view(),
+    path("my-profile-data/<int:pk>", MyProfileDataUpdateView.as_view(),
          name="student_update_data"),
-     path("admin-my-profile-data/<int:pk>", AdminMyProfileDataUpdateView.as_view(),
+    path("admin-my-profile-data/<int:pk>", AdminMyProfileDataUpdateView.as_view(),
          name="admin_student_update_data"),
 ]

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (Exam, EssayQuestion, StudentEssayAnswer, TrueFalseQuestion, StudentTrueFalseAnswer,
-                     ChoiceQuestion, StudentChoiceAnswer, StudentExam)
+                     ChoiceQuestion, StudentChoiceAnswer, StudentExam, StudentExamMakeup)
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ admin.site.register(TrueFalseQuestion)
 admin.site.register(StudentTrueFalseAnswer)
 admin.site.register(ChoiceQuestion)
 admin.site.register(StudentChoiceAnswer)
+admin.site.register(StudentExamMakeup)

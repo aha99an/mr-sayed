@@ -76,7 +76,65 @@
 
     </table>
 {% endif %}
+{% comment %} MAKEUP EXAMS {% endcomment %}
+<form method="post" action="{% url 'admin_add_makeup_exam' student_user.id %}">
+{% csrf_token %}
 
+    <select name="exam_id" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار امتحان تعويضي</option>
+
+        {% for exam in exams %}
+
+        <option value="{{exam.id}}" {% if exam_id == exam.name %} selected{% endif %}>
+            {{exam.name}}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if makeup_exams %}
+<h3>الامتحانات التعويضية</h3>
+<div class="table-responsive table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <h4>الاسم</h4>
+                </th>
+                <th scope="col" style="text-align: center;">
+                    <h4>مسح</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in makeup_exams %}
+
+            <tr>
+
+                <td>
+                    
+                <div style="color: lightblue;">{{exam.exam.name}}</div>
+
+                </td>
+                <td style="text-align: center;">
+                    <span>
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'delete_makeup_exam' exam.id  student_user.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+{% endif %}
 
 
 <a href="{%url 'admin_student_update_data' object.id %}" class="button primary" style="background-color:#4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">  البيانات الشخصية للطالب     </a>

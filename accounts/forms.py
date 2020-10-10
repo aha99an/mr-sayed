@@ -18,8 +18,9 @@ class CustomUserCreationForm(UserCreationForm):
     phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
     profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
-    
-  
+    password1 = forms.CharField(validators=[check_size, ], label="كلمه السر") 
+    password2= forms.CharField(validators=[check_size, ], label="إعادة كلمه السر")
+
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
@@ -29,10 +30,8 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-     #  fields = UserCreationForm.Meta.fields +("school", "parentPhoneNumber", "phoneNumber", "profile_pic")
-        # fields = UserCreationForm.Meta.fields
         fields = ('username', 'first_name', 'school',
-                  "parentPhoneNumber", "phoneNumber", "profile_pic")
+                  "parentPhoneNumber", "phoneNumber", "profile_pic",'password1','password2')
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -62,3 +61,18 @@ class test(forms.ModelForm):
     class Meta:
         model = StudentLectureMakeup
         fields = ("lecture",)
+
+
+
+
+class MyProfileData(forms.ModelForm):
+    username = forms.EmailField(label="الايميل")
+    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    school = forms.CharField(validators=[check_size, ], label="المدرسة")
+    # profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'school', 'parentPhoneNumber','phoneNumber')
+
+    

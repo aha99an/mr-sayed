@@ -25,9 +25,9 @@
             </div>
             <div class="profile-usermenu">
                 <ul class="nav">
-                    <li>
-                        <a style="text-align: right; " href="{% url 'password_change' %}">
-                            تغيير الباسورد &nbsp;
+                    <li>      
+                        <a style="text-align: right; " href="{% url 'student_update_data' request.user.id %}" >
+                            تغيير بياناتي &nbsp;
                             <i class="glyphicon glyphicon-user"></i>
                         </a>
                     </li>

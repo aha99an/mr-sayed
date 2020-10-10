@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView, DetailView
-from .forms import CustomUserCreationForm
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView
+from .forms import CustomUserCreationForm ,MyProfileData
 from django.views import generic
 from exams.models import Exam, StudentExam, StudentChoiceAnswer, StudentEssayAnswer
 from django.db.models import Sum
@@ -10,7 +10,7 @@ from collections import OrderedDict
 from homework.models import StudentHomework
 from home.permissions import StudentPermission
 from datetime import datetime
-
+from .models import CustomUser
 now = datetime.now()
 
 
@@ -160,3 +160,9 @@ class ExamQuestionDetailView(StudentPermission, DetailView):
 class HomeworkDetailView(StudentPermission, DetailView):
     template_name = 'accounts/profile-homework.html'
     model = StudentHomework
+
+class MyProfileDataUpdateView(StudentPermission,UpdateView):
+    template_name = 'accounts/my-profile-data.html'
+    model = CustomUser
+    success_url = reverse_lazy("profile")
+    form_class  = MyProfileData

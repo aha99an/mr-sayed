@@ -3,6 +3,7 @@
 <h2>تغيير بيانات الطالب</h2>
 {% endblock %}
 {% block content2 %}
+<p>اسم الطالب: {{student_user.first_name}} </p>
 <p>ايميل الطالب: {{student_user}} </p>
 {% if reseted_password %}
 الباسورد الجديد للطالب: {{student_user.random_password}}

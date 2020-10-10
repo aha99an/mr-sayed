@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView
+from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView, MyProfileDataUpdateView
 from .views_admin import AdminStudentListView, AdminStudentUpdateView, reset_password, index2, LectureMakeupDeleteView,AdminAccountDeleteView
 
 
@@ -21,5 +21,6 @@ urlpatterns = [
          name="delete_makeup_lecture"),
     path('delete-account/<int:pk>/', AdminAccountDeleteView.as_view(),
          name="delete_account"),
-
+     path("my-profile-data/<int:pk>", MyProfileDataUpdateView.as_view(),
+         name="student_update_data"),
 ]

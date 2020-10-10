@@ -7,7 +7,23 @@
 {% block content %}
 <form method="post">
 {% csrf_token %}
-{{ form.as_p }}
+{% if form.non_field_errors %}
+
+الرجاء إدخال اسم مستخدم وكلمة مرور صحيحين. 
+{% endif %}
+
+
+<br/>
+<br/>
+
+الايميل:
+{{form.username}}
+<br/>
+
+كلمه السر:
+{{form.password}}
+<br/>
+
 <button type="submit" class="button primary">  تسجيل الدخول  </button>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <a  href="{% url 'password_reset' %}"   style="color:rgb(255, 255, 255)" >  نسيت الباسورد؟   </a>

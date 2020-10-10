@@ -8,11 +8,11 @@
 
 <form method="get" action="{% url 'all_questions' %}">
 <select name="is_answered" onchange="this.form.submit()">
-        <option value="">التصحيح؟ </option>
-        <option value="True" {% if is_answered == "True" %} selected{% endif %}>تم تصحيحه
+        <option value="">مجاب؟ </option>
+        <option value="True" {% if is_answered == "True" %} selected{% endif %}>تم إجابتة
         </option>
         <option value="False" {% if is_answered == "False" %} selected{% endif %}>لم يتم
-            تصحيحه
+            إجابتة
         </option>
     </select>
 </form>

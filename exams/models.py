@@ -44,7 +44,8 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        ordering = ('created_at',)
 
 class StudentExam(models.Model):
 
@@ -64,7 +65,8 @@ class StudentExam(models.Model):
 
     def __str__(self):
         return self.exam.name + " " + self.user.username
-
+    class Meta:
+        ordering = ('created_at',)
 
 class EssayQuestion(models.Model):
     exam = models.ForeignKey(
@@ -90,7 +92,8 @@ class EssayQuestion(models.Model):
     def __str__(self):
         return self.question + "--" + self.exam.name
 
-
+    class Meta:
+        ordering = ('created_at',)
 class StudentEssayAnswer(models.Model):
     question = models.ForeignKey(
         EssayQuestion, on_delete=models.CASCADE, related_name="student_essay_answer")
@@ -114,7 +117,8 @@ class StudentEssayAnswer(models.Model):
         if self.grade:
             print("HELLO THERE")
         super(StudentEssayAnswer, self).save(*args, **kwargs)
-
+    class Meta:
+        ordering = ('created_at',)
 
 class ChoiceQuestion(models.Model):
     OPTION1 = 1
@@ -143,7 +147,8 @@ class ChoiceQuestion(models.Model):
 
     def __str__(self):
         return self.question or " "
-
+    class Meta:
+        ordering = ('created_at',)
 
 class StudentChoiceAnswer(models.Model):
     question = models.ForeignKey(
@@ -170,7 +175,8 @@ class StudentChoiceAnswer(models.Model):
             self.is_answered = False
         super(StudentChoiceAnswer, self).save(*args, **kwargs)
 
-
+    class Meta:
+        ordering = ('created_at',)
 class TrueFalseQuestion(models.Model):
     exam = models.ForeignKey(
         Exam, on_delete=models.CASCADE, related_name="true_false_question")
@@ -180,7 +186,8 @@ class TrueFalseQuestion(models.Model):
     right_answer = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    class Meta:
+        ordering = ('created_at',)
 
 class StudentTrueFalseAnswer(models.Model):
     question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
@@ -191,3 +198,5 @@ class StudentTrueFalseAnswer(models.Model):
     grade = models.FloatField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering = ('created_at',)

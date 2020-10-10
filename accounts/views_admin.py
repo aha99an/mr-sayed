@@ -1,6 +1,6 @@
 from django.views.generic import UpdateView, ListView, DeleteView
 from .models import CustomUser
-from .forms import StudentChangeForm, test
+from .forms import StudentChangeForm, test,AdminMyProfileData
 from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
@@ -36,6 +36,11 @@ class AdminStudentListView(AdminPermission, ListView):
             q = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
         return q
 
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["students_count"]= CustomUser.objects.filter(user_type=CustomUser.STUDENT).count()
+        ctx["students_active"]= CustomUser.objects.filter(student_is_active = True, user_type=CustomUser.STUDENT).count()
+        return ctx
 
 class AdminStudentUpdateView(AdminPermission, UpdateView):
     model = CustomUser
@@ -86,3 +91,11 @@ class AdminAccountDeleteView(AdminPermission, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("admin_student_list")
+
+
+
+class AdminMyProfileDataUpdateView(AdminPermission,UpdateView):
+    template_name = 'accounts/admin-my-profile-data.html'
+    model = CustomUser
+    success_url = reverse_lazy("admin_student_list")
+    form_class  = AdminMyProfileData

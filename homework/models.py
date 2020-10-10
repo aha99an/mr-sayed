@@ -42,7 +42,8 @@ class StudentHomework(models.Model):
         else:
             self.is_checked = False
         super(StudentHomework, self).save(*args, **kwargs)
-
+    class Meta:
+        ordering = ('created_at',)
 
 class StudentHomeworkFile(models.Model):
     student_homework = models.ForeignKey(
@@ -56,3 +57,6 @@ class StudentHomeworkFile(models.Model):
             return self.student_homework_file.name[:20] + "..."
         else:
             return self.student_homework_file.name
+
+    class Meta:
+        ordering = ('created_at',)

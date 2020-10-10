@@ -13,10 +13,11 @@ class CustomUser(AbstractUser):
         (ADMIN, 'admin'),
     )
 
-    username = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=1000)
+    username = models.EmailField(unique=True, max_length=255)
+    first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=200)
     school = models.CharField(max_length=200)
+    email = models.EmailField(max_length=255, null=True, blank=True)
     parentPhoneNumber = models.IntegerField(default=0)
     phoneNumber = models.IntegerField(default=0)
     profile_pic = models.ImageField(null=True, blank=True)

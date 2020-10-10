@@ -29,6 +29,9 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.email = self.username
+
+        if self.is_active is False:
+            self.is_active = True
         super(CustomUser, self).save(*args, **kwargs)
 
     def is_student(self):
@@ -38,14 +41,14 @@ class CustomUser(AbstractUser):
     def is_admin(self):
         if self.user_type:
             return True
-    class Meta:
-        ordering = ('date_joined',)
 
     def reset_password(self):
         self.random_password = random.randint(0, 999999)
         self.set_password(self.random_password)
         self.save()
 
+    class Meta:
+        ordering = ('date_joined',)
 
 class Counter(models.Model):
     counter = models.IntegerField(null=True, blank=True, default=0)

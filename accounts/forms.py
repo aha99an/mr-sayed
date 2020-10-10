@@ -18,8 +18,8 @@ class CustomUserCreationForm(UserCreationForm):
     phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
     profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
-    password1 = forms.CharField(validators=[check_size, ], label="كلمه السر") 
-    password2= forms.CharField(validators=[check_size, ], label="إعادة كلمه السر")
+    password1 = forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="كلمه السر") 
+    password2= forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="إعادة كلمه السر")
 
 
     def __init__(self, *args, **kwargs):
@@ -76,3 +76,13 @@ class MyProfileData(forms.ModelForm):
         fields = ('username', 'school', 'parentPhoneNumber','phoneNumber')
 
     
+
+class AdminMyProfileData(forms.ModelForm):
+    username = forms.EmailField(label="الايميل")
+    first_name = forms.CharField(validators=[check_size, ], label="الأسم ثلاثي")
+    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    school = forms.CharField(validators=[check_size, ], label="المدرسة")
+    class Meta:
+        model = CustomUser
+        fields = ('username','first_name', 'school', 'parentPhoneNumber','phoneNumber')

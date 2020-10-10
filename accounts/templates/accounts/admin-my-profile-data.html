@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<h2>تعديل بيانات الطالب</h2>
+{% endblock%}
+
+
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+{{ form.as_p }}
+    <button type="submit" class="button primary">تعديل الملف الشخصي</button>
+</form>
+{% endblock content %}

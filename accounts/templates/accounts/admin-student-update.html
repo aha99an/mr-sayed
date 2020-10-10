@@ -77,6 +77,13 @@
     </table>
 {% endif %}
 
+
+
+<a href="{%url 'admin_student_update_data' object.id %}" class="button primary" style="background-color:#4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">  البيانات الشخصية للطالب     </a>
+
+
+<br/>
+<br/>
 <form method="post" action="{% url 'delete_account' object.id %}">
                             {% csrf_token %}
                             <input type="submit" value="&nbsp;  مسح الطالب&nbsp;" class="btn btn-danger"

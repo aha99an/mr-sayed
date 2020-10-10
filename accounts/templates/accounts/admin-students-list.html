@@ -4,7 +4,15 @@
 <h2>الطلاب</h2>
 {% endblock %}
 {% block content2 %}
-
+<table>
+        <thead>
+            <tr>
+              <th> عدد الطلاب: {{students_count}}</th>
+              <th> عدد الطلاب المفعلين: {{students_active}}</th>
+            </tr>
+        </thead>
+        <tbody>
+</table>
 <form  action="{% url 'admin_student_list' %}" method="get">
     <input style = "width: auto;" id="al-search" type="text" 
            name="account" value="{{ request.GET.account }}"
@@ -12,6 +20,8 @@
     <input type="submit"
             value="بحث" class="button primary" />
 </form>
+
+        
 
 
 <div class="table-wrapper">

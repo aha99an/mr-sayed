@@ -16,8 +16,8 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     school = models.CharField(max_length=200)
-    parentPhoneNumber = models.IntegerField(default=0)
-    phoneNumber = models.IntegerField(default=0)
+    parentPhoneNumber = models.CharField(max_length=200, default="0")
+    phoneNumber = models.CharField(max_length=200, default="0")
     profile_pic = models.ImageField(null=True, blank=True)
     student_class = models.ForeignKey(Class, null=True, blank=True, on_delete=models.SET_NULL,
                                       related_name="student_class", verbose_name="المجموعة")
@@ -36,3 +36,5 @@ class CustomUser(AbstractUser):
     def is_admin(self):
         if self.user_type:
             return True
+    class Meta:
+        ordering = ('date_joined',)

@@ -42,8 +42,10 @@ class StudentHomework(models.Model):
         else:
             self.is_checked = False
         super(StudentHomework, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ('created_at',)
+
 
 class StudentHomeworkFile(models.Model):
     student_homework = models.ForeignKey(
@@ -60,3 +62,10 @@ class StudentHomeworkFile(models.Model):
 
     class Meta:
         ordering = ('created_at',)
+
+
+class StudentHomeworkMakeup(models.Model):
+    exam = models.ForeignKey(
+        Homework, on_delete=models.CASCADE, related_name="student_homework_makeup")
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="student_homework_makeup")

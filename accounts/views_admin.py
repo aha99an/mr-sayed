@@ -1,12 +1,13 @@
 from django.views.generic import UpdateView, ListView, DeleteView
 from .models import CustomUser
-from .forms import StudentChangeForm, test,AdminMyProfileData
+from .forms import StudentChangeForm, test, AdminMyProfileData
 from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
 from lectures.models import Lecture, StudentLectureMakeup
+from exams.models import Exam, StudentExamMakeup
 from django.db.models import Q
 
 
@@ -38,9 +39,12 @@ class AdminStudentListView(AdminPermission, ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx["students_count"]= CustomUser.objects.filter(user_type=CustomUser.STUDENT).count()
-        ctx["students_active"]= CustomUser.objects.filter(student_is_active = True, user_type=CustomUser.STUDENT).count()
+        ctx["students_count"] = CustomUser.objects.filter(
+            user_type=CustomUser.STUDENT).count()
+        ctx["students_active"] = CustomUser.objects.filter(
+            student_is_active=True, user_type=CustomUser.STUDENT).count()
         return ctx
+
 
 class AdminStudentUpdateView(AdminPermission, UpdateView):
     model = CustomUser
@@ -57,7 +61,10 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
         ctx["lectures"] = Lecture.objects.all()
         ctx["makeup_lectures"] = StudentLectureMakeup.objects.filter(
             user=ctx["student_user"])
-        ctx["formo"] = test
+
+        ctx["exams"] = Exam.objects.all()
+        ctx["makeup_exams"] = StudentExamMakeup.objects.filter(
+            user=ctx["student_user"])
         return ctx
 
 
@@ -69,7 +76,7 @@ def reset_password(request, pk):
     return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
 
 
-def index2(request, pk):
+def add_makeup_lecture(request, pk):
     if request.method == 'POST':
         StudentLectureMakeup.objects.get_or_create(
             user=CustomUser.objects.get(id=pk), lecture=Lecture.objects.get(id=int(request.POST.get("lecture_id"))))
@@ -86,6 +93,25 @@ class LectureMakeupDeleteView(AdminPermission, DeleteView):
     def get_success_url(self):
         return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
 
+
+def add_makeup_exam(request, pk):
+    if request.method == 'POST':
+        StudentExamMakeup.objects.get_or_create(
+            user=CustomUser.objects.get(id=pk), exam=Exam.objects.get(id=int(request.POST.get("exam_id"))))
+
+    return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
+
+
+class ExamMakeupDeleteView(AdminPermission, DeleteView):
+    model = StudentExamMakeup
+
+    def get_object(self):
+        return StudentExamMakeup.objects.get(id=self.kwargs.get("makeup_exam_pk"))
+
+    def get_success_url(self):
+        return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
+
+
 class AdminAccountDeleteView(AdminPermission, DeleteView):
     model = CustomUser
 
@@ -93,9 +119,8 @@ class AdminAccountDeleteView(AdminPermission, DeleteView):
         return reverse_lazy("admin_student_list")
 
 
-
-class AdminMyProfileDataUpdateView(AdminPermission,UpdateView):
+class AdminMyProfileDataUpdateView(AdminPermission, UpdateView):
     template_name = 'accounts/admin-my-profile-data.html'
     model = CustomUser
     success_url = reverse_lazy("admin_student_list")
-    form_class  = AdminMyProfileData
+    form_class = AdminMyProfileData

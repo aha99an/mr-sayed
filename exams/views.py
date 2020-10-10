@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import (Exam, EssayQuestion, TrueFalseQuestion, ChoiceQuestion,
-                     StudentExam, StudentChoiceAnswer, StudentEssayAnswer)
+                     StudentExam, StudentChoiceAnswer, StudentEssayAnswer, StudentExamMakeup)
 from collections import OrderedDict
 from .forms import StudentChoiceAnswerForm, StudentEssayAnswerForm
 from django.urls import reverse_lazy
@@ -75,10 +75,18 @@ class ExamListView(StudentPermission, ListView):
     template_name = "exams/exam-list.html"
 
     def get_queryset(self):
+        queryset = Exam.objects.none()
+        mackup_exams = StudentExamMakeup.objects.filter(
+            user=self.request.user)
+        if mackup_exams:
+            for exam in mackup_exams:
+                queryset |= Exam.objects.filter(id=exam.exam.id)
+
         if self.request.user.student_class.week_day == now.weekday():
-            return Exam.objects.filter(week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
-        else:
-            return Exam.objects.none()
+            queryset |= Exam.objects.filter(
+                week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
+
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -103,15 +111,29 @@ class QuestionUpdateView(UpdateView):
     # form_class = StudentEssayAnswerForm
 
     def dispatch(self, request, *args, **kwargs):
+        # check permissions
         if self.request.user.is_authenticated is False:
             return redirect('login')
         if self.request.user.student_is_active is False:
             return redirect('home')
-        self.exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"),
-                                        week__start__lte=now.date(),
-                                        week__end__gte=now.date(), is_active=True).last()
+
+        exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"))
+
+        # check if this is a makeup exam
+        self.exam = StudentExamMakeup.objects.filter(
+            user=self.request.user, exam__id=self.kwargs.get("exam_pk")).last()
+        self.exam = getattr(self.exam, 'exam', None)
+        # return super().dispatch(request, *args, **kwargs)
+
+        # get exam and check if its time is due
+        if not self.exam:
+            self.exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"),
+                                            week__start__lte=now.date(),
+                                            week__end__gte=now.date(), is_active=True).last()
+
         if not self.exam:
             return redirect('exam_list')
+
         self.student_exam, created = StudentExam.objects.get_or_create(
             user=self.request.user, exam=self.exam)
         if not self.student_exam.expiry_time:

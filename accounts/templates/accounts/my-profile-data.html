@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<h2>تعديل بياناتي</h2>
+{% endblock%}
+
+
+
+{% block content %}
+ <a style="text-align: right; " href="{% url 'password_change' %}">
+                            تغيير الباسورد &nbsp;
+    <i class="glyphicon glyphicon-user"></i>
+</a>
+
+<form action="" method="post">{% csrf_token %}
+{{ form.as_p }}
+    <button type="submit" class="button primary">تعديل الملف الشخصي</button>
+</form>
+{% endblock content %}

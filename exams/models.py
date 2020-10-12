@@ -222,3 +222,8 @@ class StudentExamMakeup(models.Model):
         Exam, on_delete=models.CASCADE, related_name="student_exam_makeup")
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="student_exam_makeup")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('created_at',)

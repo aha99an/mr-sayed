@@ -9,7 +9,7 @@ from home.permissions import AdminPermission
 from lectures.models import Lecture, StudentLectureMakeup
 from exams.models import Exam, StudentExamMakeup
 from django.db.models import Q
-
+import difflib
 
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
@@ -32,6 +32,8 @@ class AdminStudentListView(AdminPermission, ListView):
                 admin_student_list1 | admin_student_list2 | admin_student_list3)
         # Filter 
         student_is_active = self.request.GET.get('student_is_active')
+        # print(difflib.get_close_matches('Hello', ["hello"])
+
         if student_is_active:
             if student_is_active == "True":
                 queryset = queryset.filter(student_is_active=True)

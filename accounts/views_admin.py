@@ -17,25 +17,29 @@ class AdminStudentListView(AdminPermission, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        try:
-            a = self.request.GET.get('account',)
-        except KeyError:
-            a = None
+        queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
 
-        if a:
-
+        # Search
+        search_value = self.request.GET.get('search_value',)
+        if search_value:
             admin_student_list1 = Q(
-                first_name__contains=a, user_type=CustomUser.STUDENT)
+                first_name__contains=search_value, user_type=CustomUser.STUDENT)
             admin_student_list2 = Q(
-                username__contains=a, user_type=CustomUser.STUDENT)
+                username__contains=search_value, user_type=CustomUser.STUDENT)
             admin_student_list3 = Q(
-                student_class__name__contains=a, user_type=CustomUser.STUDENT)
-            q = CustomUser.objects.filter(
+                student_class__name__contains=search_value, user_type=CustomUser.STUDENT)
+            queryset = CustomUser.objects.filter(
                 admin_student_list1 | admin_student_list2 | admin_student_list3)
+        # Filter 
+        student_is_active = self.request.GET.get('student_is_active')
+        if student_is_active:
+            if student_is_active == "True":
+                queryset = queryset.filter(student_is_active=True)
+            else:
+                queryset = queryset.filter(student_is_active=False)
 
-        else:
-            q = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
-        return q
+        return queryset
+
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -43,6 +47,8 @@ class AdminStudentListView(AdminPermission, ListView):
             user_type=CustomUser.STUDENT).count()
         ctx["students_active"] = CustomUser.objects.filter(
             student_is_active=True, user_type=CustomUser.STUDENT).count()
+        # Related to the filter
+        ctx["student_is_active"] = self.request.GET.get('student_is_active')
         return ctx
 
 

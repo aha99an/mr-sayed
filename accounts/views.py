@@ -161,8 +161,11 @@ class HomeworkDetailView(StudentPermission, DetailView):
     template_name = 'accounts/profile-homework.html'
     model = StudentHomework
 
-class MyProfileDataUpdateView(StudentPermission,UpdateView):
+class MyProfileDataUpdateView(StudentPermission, UpdateView):
     template_name = 'accounts/my-profile-data.html'
     model = CustomUser
     success_url = reverse_lazy("profile")
-    form_class  = MyProfileData
+    form_class = MyProfileData
+
+class IsNotActiveTemplateView(TemplateView):
+    template_name = 'accounts/is_not_active_students.html'

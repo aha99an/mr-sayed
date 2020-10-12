@@ -7,7 +7,7 @@ class StudentPermission(object):
         if request.user.is_authenticated:
             if self.request.user.user_type == CustomUser.STUDENT and self.request.user.student_is_active is True:
                 return super().dispatch(request, *args, **kwargs)
-        return redirect('login')
+        return redirect("account_not_active")
 
 
 class AdminPermission(object):

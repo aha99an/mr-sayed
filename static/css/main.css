@@ -4065,6 +4065,10 @@ input, select, textarea {
 			#footer {
 				padding: 3.25em 1.5em;
 			}
+			.circular--square {
+				margin-top:15px;
+				margin-right:40px !important;
+			  }
 
 	}
 
@@ -4137,10 +4141,10 @@ input, select, textarea {
 	
 	.circular--square {
 		border-radius: 50%;
-		width: 300px;
-		height: 300px;
+		width: 250px;
+		height: 250px;
 		position: relative;
-		margin-left: 1200px;
+		margin-right:130px;
 	  }
 	  
 	  .check {

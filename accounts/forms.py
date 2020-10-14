@@ -17,9 +17,9 @@ class CustomUserCreationForm(UserCreationForm):
     parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
     phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
-    profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
+    # profile_pic = forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
     password1 = forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="كلمه السر") 
-    password2= forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="إعادة كلمه السر")
+    password2 = forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="إعادة كلمه السر")
 
 
     def __init__(self, *args, **kwargs):
@@ -31,7 +31,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'first_name', 'school',
-                  "parentPhoneNumber", "phoneNumber", "profile_pic",'password1','password2')
+                  "parentPhoneNumber", "phoneNumber",'password1','password2')
 
 
 class CustomUserChangeForm(UserChangeForm):

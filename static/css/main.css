@@ -239,6 +239,33 @@ input, select, textarea {
 	}
 
 /* Loader */
+.loader {
+	border: 16px solid #D4D4D4;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 120px;
+	background-color: transparent;
+	height: 120px;
+	position: fixed;
+	top: 100px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: 99999999;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
 
 	@-moz-keyframes spinner-show {
 		0% {
@@ -4188,3 +4215,5 @@ input, select, textarea {
 	video::-webkit-media-controls-panel {
 		width: calc(100% + 30px); /* Adjust as needed */
 	}
+
+	

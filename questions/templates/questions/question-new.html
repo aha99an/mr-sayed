@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content2 %}
-<style>
+{% comment %} <style>
     .loader {
         border: 16px solid #D4D4D4;
         border-radius: 50%;
@@ -35,9 +35,7 @@
             transform: rotate(360deg);
         }
     }
-</style>
-
-<script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+</style> {% endcomment %}
 
 {% comment %} <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
@@ -101,17 +99,23 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         var response = JSON.parse(xhr.responseText);
+                        
                         uploadFile(file, response.data, response.url);
+                        console.log("1")
+
                     }
                     else {
                         alert("Could not get signed URL.");
                     }
                 }
             };
+              console.log("2")
             xhr.send();
         }
 
         function uploadFile(file, s3Data, url) {
+                          console.log("3")
+
             document.getElementById("loader-upload").style.visibility = "visible";
             var xhr = new XMLHttpRequest();
             xhr.open("POST", s3Data.url);

@@ -12,6 +12,14 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from .forms import StudentHomeworkFileForm, StudentHomeworkMultipleFileForm
 from datetime import datetime
+from django.shortcuts import redirect
+import os
+import json
+import boto3
+import random
+import uuid
+from django.http import HttpResponse
+
 image_extensions = ('.djvu', '.art', '.cpt', '.tif', '.jpe', '.rgb', '.svgz', '.nef', '.xbm', '.jpeg', '.jpm', '.erf', '.cdt', '.bmp', '.pgm', '.ico', '.xpm', '.jpx', '.pcx', '.ief',
                     '.svg', '.jp2', '.pbm', '.djv', '.cr2', '.png', '.xwd', '.ppm', '.jng', '.jpg2', '.orf', '.cdr', '.gif', '.psd', '.ras', '.pnm', '.crw', '.wbmp', '.pat', '.tiff', '.jpf', '.jpg')
 
@@ -107,7 +115,6 @@ class HomeworkMultipleUpdateView(FormView):
         return ctx
 
 
-
 class UploadedFileDeleteView(StudentPermission, DeleteView):
     model = StudentHomeworkFile
 
@@ -116,3 +123,50 @@ class UploadedFileDeleteView(StudentPermission, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("homework", kwargs={"homework_pk": self.kwargs.get("homework_pk")})
+
+
+def direct_upload_s3(request):
+
+    lowercase_str = uuid.uuid4().hex
+    S3_BUCKET = 'mr-sayedabdelhamed2'
+    file_name = request.GET.get('file_name')
+    file_type = request.GET.get('file_type')
+    homework_id = request.GET.get('homework_id')
+
+    file_only_name, file_extension = os.path.splitext(file_name)
+    image_name = "images/homework/" + file_only_name + \
+        request.user.username + "-" + lowercase_str[:6] + str(file_extension)
+
+    # if file_name:
+    s3 = boto3.client('s3')
+    presigned_post = s3.generate_presigned_post(
+        Bucket=S3_BUCKET,
+        Key="static/" + image_name,
+        Fields={"acl": "public-read", "Content-Type": file_type},
+        Conditions=[
+            {"acl": "public-read"},
+            {"Content-Type": file_type}
+        ],
+        ExpiresIn=3600
+    )
+    data = {
+        'data': presigned_post,
+        'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+    }
+    homework = Homework.objects.get(id=int(homework_id))
+    student_homework, created = StudentHomework.objects.get_or_create(
+        homework=homework, user=request.user)
+#    image_question=image_name)
+    StudentHomeworkFile.objects.create(
+        student_homework=student_homework, student_homework_file=image_name)
+    print(image_name)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+    # else:
+    #     MrQuestion.objects.create(
+    #         question=question, user=request.user)
+    #     return redirect('student_questions')
+
+
+def homework_image_success_upload(request):
+    print("SUCCESS")
+    return HttpResponse(json.dumps(data={"empty": ""}), content_type="application/json")

@@ -2,7 +2,9 @@ from django.urls import path
 from .views_admin import AdminCheckHomeworkListView, AdminCheckHomeworkUpdateView, AdminCreateHomeworkView, AdminUpdateHomeworkView, AdminAddHomeworkListView, AdminDeleteHomework
 from .views import (HomeworkListView,
                     HomeworkMultipleUpdateView,
-                    UploadedFileDeleteView
+                    UploadedFileDeleteView,
+                    direct_upload_s3,
+                    homework_image_success_upload
                     )
 
 urlpatterns = [
@@ -23,4 +25,8 @@ urlpatterns = [
          name="admin_add_homework_list"),
     path('admin-delet-homework/<int:pk>/', AdminDeleteHomework.as_view(),
          name="admin_delete_homework"),
+    path('generate_s3_signature_homework/', direct_upload_s3,
+         name="generate_s3_signature_homework"),
+    path('homework-image-success-upload/', homework_image_success_upload,
+         name="homework_image_success_upload"),
 ]

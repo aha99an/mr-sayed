@@ -34,33 +34,6 @@ class QuestionCreateView(StudentPermission, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # # ctx["is_checked_filter"] = self.request.GET.get('is_checked_filter')
-        # S3_BUCKET = 'mr-sayedabdelhamed2'
-        # file_name = self.request.GET.get('file_name')
-        # file_type = self.request.GET.get('file_type')
-        # if file_name:
-        #     s3 = boto3.client('s3')
-        #     presigned_post = s3.generate_presigned_post(
-        #         Bucket=S3_BUCKET,
-        #         Key=file_name,
-        #         Fields={"acl": "public-read", "Content-Type": file_type},
-        #         Conditions=[
-        #             {"acl": "public-read"},
-        #             {"Content-Type": file_type}
-        #         ],
-        #         ExpiresIn=3600
-        #     )
-        #     context['data'] = presigned_post
-        #     context['url'] = 'https://%s.s3.amazonaws.com/%s' % (
-        #         S3_BUCKET, file_name)
-        #     # return json.dumps({
-        #     #     'data': presigned_post,
-        #     #     'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
-        #     # })
-        return context
-
 
 def index2(request):
     lowercase_str = uuid.uuid4().hex

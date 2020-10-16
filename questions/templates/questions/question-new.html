@@ -125,13 +125,12 @@
                         document.getElementById("loader-upload").style.visibility = "hidden";
                          swal({
                                 type: 'success',
-                                text: 'تم تسليم الواجب بنجاح'
+                                text: 'تم تسليم السؤال'
                             }
                             ).then(function () {
                                 window.location = "{% url 'student_questions' %}";
                             });
-                        // document.getElementById("preview").src = url;
-                        // document.getElementById("avatar-url").value = url;
+
                     }
                     else {
                         alert("Could not upload file.");
@@ -139,7 +138,6 @@
                 }
             };
             xhr.send(postData);
-            //window.location.replace("{% url 'student_questions' %}");
         }
     </script>
 

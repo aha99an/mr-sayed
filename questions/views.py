@@ -35,7 +35,7 @@ class QuestionCreateView(StudentPermission, CreateView):
         return super().form_valid(form)
 
 
-def index2(request):
+def upload_to_s3(request):
     lowercase_str = uuid.uuid4().hex
     S3_BUCKET = 'mr-sayedabdelhamed2'
     file_name = request.GET.get('file_name')

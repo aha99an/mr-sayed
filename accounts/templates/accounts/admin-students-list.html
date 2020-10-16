@@ -13,13 +13,14 @@
             </tr>
         </thead>
 </table>
+
 {% comment %} FILTER {% endcomment %}
 <form method="get" action="{% url 'admin_student_list' %}">
 <select name="student_is_active" onchange="this.form.submit()">
         <option value="">مفعل؟ </option>
-        <option value="True" {% if student_is_active == "True" %} selected{% endif %}>مفعل
+        <option value="True" {% if request.GET.student_is_active == "True" %} selected{% endif %}>مفعل
         </option>
-        <option value="False" {% if student_is_active == "False" %} selected{% endif %}>غير مفعل
+        <option value="False" {% if request.GET.student_is_active == "False" %} selected{% endif %}>غير مفعل
         </option>
     </select>
 

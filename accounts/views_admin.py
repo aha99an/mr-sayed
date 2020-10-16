@@ -11,6 +11,7 @@ from exams.models import Exam, StudentExamMakeup
 from django.db.models import Q
 import difflib
 
+
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
     template_name = "accounts/admin-students-list.html"
@@ -30,7 +31,7 @@ class AdminStudentListView(AdminPermission, ListView):
                 student_class__name__contains=search_value, user_type=CustomUser.STUDENT)
             queryset = CustomUser.objects.filter(
                 admin_student_list1 | admin_student_list2 | admin_student_list3)
-        # Filter 
+        # Filter
         student_is_active = self.request.GET.get('student_is_active')
         # print(difflib.get_close_matches('Hello', ["hello"])
 
@@ -42,15 +43,12 @@ class AdminStudentListView(AdminPermission, ListView):
 
         return queryset
 
-
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx["students_count"] = CustomUser.objects.filter(
             user_type=CustomUser.STUDENT).count()
         ctx["students_active"] = CustomUser.objects.filter(
             student_is_active=True, user_type=CustomUser.STUDENT).count()
-        # Related to the filter
-        ctx["student_is_active"] = self.request.GET.get('student_is_active')
         return ctx
 
 

@@ -5,13 +5,12 @@
 
 
 {% block content2 %}
-
 <form method="get" action="{% url 'all_questions' %}">
 <select name="is_answered" onchange="this.form.submit()">
         <option value="">مجاب؟ </option>
-        <option value="True" {% if is_answered == "True" %} selected{% endif %}>تم إجابتة
+        <option value="True" {% if request.GET.is_answered == "True" %} selected{% endif %}>تم إجابتة
         </option>
-        <option value="False" {% if is_answered == "False" %} selected{% endif %}>لم يتم
+        <option value="False" {% if request.GET.is_answered == "False" %} selected{% endif %}>لم يتم
             إجابتة
         </option>
     </select>
@@ -80,9 +79,9 @@
     {% endif %}
       {% for pg in page_obj.paginator.page_range %}
         {% if page_obj.number == pg %}
-          <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+          <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
         {% else %}
-          <a href="?page={{pg}}" class="btn">{{pg}}</a>
+            <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}

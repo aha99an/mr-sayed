@@ -75,13 +75,13 @@
     <div c lass="prev_next">
     <div class="pages">
     {% if page_obj.has_previous %}
-      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">لسابق</a>
+      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">السابق</a>
     {% endif %}
       {% for pg in page_obj.paginator.page_range %}
         {% if page_obj.number == pg %}
-          <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
+          <a href="{{ request.get_full_path }}?&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
         {% else %}
-            <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
+            <a href="{{ request.get_full_path }}?&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}

@@ -54,13 +54,13 @@ class LectureDetailView(StudentPermission, DetailView):
 
             # Makeup Lecture
             if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):
-
                 return super().dispatch(request, *args, **kwargs)
-
+            # Permenant Lecture
+            if self.object.is_permanent:
+                return super().dispatch(request, *args, **kwargs)
             if student_class.week_day == now.weekday() and student_class.start < now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
-                    print("BE5")
                     return super().dispatch(request, *args, **kwargs)
 
         return redirect("lectures_list")

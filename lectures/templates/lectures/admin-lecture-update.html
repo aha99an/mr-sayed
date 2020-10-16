@@ -2,6 +2,7 @@
 {% block head %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <h2>إضافة محاضرة</h2>
+{{ form.week.label.id_for_label }}
 {% endblock %}
 {% block content %}
 <form method="post">
@@ -83,6 +84,49 @@ $(document).ready(function() {
     $("body").on("click",".remove",function(){ 
         $(this).parents(".after-add-more").remove();
     });
+});
+$(document).ready(function() {
+    console.log("HELLO ANA0");
+   // "{{ form.my_field.id_for_label }}"
+    //console.log(document.getElementById("id_is_permanent").value)
+    a = document.getElementById("id_is_permanent").value;
+    if(a == "True"){
+            $('label[for="id_week"]').hide ();
+            document.getElementById("id_week").style.display = "none";
+            document.getElementById("id_lecture_allowed_time").style.display = "none";
+
+    }else{
+            document.getElementById("id_week").style.display = "block";
+            document.getElementById("id_lecture_allowed_time").style.display = "block";
+
+    }
+
+    $('#id_is_permanent').change(function (e) {
+        var errors = document.getElementsByClassName("errorlist");
+        if(e.target.value=="True"){
+            if(errors){
+            var i;
+            for (i = 0; i < errors.length; i++) {
+                errors[i].style.display = "none";
+            }}
+            $('label[for="id_week"]').hide();
+            document.getElementById("id_week").style.display = "none";
+            $('label[for="id_lecture_allowed_time"]').hide();
+            document.getElementById("id_lecture_allowed_time").style.display = "none";
+
+        }
+        else{
+            if(errors){
+            var i;
+            for (i = 0; i < errors.length; i++) {
+                errors[i].style.display = "block";
+            }}
+            $('label[for="id_week"]').show();
+            document.getElementById("id_week").style.display = "block";
+            $('label[for="id_lecture_allowed_time"]').show();
+            document.getElementById("id_lecture_allowed_time").style.display = "block";
+        }
+            });
 });
 </script>
 

@@ -12,4 +12,9 @@
 {{ form.as_p }}
     <button type="submit" class="button primary">تعديل بيانات الدفع</button>
 </form>
+
+<script>
+document.getElementbyId("id_paid_at").type="date";
+</script>
+{% comment %} id_paid_at {% endcomment %}
 {% endblock content %}

@@ -1,6 +1,6 @@
 from django.db import models
 from classes.models import Week
-from accounts.models import CustomUser
+from accounts.models import CustomUser, StudentPayment
 
 
 class Lecture(models.Model):
@@ -41,6 +41,8 @@ class StudentLecture(models.Model):
     lecture = models.ForeignKey(
         Lecture, on_delete=models.CASCADE)
     is_seen = models.BooleanField(default=False)
+    student_payment = models.ForeignKey(
+        StudentPayment, on_delete=models.SET_NULL, related_name="student_payment", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -2,6 +2,8 @@
 
 {% block head %}
 <h2>بيانات الدفع للطالب</h2>
+{% comment %} <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> {% endcomment %}
+
 {% endblock%}
 
 
@@ -12,9 +14,9 @@
 {{ form.as_p }}
     <button type="submit" class="button primary">تعديل بيانات الدفع</button>
 </form>
-
 <script>
-document.getElementbyId("id_paid_at").type="date";
+document.getElementById("id_paid_at").type="date";
+document.getElementById("id_paid_at").value="{{form.paid_at.value|date:'Y-m-d'}}"
 </script>
 {% comment %} id_paid_at {% endcomment %}
 {% endblock content %}

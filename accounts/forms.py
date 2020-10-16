@@ -101,7 +101,10 @@ class AdminMyProfileData(forms.ModelForm):
 
 class AdminStudentPayment(forms.ModelForm):
     paid_at = forms.DateField(
-        label="تاريخ الدفع", widget=forms.DateInput(format='%d-%m-%Y'))
+        label="تاريخ الدفع", widget=forms.DateInput(format='%Y-%m-%d'))
+    number_available_lectures = forms.IntegerField(
+        label="عدد المحاضرات المتاح للطالب حضورها")
+    notes = forms.CharField(widget=forms.Textarea, label="الملاحظات")
 
     class Meta:
         model = StudentPayment

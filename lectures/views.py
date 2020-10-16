@@ -57,7 +57,7 @@ class LectureDetailView(StudentPermission, DetailView):
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
-                if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() < self.object.week.end:
+                if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
                     return super().dispatch(request, *args, **kwargs)
 
         return redirect("lectures_list")

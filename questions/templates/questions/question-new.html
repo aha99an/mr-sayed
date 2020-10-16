@@ -122,7 +122,14 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200 || xhr.status === 204) {
-                        window.location.replace("{% url 'student_questions' %}");
+                        document.getElementById("loader-upload").style.visibility = "hidden";
+                         swal({
+                                type: 'success',
+                                text: 'تم تسليم الواجب بنجاح'
+                            }
+                            ).then(function () {
+                                window.location = "{% url 'student_questions' %}";
+                            });
                         // document.getElementById("preview").src = url;
                         // document.getElementById("avatar-url").value = url;
                     }

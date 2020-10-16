@@ -2562,11 +2562,6 @@ input, select, textarea {
 			z-index: 1;
 		}
 
-		.image img {
-			border-radius: 4px;
-			display: block;
-		}
-
 		.image.left {
 			float: left;
 			margin: 0 1.5em 1em 0;
@@ -2596,9 +2591,7 @@ input, select, textarea {
 			.image.fit img {
 				width: 100%;
 			}
-		img {
-				border-radius: 50%;
-		}
+
 
 /* List */
 

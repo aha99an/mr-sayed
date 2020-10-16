@@ -56,7 +56,8 @@ class StudentHomeworkFile(models.Model):
 
     def snippet_file_name(self):
         if len(self.student_homework_file.name) > 20:
-            return self.student_homework_file.name[:20] + "..."
+            return "..."+self.student_homework_file.name.rsplit(
+                '/', 1)[1][:20]
         else:
             return self.student_homework_file.name
 

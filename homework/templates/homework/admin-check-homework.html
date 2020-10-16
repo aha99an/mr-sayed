@@ -29,9 +29,57 @@
     <!-- <div style="text-align: right;"> -->
     <h3>واجب التلميذ</h3>
     {% for file in student_homework_files %}
-    <a href="{{file.student_homework_file.url}}"
-        style="color: lightblue;">{{file.snippet_file_name}}</a>
+    <a href="{{file.student_homework_file.url}}" >
+    <img id = "image{{ forloop.counter }}" class="image fit original-position"  src="{{file.student_homework_file.url}}" alt="{{file.student_homework_file}}">
+        </a>
+    <input  class="button primary" type="button" value="تدوير الصورة" id="clickme" onclick="rotateImage({{forloop.counter}})">
+    </br> </br>
     {% endfor %}
+    <script>
+
+    function rotateImage(id) {
+                image = document.getElementById("image"+id);
+                image_height = image.height;
+                image_width = image.width;
+                var margin_top = "0em"
+                var margin_bottom = "2em"
+                console.log(image_height);
+                console.log(image_width);
+                if (image_width >image_height){
+                    console.log("HELLO HERE");
+                    margin = (image_width-image_height)/2;
+                    margin_top = margin.toString()+"px";
+                    margin_bottom = margin.toString()+"px";
+                }
+                if (image.classList.contains("original-position")){
+                    image.style.transform = "rotate(90deg)";
+                    image.classList.add("rotate90");
+                    image.classList.remove("original-position");
+                    image.style.marginTop = margin_top;
+                    image.style.marginBottom = margin_bottom;
+                }else if (image.classList.contains("rotate90")){
+                    image.style.marginTop = "0em";
+                    image.style.marginBottom = "2em";
+                    image.classList.remove("rotate90");
+                    image.style.transform = "rotate(180deg)";
+                    image.classList.add("rotate180");
+
+                }else if (image.classList.contains("rotate180")){
+                    image.style.marginTop = margin_top;
+                    image.style.marginBottom = margin_bottom;
+                    image.classList.remove("rotate180");
+                    image.style.transform = "rotate(270deg)";
+                    image.classList.add("rotate270");
+
+                }else if (image.classList.contains("rotate270")){
+                    image.style.marginTop = "0em";
+                    image.style.marginBottom = "2em";
+                    image.classList.remove("rotate270");
+                    image.style.transform = "rotate(0deg)";
+                    image.classList.add("original-position");
+            }
+    };
+    </script>
     <form method="post" enctype="multipart/form-data" class="md-form">
         {% csrf_token %}
 

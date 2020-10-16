@@ -22,8 +22,8 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
         except KeyError:
             a = None
 
-        q = StudentHomework.objects.all()
-
+        q = StudentHomework.objects.filter(
+            student_homework_file__isnull=False).distinct()
         if a:
 
             admin_student_list1 = Q(user__first_name__contains=a)

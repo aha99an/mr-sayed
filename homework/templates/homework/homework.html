@@ -113,7 +113,6 @@
                             if (i == files.length - 1) {
                                 is_last = "YES";
                             }
-                            console.log(is_last)
                             getSignedRequest(files[i], is_last);
                         }
 
@@ -121,8 +120,6 @@
                 };
 
                 function getSignedRequest(file, is_last) {
-                    console.log("simple")
-                    console.log(is_last)
                     var xhr = new XMLHttpRequest();
                     var homework_id = "{{homework.id}}"
                     xhr.open("GET", "{% url 'generate_s3_signature_homework'%}?file_name=" + file.name + "&file_type=" + file.type + "&homework_id=" + homework_id);
@@ -137,7 +134,6 @@
                             }
                         }
                     };
-                    console.log("2")
                     xhr.send();
                 }
 

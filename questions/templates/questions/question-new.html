@@ -101,21 +101,16 @@
                         var response = JSON.parse(xhr.responseText);
                         
                         uploadFile(file, response.data, response.url);
-                        console.log("1")
-
                     }
                     else {
                         alert("Could not get signed URL.");
                     }
                 }
             };
-              console.log("2")
             xhr.send();
         }
 
         function uploadFile(file, s3Data, url) {
-                          console.log("3")
-
             document.getElementById("loader-upload").style.visibility = "visible";
             var xhr = new XMLHttpRequest();
             xhr.open("POST", s3Data.url);

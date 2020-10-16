@@ -153,20 +153,17 @@ def direct_upload_s3(request):
         'data': presigned_post,
         'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
     }
-    homework = Homework.objects.get(id=int(homework_id))
-    student_homework, created = StudentHomework.objects.get_or_create(
-        homework=homework, user=request.user)
-#    image_question=image_name)
-    StudentHomeworkFile.objects.create(
-        student_homework=student_homework, student_homework_file=image_name)
-    print(image_name)
     return HttpResponse(json.dumps(data), content_type="application/json")
-    # else:
-    #     MrQuestion.objects.create(
-    #         question=question, user=request.user)
-    #     return redirect('student_questions')
 
 
 def homework_image_success_upload(request):
-    print("SUCCESS")
-    return HttpResponse(json.dumps(data={"empty": ""}), content_type="application/json")
+    image_name = request.GET.get('image_name')[7:]
+    homework_id = request.GET.get('homework_id')
+
+    homework = Homework.objects.get(id=int(homework_id))
+    student_homework, created = StudentHomework.objects.get_or_create(
+        homework=homework, user=request.user)
+    StudentHomeworkFile.objects.create(
+        student_homework=student_homework, student_homework_file=image_name)
+
+    return HttpResponse(status=201)

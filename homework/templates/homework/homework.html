@@ -73,112 +73,111 @@
 
     <h1>{{error_message}}<h1>
 
-    {% comment %} <form method="post" enctype="multipart/form-data" class="md-form">
-        {% csrf_token %}
+            {% comment %} <form method="post" enctype="multipart/form-data" class="md-form">
+                {% csrf_token %}
 
-        {{form}}
-        <br><br>
-        <button type="submit" class="button primary"
-            style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تسليم الواجب</button>
-    </form> {% endcomment %}
-    <p><label for="id_homework_images">رفع ملفات الواجب:</label> <input type="file" name="homework_images"
-            accept="image/*" id="id_homework_images" multiple></p>
-    <input type="submit" style="width:100%; font-size: 20px;" value="تسليم الواجب"
-        id="homewor-form" onclick="checkInput();this.disabled = true;">
+                {{form}}
+                <br><br>
+                <button type="submit" class="button primary"
+                    style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تسليم
+                    الواجب</button>
+            </form> {% endcomment %}
+            <p><label for="id_homework_images">رفع ملفات الواجب:</label> <input type="file"
+                    name="homework_images" accept="image/*" id="id_homework_images" multiple></p>
+            <input type="submit" style="width:100%; font-size: 20px;" value="تسليم الواجب"
+                id="homewor-form" onclick="checkInput();this.disabled = true;">
 
-    <div class="loader" id="loader-upload" style="visibility: hidden;" ng-hide="data.length > 0">
-    </div>
+            <div class="loader" id="loader-upload" style="visibility: hidden;"
+                ng-hide="data.length > 0">
+            </div>
 
 
 
-  <script>
+            <script>
 
-        function checkInput() {
-            var files = document.getElementById("id_homework_images").files;
-            var file = files[0];            
-            if (!file) {
-                swal({
-                    type: 'error',
-                    text: 'من فضلك قم برفع صورة على الاقل'
-                }
-                )
-                document.getElementById("homework-form").disabled = false;
-            }
-            else {
-                    document.getElementById("loader-upload").style.visibility = "visible";
-                    for (i = 0; i < files.length; i++) {
-                        var is_last;
-                        if (i==files.length-1){
-                            console.log("HELLOif condition");
-                            is_last="YES";
+                function checkInput() {
+                    var files = document.getElementById("id_homework_images").files;
+                    var file = files[0];
+                    if (!file) {
+                        swal({
+                            type: 'error',
+                            text: 'من فضلك قم برفع صورة على الاقل'
+                        }
+                        )
+                        document.getElementById("homework-form").disabled = false;
+                    }
+                    else {
+                        document.getElementById("loader-upload").style.visibility = "visible";
+                        for (i = 0; i < files.length; i++) {
+                            var is_last;
+                            if (i == files.length - 1) {
+                                is_last = "YES";
+                            }
                             console.log(is_last)
+                            getSignedRequest(files[i], is_last);
                         }
-                        console.log(is_last)
-                        getSignedRequest(files[i], is_last);
-                        }
-                            
-            }
-        };
 
-        function getSignedRequest(file, is_last) {
-            console.log("simple")
-            console.log(is_last)
-            var xhr = new XMLHttpRequest();
-            var homework_id = "{{homework.id}}"
-            xhr.open("GET", "{% url 'generate_s3_signature_homework'%}?file_name=" + file.name + "&file_type=" + file.type+"&homework_id="+homework_id);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        uploadFile(file, response.data, response.url, is_last);
-                        console.log("1")
                     }
-                    else {
-                        alert("Could not get signed URL.");
-                    }
+                };
+
+                function getSignedRequest(file, is_last) {
+                    console.log("simple")
+                    console.log(is_last)
+                    var xhr = new XMLHttpRequest();
+                    var homework_id = "{{homework.id}}"
+                    xhr.open("GET", "{% url 'generate_s3_signature_homework'%}?file_name=" + file.name + "&file_type=" + file.type + "&homework_id=" + homework_id);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                uploadFile(file, response.data, response.url, is_last);
+                            }
+                            else {
+                                alert("Could not get signed URL.");
+                            }
+                        }
+                    };
+                    console.log("2")
+                    xhr.send();
                 }
-            };
-              console.log("2")
-            xhr.send();
-        }
 
-        function uploadFile(file, s3Data, url, is_last) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", s3Data.url);
-            var postData = new FormData();
-            for (key in s3Data.fields) {
-                postData.append(key, s3Data.fields[key]);
-            }
-            postData.append('file', file);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200 || xhr.status === 204) {
-                        console.log(is_last)
-                        if(is_last=="YES"){
-                         //   var new_request = new XMLHttpRequest();
-                        //    new_request.open("GET", "{% url 'homework_image_success_upload'%}");
-                      //      new_request.send()
-                            document.getElementById("loader-upload").style.visibility = "hidden";
-                                            swal({
-                                    type: 'success',
-                                    text: 'تم تسليم الواجب بنجاح'
+                function uploadFile(file, s3Data, url, is_last) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", s3Data.url);
+                    var postData = new FormData();
+                    for (key in s3Data.fields) {
+                        postData.append(key, s3Data.fields[key]);
+                    }
+                    postData.append('file', file);
+                    var homework_id = "{{homework.id}}"
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200 || xhr.status === 204) {
+                                var new_request = new XMLHttpRequest();
+                                new_request.open("GET", "{% url 'homework_image_success_upload'%}?image_name=" + s3Data.fields["key"] + "&homework_id=" + homework_id);
+                                new_request.send();
+                                if (is_last == "YES") {
+                                    document.getElementById("loader-upload").style.visibility = "hidden";
+                                    swal({
+                                        type: 'success',
+                                        text: 'تم تسليم الواجب بنجاح'
+                                    }
+                                    ).then(function () {
+                                        window.location = "{% url 'homework_list' %}";
+                                    });
                                 }
-                                ).then(function() {
-                                    window.location = "{% url 'homework_list' %}";
-                            });  
-                                        }
 
-                        // document.getElementById("preview").src = url;
-                        // document.getElementById("avatar-url").value = url;
-                    }
-                    else {
-                        alert("Could not upload file.");
-                    }
+                                // document.getElementById("preview").src = url;
+                                // document.getElementById("avatar-url").value = url;
+                            }
+                            else {
+                                alert("Could not upload file.");
+                            }
+                        }
+                    };
+                    xhr.send(postData);
+                    //window.location.replace("{% url 'student_questions' %}");
                 }
-            };
-            xhr.send(postData);
-            //window.location.replace("{% url 'student_questions' %}");
-        }
-    </script>
+            </script>
 
-    {% endblock content %}
+            {% endblock content %}

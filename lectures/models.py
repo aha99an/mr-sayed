@@ -7,8 +7,9 @@ class Lecture(models.Model):
     name = models.CharField(max_length=255)
     week = models.ForeignKey(
         Week, on_delete=models.SET_NULL, related_name="lecture", null=True, blank=True)
-    lecture_allowed_time = models.IntegerField(default=0)
-    lecture_manual_allow = models.BooleanField(default=False)
+    lecture_allowed_time = models.IntegerField(
+        default=0, null=True, blank=True)
+    is_permanent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -74,8 +75,10 @@ class StudentSeenLecture(models.Model):
 
 
 class StudentLectureMakeup(models.Model):
-    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, related_name="student_lecture_makeup")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="student_lecture_makeup")
+    lecture = models.ForeignKey(
+        Lecture, on_delete=models.CASCADE, related_name="student_lecture_makeup")
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="student_lecture_makeup")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

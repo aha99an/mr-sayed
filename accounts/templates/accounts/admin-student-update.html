@@ -8,6 +8,9 @@
 {% if reseted_password %}
 الباسورد الجديد للطالب: {{student_user.random_password}}
 {% endif %}
+<a href="{% url 'student_payment_update_view' student_user.id%}">
+الدفع للطالب
+</a>
 <form method="post">
     {{ form.as_p }}
     {% csrf_token %}

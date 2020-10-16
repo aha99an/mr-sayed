@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import SignUpView, ProfileView, ExamQuestionDetailView, HomeworkDetailView, MyProfileDataUpdateView, IsNotActiveTemplateView
+from .views import (SignUpView, ProfileView, ExamQuestionDetailView,
+                    HomeworkDetailView, MyProfileDataUpdateView, IsNotActiveTemplateView)
 from .views_admin import (AdminStudentListView, AdminStudentUpdateView, reset_password,
                           add_makeup_lecture, LectureMakeupDeleteView, AdminAccountDeleteView, AdminMyProfileData,
-                          AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam)
+                          AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam, StudentPaymentUpdateView)
 
 
 urlpatterns = [
@@ -31,5 +32,9 @@ urlpatterns = [
          name="student_update_data"),
     path("admin-my-profile-data/<int:pk>", AdminMyProfileDataUpdateView.as_view(),
          name="admin_student_update_data"),
-    path("account-not-active", IsNotActiveTemplateView.as_view(), name="account_not_active"),
+    path("account-not-active", IsNotActiveTemplateView.as_view(),
+         name="account_not_active"),
+    path("student-payment-update-view/<int:student_pk>/", StudentPaymentUpdateView.as_view(),
+         name="student_payment_update_view"),
+
 ]

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, StudentPayment
 from lectures.models import Lecture, StudentLectureMakeup
 
 # DataFlair #Custom_Validator
@@ -13,14 +13,18 @@ def check_size(value):
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.EmailField(label="الايميل")
-    first_name = forms.CharField(validators=[check_size, ], label="الأسم ثلاثي")
-    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
-    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    first_name = forms.CharField(
+        validators=[check_size, ], label="الأسم ثلاثي")
+    parentPhoneNumber = forms.CharField(
+        validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(
+        validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
     # profile_pic = forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
-    password1 = forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="كلمه السر") 
-    password2 = forms.CharField(widget = forms.PasswordInput(), validators=[check_size, ], label="إعادة كلمه السر")
-
+    password1 = forms.CharField(widget=forms.PasswordInput(), validators=[
+                                check_size, ], label="كلمه السر")
+    password2 = forms.CharField(widget=forms.PasswordInput(), validators=[
+                                check_size, ], label="إعادة كلمه السر")
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
@@ -31,7 +35,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'first_name', 'school',
-                  "parentPhoneNumber", "phoneNumber",'password1','password2')
+                  "parentPhoneNumber", "phoneNumber", 'password1', 'password2')
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -49,11 +53,13 @@ class StudentChangeForm(forms.ModelForm):
         (False, 'غير مفعل')
     )
     # student_class = forms.CharField(label="المجموعة")
-    student_is_active = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="التفعيل")
+    student_is_active = forms.ChoiceField(
+        choices=TRUE_FALSE_CHOICES, label="التفعيل")
 
     class Meta:
         model = CustomUser
         fields = ('student_class', 'student_is_active',)
+
 
 class test(forms.ModelForm):
     lecture = forms.ModelChoiceField(queryset=Lecture.objects.all())
@@ -63,26 +69,40 @@ class test(forms.ModelForm):
         fields = ("lecture",)
 
 
-
-
 class MyProfileData(forms.ModelForm):
     username = forms.EmailField(label="الايميل")
-    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
-    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    parentPhoneNumber = forms.CharField(
+        validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(
+        validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
     # profile_pic= forms.ImageField(validators=[check_size, ],required=False, label="صوره الطالب")
+
     class Meta:
         model = CustomUser
-        fields = ('username', 'school', 'parentPhoneNumber','phoneNumber')
+        fields = ('username', 'school', 'parentPhoneNumber', 'phoneNumber')
 
-    
 
 class AdminMyProfileData(forms.ModelForm):
     username = forms.EmailField(label="الايميل")
-    first_name = forms.CharField(validators=[check_size, ], label="الأسم ثلاثي")
-    parentPhoneNumber = forms.CharField(validators=[check_size, ], label="رقم موبايل ولي الأمر")
-    phoneNumber = forms.CharField(validators=[check_size, ], label=" رقم موبايل الطالب")
+    first_name = forms.CharField(
+        validators=[check_size, ], label="الأسم ثلاثي")
+    parentPhoneNumber = forms.CharField(
+        validators=[check_size, ], label="رقم موبايل ولي الأمر")
+    phoneNumber = forms.CharField(
+        validators=[check_size, ], label=" رقم موبايل الطالب")
     school = forms.CharField(validators=[check_size, ], label="المدرسة")
+
     class Meta:
         model = CustomUser
-        fields = ('username','first_name', 'school', 'parentPhoneNumber','phoneNumber')
+        fields = ('username', 'first_name', 'school',
+                  'parentPhoneNumber', 'phoneNumber')
+
+
+class AdminStudentPayment(forms.ModelForm):
+    paid_at = forms.DateField(
+        label="تاريخ الدفع", widget=forms.DateInput(format='%d-%m-%Y'))
+
+    class Meta:
+        model = StudentPayment
+        fields = ('number_available_lectures', 'paid_at', 'notes',)

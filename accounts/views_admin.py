@@ -1,6 +1,6 @@
 from django.views.generic import UpdateView, ListView, DeleteView
-from .models import CustomUser
-from .forms import StudentChangeForm, test, AdminMyProfileData
+from .models import CustomUser, StudentPayment
+from .forms import StudentChangeForm, test, AdminMyProfileData, AdminStudentPayment
 from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
@@ -130,3 +130,18 @@ class AdminMyProfileDataUpdateView(AdminPermission, UpdateView):
     model = CustomUser
     success_url = reverse_lazy("admin_student_list")
     form_class = AdminMyProfileData
+
+
+class StudentPaymentUpdateView(AdminPermission, UpdateView):
+    model = StudentPayment
+    form_class = AdminStudentPayment
+    template_name = 'accounts/admin-student-payment.html'
+
+    def get_object(self):
+        this_user = CustomUser.objects.get(id=self.kwargs.get("student_pk"))
+        student_payment, created = StudentPayment.objects.get_or_create(
+            user=this_user)
+        return student_payment
+
+    def get_success_url(self):
+        return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})

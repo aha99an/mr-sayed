@@ -50,5 +50,16 @@ class CustomUser(AbstractUser):
     class Meta:
         ordering = ('date_joined',)
 
-class Counter(models.Model):
-    counter = models.IntegerField(null=True, blank=True, default=0)
+
+class StudentPayment(models.Model):
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE)
+    number_available_lectures = models.IntegerField(
+        default=0, null=True, blank=True)
+    paid_at = models.DateField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('id',)

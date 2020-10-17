@@ -1,4 +1,9 @@
-from questions.models import MrQuestion
+
+import os
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mr-syed.settings')
+application = get_wsgi_application()
 from accounts.models import CustomUser, StudentPayment
 from datetime import datetime
 
@@ -16,6 +21,7 @@ for user in users:
             user.student_is_active = False
     else:
         user.student_is_active = False
+    user.save()
     MrQuestion.objects.create(user=CustomUser.objects.last(),
                               question=user.id
                               )

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<h2>الطلاب</h2>
+{% endblock %}
+{% block content2 %}  
+  <a href="{% url 'admin_student_payment_create_view' student_pk %}">
+                        <button type="button" class="button primary">
+                            تسجيل دفع الطالب</button>
+                    </a>
+                    <br/><br/>
+{% if object_list %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th style="text-align:center;" width="100px">تاريخ الدفع</th>
+                <th style="text-align:center;">عدد الحصص المدفوعة</th>
+                <th style="text-align:center;">الحصص المتبقية</th>
+                <th style="text-align:center;">الحصص</th>
+                <th style="text-align:center;" width="200px">الملاحظات</th>
+                <th style="text-align:center;">مسح</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for payment in object_list %}
+            <tr>
+
+                <td style="text-align:center;">
+                    <a href="{% url 'student_payment_update_view' payment.id payment.user.id %}">
+                        <button type="button" class="button primary">
+                            {{payment.paid_at}}</button>
+                    </a>
+                </td>
+                <td style="text-align:center;">
+                {{payment.number_available_lectures}}
+                </td>
+                <td style="text-align:center;">
+                    {{payment.remainder_available_lectures}}
+                </td>
+                  <td style="text-align:center; padding:0px;">
+                    {% for student_lecture in payment.student_lecture.all%}
+                    {{student_lecture.lecture.name}}{% if not forloop.last %}، {% endif %}
+                    {% if forloop.counter|divisibleby:3 %}
+                    <br/>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                    <td style="text-align:center; padding:0px;">
+                    {{payment.notes}}
+                </td>
+                <td style="text-align: center; padding:0px;">
+                    <span>
+
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'admin_student_payment_delete_view' payment.id payment.user.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+    </div>
+{% endif %}
+{% endblock %}

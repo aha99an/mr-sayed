@@ -1,9 +1,9 @@
 from django.views.generic import ListView, UpdateView, DetailView
 
-from .models import Lecture, StudentLecture, StudentLectureQuestion, StudentLectureMakeup
+from .models import Lecture, StudentLecture, StudentLectureQuestion, StudentLectureMakeup, StudentLecture
 
 from home.permissions import StudentPermission
-from accounts.models import CustomUser
+from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
 import datetime
 
@@ -45,21 +45,45 @@ class LectureDetailView(StudentPermission, DetailView):
     template_name = "lectures/lecture.html"
 
     def dispatch(self, request, *args, **kwargs):
+
         if request.user.is_authenticated:
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
             now = datetime.datetime.now()
             student_class = self.request.user.student_class
 
+            def handle_student_payment():
+                payment = StudentPayment.objects.filter(
+                    user=self.request.user, remainder_available_lectures__gte=1).first()
+                if payment:
+                    student_lecture, created = StudentLecture.objects.get_or_create(
+                        user=request.user, lecture=self.object)
+                    if created:
+                        # subtract from remainder_available_lectures and get date if last lecture
+                        payment.remainder_available_lectures -= 1
+                        if payment.remainder_available_lectures == 0:
+                            payment.last_lecture_attended = now.date()
+                        payment.save()
+                        # save student payment in lecture class
+                        student_lecture.student_payment = payment
+                        student_lecture.save()
+                        return True
+                else:
+                    if StudentLecture.objects.filter(user=request.user, lecture=self.object):
+                        return True
+                    else:
+                        return False
+
             # Makeup Lecture
             if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):
-
-                return super().dispatch(request, *args, **kwargs)
+                if handle_student_payment():
+                    return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
-                    return super().dispatch(request, *args, **kwargs)
-
+                    if handle_student_payment():
+                        # subtract one from the avilable lecture to student
+                        return super().dispatch(request, *args, **kwargs)
         return redirect("lectures_list")
 
     def get_context_data(self, *args, **kwargs):

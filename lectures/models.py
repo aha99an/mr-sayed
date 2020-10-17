@@ -1,6 +1,6 @@
 from django.db import models
 from classes.models import Week
-from accounts.models import CustomUser
+from accounts.models import CustomUser, StudentPayment
 
 
 class Lecture(models.Model):
@@ -8,7 +8,6 @@ class Lecture(models.Model):
     week = models.ForeignKey(
         Week, on_delete=models.SET_NULL, related_name="lecture", null=True, blank=True)
     lecture_allowed_time = models.IntegerField(default=0)
-    lecture_manual_allow = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -41,8 +40,9 @@ class StudentLecture(models.Model):
         CustomUser, on_delete=models.CASCADE)
     lecture = models.ForeignKey(
         Lecture, on_delete=models.CASCADE)
-    special_access = models.BooleanField(default=False)
-    attendance = models.BooleanField(default=False)
+    is_seen = models.BooleanField(default=False)
+    student_payment = models.ForeignKey(
+        StudentPayment, on_delete=models.SET_NULL, related_name="student_lecture", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -62,7 +62,7 @@ class StudentLectureQuestion(models.Model):
         ordering = ('id',)
 
 
-class StudentSeenLecture(models.Model):
+class StudentSeenLink(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     link = models.ForeignKey(LectureLink, on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
@@ -74,8 +74,10 @@ class StudentSeenLecture(models.Model):
 
 
 class StudentLectureMakeup(models.Model):
-    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, related_name="student_lecture_makeup")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="student_lecture_makeup")
+    lecture = models.ForeignKey(
+        Lecture, on_delete=models.CASCADE, related_name="student_lecture_makeup")
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="student_lecture_makeup")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

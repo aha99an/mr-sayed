@@ -1,6 +1,6 @@
-from django.views.generic import UpdateView, ListView, DeleteView
-from .models import CustomUser
-from .forms import StudentChangeForm, test, AdminMyProfileData
+from django.views.generic import UpdateView, ListView, DeleteView, CreateView
+from .models import CustomUser, StudentPayment
+from .forms import StudentChangeForm, test, AdminMyProfileData, AdminStudentPayment, AdminStudentPaymentUpdateForm
 from classes.models import Class
 from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
@@ -130,3 +130,47 @@ class AdminMyProfileDataUpdateView(AdminPermission, UpdateView):
     model = CustomUser
     success_url = reverse_lazy("admin_student_list")
     form_class = AdminMyProfileData
+
+
+class StudentPaymentUpdateView(AdminPermission, UpdateView):
+    model = StudentPayment
+    form_class = AdminStudentPaymentUpdateForm
+    template_name = 'accounts/admin-student-payment.html'
+
+    def get_success_url(self):
+        return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})
+
+
+class StudentPaymentCreateView(AdminPermission, CreateView):
+    model = StudentPayment
+    form_class = AdminStudentPayment
+    template_name = 'accounts/admin-student-payment.html'
+
+    def form_valid(self, form):
+        form.instance.user = CustomUser.objects.get(
+            id=self.kwargs.get("student_pk"))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})
+
+
+class AdminStudentPaymentListView(AdminPermission, ListView):
+    template_name = "accounts/admin-student-payment-list.html"
+
+    def get_queryset(self):
+        queryset = StudentPayment.objects.filter(
+            user__id=self.kwargs.get("student_pk"))
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["student_pk"] = self.kwargs.get("student_pk")
+        return ctx
+
+
+class AdminStudentPaymentDeleteView(AdminPermission, DeleteView):
+    model = StudentPayment
+
+    def get_success_url(self):
+        return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})

@@ -8,3 +8,4 @@ django-storages==1.10.1
 boto3==1.15.11
 xlrd==1.2.0
 googletrans==3.0.0
+django-crontab==0.7.1

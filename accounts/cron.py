@@ -19,6 +19,3 @@ def deactivate_users():
         else:
             user.student_is_active = False
         user.save()
-        MrQuestion.objects.create(user=CustomUser.objects.last(),
-                                  question=user.id
-                                )

@@ -56,10 +56,21 @@ class StudentPayment(models.Model):
         CustomUser, on_delete=models.CASCADE)
     number_available_lectures = models.IntegerField(
         default=0, null=True, blank=True)
+    remainder_available_lectures = models.IntegerField(
+        default=0, null=True, blank=True)
     paid_at = models.DateField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
+    last_lecture_attended = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('id',)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.remainder_available_lectures = self.number_available_lectures
+        if self.number_available_lectures:
+            CustomUser.objects.filter(id=self.user_id).update(
+                student_is_active=True)
+        super(StudentPayment, self).save(*args, **kwargs)

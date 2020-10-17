@@ -42,7 +42,7 @@ class StudentLecture(models.Model):
         Lecture, on_delete=models.CASCADE)
     is_seen = models.BooleanField(default=False)
     student_payment = models.ForeignKey(
-        StudentPayment, on_delete=models.SET_NULL, related_name="student_payment", null=True, blank=True)
+        StudentPayment, on_delete=models.SET_NULL, related_name="student_lecture", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

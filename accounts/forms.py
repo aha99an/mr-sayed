@@ -48,17 +48,17 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class StudentChangeForm(forms.ModelForm):
-    TRUE_FALSE_CHOICES = (
-        (True, 'مفعل'),
-        (False, 'غير مفعل')
-    )
-    # student_class = forms.CharField(label="المجموعة")
-    student_is_active = forms.ChoiceField(
-        choices=TRUE_FALSE_CHOICES, label="التفعيل")
+    # TRUE_FALSE_CHOICES = (
+    #     (True, 'مفعل'),
+    #     (False, 'غير مفعل')
+    # )
+    # # student_class = forms.CharField(label="المجموعة")
+    # student_is_active = forms.ChoiceField(
+    #     choices=TRUE_FALSE_CHOICES, label="التفعيل")
 
     class Meta:
         model = CustomUser
-        fields = ('student_class', 'student_is_active',)
+        fields = ('student_class',)
 
 
 class test(forms.ModelForm):
@@ -104,8 +104,18 @@ class AdminStudentPayment(forms.ModelForm):
         label="تاريخ الدفع", widget=forms.DateInput(format='%Y-%m-%d'))
     number_available_lectures = forms.IntegerField(
         label="عدد المحاضرات المتاح للطالب حضورها")
-    notes = forms.CharField(widget=forms.Textarea, label="الملاحظات")
+    notes = forms.CharField(widget=forms.Textarea,
+                            label="الملاحظات", required=False)
 
     class Meta:
         model = StudentPayment
         fields = ('number_available_lectures', 'paid_at', 'notes',)
+
+
+class AdminStudentPaymentUpdateForm(forms.ModelForm):
+    notes = forms.CharField(widget=forms.Textarea,
+                            label="الملاحظات", required=False)
+
+    class Meta:
+        model = StudentPayment
+        fields = ('notes',)

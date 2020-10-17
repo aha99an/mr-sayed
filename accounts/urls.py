@@ -3,7 +3,8 @@ from .views import (SignUpView, ProfileView, ExamQuestionDetailView,
                     HomeworkDetailView, MyProfileDataUpdateView, IsNotActiveTemplateView)
 from .views_admin import (AdminStudentListView, AdminStudentUpdateView, reset_password,
                           add_makeup_lecture, LectureMakeupDeleteView, AdminAccountDeleteView, AdminMyProfileData,
-                          AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam, StudentPaymentUpdateView)
+                          AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam, StudentPaymentUpdateView,
+                          AdminStudentPaymentListView, StudentPaymentCreateView, AdminStudentPaymentDeleteView)
 
 
 urlpatterns = [
@@ -34,7 +35,13 @@ urlpatterns = [
          name="admin_student_update_data"),
     path("account-not-active", IsNotActiveTemplateView.as_view(),
          name="account_not_active"),
-    path("student-payment-update-view/<int:student_pk>/", StudentPaymentUpdateView.as_view(),
+    path("admin-student-payment-update-view/<int:pk>/<int:student_pk>/", StudentPaymentUpdateView.as_view(),
          name="student_payment_update_view"),
+    path("admin-student-payment-list-view/<int:student_pk>/", AdminStudentPaymentListView.as_view(),
+         name="admin_student_payment_list_view"),
+    path("admin-student-payment-create-view/<int:student_pk>/", StudentPaymentCreateView.as_view(),
+         name="admin_student_payment_create_view"),
+    path("admin-student-payment-delete-view/<int:pk>/<int:student_pk>/", AdminStudentPaymentDeleteView.as_view(),
+         name="admin_student_payment_delete_view"),
 
 ]

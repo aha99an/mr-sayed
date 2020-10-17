@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "homework",
     "lectures",
     # 3rd Party
+    'django_crontab',
+
 
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -165,3 +167,7 @@ AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # AWS_S3_ENDPOINT_URL = 'https://s3-us-west-2.amazonaws.com'
+CRONJOBS = [
+    ('42 12 * * *', 'accounts.cron.deactivate_users', '>> test.log')
+]
+# 45 23 * * 6

@@ -74,3 +74,6 @@ class StudentPayment(models.Model):
             CustomUser.objects.filter(id=self.user_id).update(
                 student_is_active=True)
         super(StudentPayment, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user.first_name

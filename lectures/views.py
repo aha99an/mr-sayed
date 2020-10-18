@@ -66,7 +66,7 @@ class LectureDetailView(StudentPermission, DetailView):
                         # save student payment in lecture class
                         student_lecture.student_payment = payment
                         student_lecture.save()
-                        return True
+                    return True
                 else:
                     if StudentLecture.objects.filter(user=request.user, lecture=self.object):
                         return True
@@ -82,7 +82,7 @@ class LectureDetailView(StudentPermission, DetailView):
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
                     handle_student_payment()
-                        # subtract one from the avilable lecture to student
+                    # subtract one from the avilable lecture to student
                     return super().dispatch(request, *args, **kwargs)
         return redirect("lectures_list")
 

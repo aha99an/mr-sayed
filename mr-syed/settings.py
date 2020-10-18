@@ -168,5 +168,5 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # AWS_S3_ENDPOINT_URL = 'https://s3-us-west-2.amazonaws.com'
 CRONJOBS = [
-    ('59 23 * * *', 'accounts.cron.deactivate_users', '>> test.log')
+    ('59 23 * * *', 'accounts.cron.deactivate_users')
 ]

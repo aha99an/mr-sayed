@@ -115,9 +115,7 @@ class AdminStudentPayment(forms.ModelForm):
 class AdminStudentPaymentUpdateForm(forms.ModelForm):
     notes = forms.CharField(widget=forms.Textarea,
                             label="الملاحظات", required=False)
-    number_available_lectures = forms.IntegerField(
-        label="عدد المحاضرات المتاح للطالب حضورها")
 
     class Meta:
         model = StudentPayment
-        fields = ('notes', 'number_available_lectures')
+        fields = ('notes',)

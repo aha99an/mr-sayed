@@ -49,6 +49,9 @@ class StudentLecture(models.Model):
     class Meta:
         ordering = ('id',)
 
+    def __str__(self):
+        return self.user.first_name + "-" + self.lecture.name
+
 
 class StudentLectureQuestion(models.Model):
     student_lecture = models.ForeignKey(

@@ -3,11 +3,11 @@
 <h2>إضافة محاضرة</h2>
 {% endblock %}
 {% block content %}
-<form method="post">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<form method="post"  enctype="multipart/form-data">
 {% csrf_token %} 
 {{form}}
 <br/><br/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
 

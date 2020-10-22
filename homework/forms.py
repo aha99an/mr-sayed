@@ -18,6 +18,8 @@ class AdminHomeworkForm(forms.ModelForm):
     notes = forms.CharField(widget=forms.Textarea,
                             label='ملاحظات', required=False)
 
+    notes_file = forms.FileField(
+                            label=' ملاحظات كصوره أو ملف', required=False)
     class Meta:
         model = StudentHomework
-        fields = ("notes",)
+        fields = ("notes","notes_file")

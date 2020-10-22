@@ -78,7 +78,7 @@
     <div c lass="prev_next">
     <div class="pages">
     {% if page_obj.has_previous %}
-      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">السابق</a>
+      <a class="prev btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.previous_page_number}}">السابق</a>
     {% endif %}
       {% for pg in page_obj.paginator.page_range %}
       {% comment %}Ensure that serach filter is applied with pagination  {% endcomment %}
@@ -109,7 +109,7 @@
 
       {% endfor %}
       {% if page_obj.has_next %}
-      <a class="next btn btn-info" href="?page={{page_obj.next_page_number}}">التالي</a>
+      <a class="next btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.next_page_number}}">التالي</a>
     {% endif %}
       </ul>
     </div>

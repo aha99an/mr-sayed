@@ -68,4 +68,10 @@
     {{object.notes}}
     {% endif %}
 
+{% if object.notes_file %}
+    الملاحظات:
+    <br>
+    {{object.notes_file}}
+    {% endif %}
+
     {% endblock content %}

@@ -39,6 +39,7 @@
                 <th>الامتحان</th>
                 <th>الاسبوع</th>
                 <th>التصحيح</th>
+                <th>مسح</th>
             </tr>
         </thead>
         <tbody>
@@ -64,7 +65,22 @@
                     &#10060;
                     {% endif %}
                 </td>
+                 <td>
+                <form method="post" action="{% url 'Exam_delete' student_exam.id %}"
+                            style=style="background-color: red; font-size: 10px; height: 2rem;  width: 5rem;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+
+
+
+                 </td>
             </tr>
+            
+
+
+
             {% endfor %}
         </tbody>
         <tfoot>
@@ -94,3 +110,5 @@
     </div>
     <span class="clear_both"></span>
     {% endblock content2 %}
+
+

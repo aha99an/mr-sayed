@@ -265,3 +265,7 @@ class AdminEssayQuestionDeleteView(AdminPermission, DeleteView):
     def get_success_url(self):
         exam = EssayQuestion.objects.get(id=self.kwargs.get("pk")).exam
         return reverse_lazy("admin_update_exam", kwargs={"pk": exam.id})
+
+class AdminExamForStudentDeleteView(AdminPermission, DeleteView):
+    model = StudentExam
+    success_url = reverse_lazy('admin_exam_list')

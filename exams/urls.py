@@ -3,7 +3,7 @@ from .views import (ExamListView, QuestionUpdateView)
 from .views_admin import (ExamAdminListView, AdminChoiceQuestion, update_view, AdminAddExamListView,
                           AdminExamCreateView, AdminExamUpdateView, AdminExamDeleteView,
                           AdminChoiceQuestionCreateView, AdminEssayQuestionCreateView, AdminEssayQuestionUpdateView, AdminChoiceQuestionUpdateView,
-                          AdminChoiceQuestionDeleteView, AdminEssayQuestionDeleteView)
+                          AdminChoiceQuestionDeleteView, AdminEssayQuestionDeleteView,AdminExamForStudentDeleteView)
 
 
 urlpatterns = [
@@ -40,4 +40,10 @@ urlpatterns = [
          AdminChoiceQuestionDeleteView.as_view(), name='admin_delete_choice_question'),
     path('exam-delete-essay-question/<int:pk>/',
          AdminEssayQuestionDeleteView.as_view(), name='admin_delete_essay_question'),
+     path('student_exam_delete/<int:pk>',
+          AdminExamForStudentDeleteView.as_view(), name='Exam_delete'),
+
 ]
+
+
+

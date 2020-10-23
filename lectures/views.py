@@ -75,15 +75,17 @@ class LectureDetailView(StudentPermission, DetailView):
 
             # Makeup Lecture
             if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):
+                # subtract one from the avilable lecture to student
                 handle_student_payment()
                 return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
-                    handle_student_payment()
                     # subtract one from the avilable lecture to student
+                    handle_student_payment()
                     return super().dispatch(request, *args, **kwargs)
+
         return redirect("lectures_list")
 
     def get_context_data(self, *args, **kwargs):

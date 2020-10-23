@@ -183,13 +183,15 @@ class QuestionUpdateView(UpdateView):
         for v, k in self.all_questions.items():
             if k["type"] == "choice_question":
                 question = ChoiceQuestion.objects.get(id=k["question"])
-                if question.student_choice_answer.exists():
-                    if question.student_choice_answer.last().is_answered:
+                student_answer = question.student_choice_answer.filter(student_exam=self.student_exam)
+                if student_answer:
+                    if student_answer.last().is_answered:
                         k["answered"] = "answered"
             if k["type"] == "essay_question":
                 question = EssayQuestion.objects.get(id=k["question"])
-                if question.student_essay_answer.exists():
-                    if question.student_essay_answer.last().is_answered:
+                student_answer = question.student_essay_answer.filter(student_exam=self.student_exam)
+                if student_answer:
+                    if student_answer.last().is_answered:
                         k["answered"] = "answered"
 
         ctx["all_questions"] = self.all_questions

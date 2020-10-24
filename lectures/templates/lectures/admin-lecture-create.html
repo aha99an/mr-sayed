@@ -11,33 +11,41 @@
 
 
 
-<div class="after-add-more" style="text-align:right;" dir="rtl">
-     <div class="form-group change">
+    <div class="after-add-more" style="text-align:right;" dir="rtl">
+        <div class="form-group change">
             <a class="btn btn-success add-more">اضافة لينك اخر</a>
         </div>
         <div class="form-group">
             <label class="control-label">لينك المحاضرة</label>
-            <input maxlength="200" type="url" class="form-control" placeholder="ادخل لينك المحاضرة" name="lecture_links" />
+            <input maxlength="200" type="url" class="form-control" placeholder="ادخل لينك المحاضرة"
+                name="lecture_links" />
         </div>
-     
+
     </div>
 
-<input type="submit" class="button primary" value="انشاء محاضرة"
-    style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
-   
-<script>
-$(document).ready(function() {
-    $("body").on("click",".add-more",function(){ 
-        var html = $(".after-add-more").first().clone().find("input").val("ادخل لينك المحاضرة").end();      
-          $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
-        $(".after-add-more").last().after(html);
-    });
+    <input type="submit" class="button primary" value="انشاء محاضرة"
+        style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
 
-    $("body").on("click",".remove",function(){ 
-        $(this).parents(".after-add-more").remove();
-    });
-});
-</script>
+    <script>
+        $(document).ready(function () {
+            $("body").on("click", ".add-more", function () {
+                var html = $(".after-add-more").first().clone().find("input").val("ادخل لينك المحاضرة").end();
+                $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
+                $(".after-add-more").last().after(html);
+            });
+            cosnole.log("hello");
 
-   
+            $('.some_class').change(function () {
+                // console.log(e.target);
+                document.getElementById("id_week").style.visibility = "hidden";
+                cosnole.log("hello");
+            });
+            // $("body").on("click",".remove",function(){ 
+            //     $(this).parents(".after-add-more").remove();
+            // });
+        });
+
+    </script>
+
+
     {% endblock content %}

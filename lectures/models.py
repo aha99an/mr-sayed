@@ -12,6 +12,7 @@ class Lecture(models.Model):
         null=True, blank=True, verbose_name=" ملف الواجب في المحاضرة")
     examAnswerFile = models.FileField(
         null=True, blank=True, verbose_name=" ملف الامتحان في المحاضرة")
+    is_permanent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

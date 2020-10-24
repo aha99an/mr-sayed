@@ -8,7 +8,7 @@ from lectures.models import Lecture, StudentLectureMakeup
 
 def check_size(value):
     if len(value) < 11 and value.isdigit():
-        raise forms.ValidationError("please enter a valid phone number")
+        raise forms.ValidationError("الرقم الذي ادخلته غير صحيح")
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -59,6 +59,7 @@ class StudentChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('student_class', 'student_is_active')
+
 
 
 class test(forms.ModelForm):

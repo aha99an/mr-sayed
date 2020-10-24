@@ -26,6 +26,8 @@ class LectureListView(StudentPermission, ListView):
         queryset = Lecture.objects.none()
         mackup_lectures = StudentLectureMakeup.objects.filter(
             user=self.request.user)
+        # permenant lectures
+        queryset |= Lecture.objects.filter(is_permanent=True)
 
         if mackup_lectures:
             for lecture in mackup_lectures:
@@ -72,6 +74,9 @@ class LectureDetailView(StudentPermission, DetailView):
                         return True
                     else:
                         return False
+            # Permenant Lecture
+            if self.object.is_permanent:
+                return super().dispatch(request, *args, **kwargs)
 
             # Makeup Lecture
             if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):

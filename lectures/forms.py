@@ -15,8 +15,8 @@ class LectureCreateForm(forms.ModelForm):
         (False, 'غير مثبتة')
     )
     name = forms.CharField(label="اسم المحاضرة", required=True)
-    homeworkAnswerFile = forms.FileField(label=" نموذج اجابة الواجب السابق ")
-    examAnswerFile = forms.FileField(label="نموذج اجابة الامتحان السابق ")
+    homeworkAnswerFile = forms.FileField(label=" نموذج اجابة الواجب السابق ", required=False)
+    examAnswerFile = forms.FileField(label="نموذج اجابة الامتحان السابق ", required=False)
     week = forms.ModelChoiceField(
         queryset=Week.objects.all(), required=False, label="الأسبوع")
     lecture_allowed_time = forms.IntegerField(validators=[check_allowed_time, ],

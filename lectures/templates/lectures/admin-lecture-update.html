@@ -72,33 +72,38 @@
 <script>
 $(document).ready(function() {
     $("body").on("click",".add-more",function(){ 
-        var html = $(".after-add-more").first().clone();      
-          $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
-      
-      
+        var html = $(".after-add-more").first().clone().find("input").val("").end();      
+        $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
         $(".after-add-more").last().after(html);
       
     
     });
 
-    $("body").on("click",".remove",function(){ 
-        $(this).parents(".after-add-more").remove();
     });
-});
 $(document).ready(function() {
-    console.log("HELLO ANA0");
    // "{{ form.my_field.id_for_label }}"
-    //console.log(document.getElementById("id_is_permanent").value)
     a = document.getElementById("id_is_permanent").value;
     if(a == "True"){
             $('label[for="id_week"]').hide ();
             document.getElementById("id_week").style.display = "none";
             document.getElementById("id_lecture_allowed_time").style.display = "none";
+            document.getElementById("id_homeworkAnswerFile").style.display = "none";
+            document.getElementById("id_examAnswerFile").style.display = "none";
+            $('label[for="id_lecture_allowed_time"]').hide();
+            $('label[for="id_week"]').hide();
+            $('label[for="id_homeworkAnswerFile"]').hide();
+            $('label[for="id_examAnswerFile"]').hide();
+
 
     }else{
             document.getElementById("id_week").style.display = "block";
             document.getElementById("id_lecture_allowed_time").style.display = "block";
-
+            document.getElementById("id_homeworkAnswerFile").style.display = "block";
+            document.getElementById("id_examAnswerFile").style.display = "block";
+            $('label[for="id_lecture_allowed_time"]').show();
+            $('label[for="id_week"]').show();
+            $('label[for="id_homeworkAnswerFile"]').show();
+            $('label[for="id_examAnswerFile"]').show();
     }
 
     $('#id_is_permanent').change(function (e) {
@@ -109,10 +114,14 @@ $(document).ready(function() {
             for (i = 0; i < errors.length; i++) {
                 errors[i].style.display = "none";
             }}
-            $('label[for="id_week"]').hide();
             document.getElementById("id_week").style.display = "none";
-            $('label[for="id_lecture_allowed_time"]').hide();
             document.getElementById("id_lecture_allowed_time").style.display = "none";
+            document.getElementById("id_homeworkAnswerFile").style.display = "none";
+            document.getElementById("id_examAnswerFile").style.display = "none";
+            $('label[for="id_lecture_allowed_time"]').hide();
+            $('label[for="id_week"]').hide();
+            $('label[for="id_homeworkAnswerFile"]').hide();
+            $('label[for="id_examAnswerFile"]').hide();
 
         }
         else{
@@ -121,10 +130,14 @@ $(document).ready(function() {
             for (i = 0; i < errors.length; i++) {
                 errors[i].style.display = "block";
             }}
-            $('label[for="id_week"]').show();
             document.getElementById("id_week").style.display = "block";
-            $('label[for="id_lecture_allowed_time"]').show();
             document.getElementById("id_lecture_allowed_time").style.display = "block";
+            document.getElementById("id_homeworkAnswerFile").style.display = "block";
+            document.getElementById("id_examAnswerFile").style.display = "block";
+            $('label[for="id_lecture_allowed_time"]').show();
+            $('label[for="id_week"]').show();
+            $('label[for="id_homeworkAnswerFile"]').show();
+            $('label[for="id_examAnswerFile"]').show();
         }
             });
 });

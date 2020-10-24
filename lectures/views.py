@@ -28,7 +28,6 @@ class LectureListView(StudentPermission, ListView):
             user=self.request.user)
         # permenant lectures
         queryset |= Lecture.objects.filter(is_permanent=True)
-
         if mackup_lectures:
             for lecture in mackup_lectures:
                 queryset |= Lecture.objects.filter(id=lecture.lecture.id)

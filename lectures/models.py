@@ -7,7 +7,7 @@ class Lecture(models.Model):
     name = models.CharField(max_length=255)
     week = models.ForeignKey(
         Week, on_delete=models.SET_NULL, related_name="lecture", null=True, blank=True)
-    lecture_allowed_time = models.IntegerField(default=0)
+    lecture_allowed_time = models.IntegerField(default=0, null=True, blank=True)
     homeworkAnswerFile = models.FileField(
         null=True, blank=True, verbose_name=" ملف الواجب في المحاضرة")
     examAnswerFile = models.FileField(

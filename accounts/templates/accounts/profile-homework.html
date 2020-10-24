@@ -29,7 +29,7 @@
 {% endfor %}
 {% endif %}
 <!-- uploaded files -->
-
+{{object.id}}
 {% if object.student_homework_file %}
 <h3>الملفات المُسلمة</h3>
 <br>
@@ -62,16 +62,19 @@
     لم يتم حل الواجب
     {% endif %}
 
-    {% if object.notes %}
+   {% if object.notes or object.notes_file %}
     الملاحظات:
-    <br>
+   {% endif %}
+
+    {% if object.notes %}
+    <br/>
     {{object.notes}}
     {% endif %}
 
 {% if object.notes_file %}
-    الملاحظات:
-    <br>
-    {{object.notes_file}}
+    <br/>
+    <a href="{{object.notes_file.url}}"
+                        style="color: lightblue;">{{object.notes_file}}</a>
     {% endif %}
 
     {% endblock content %}

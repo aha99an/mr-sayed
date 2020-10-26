@@ -9,7 +9,9 @@
 {% block content2 %}
 <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
     <p>السؤال:</p>
+    {% if object.question %}
     <p>{{ object.question }}</p>
+    {% endif %}
     {% if object.image_question %}
     <a target="_blank" href="{{ object.image_question.url}}">
         

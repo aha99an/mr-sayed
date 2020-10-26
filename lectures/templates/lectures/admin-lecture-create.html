@@ -33,6 +33,9 @@
                 $(html).find(".change").html("<a class='btn btn-danger remove'>مسح اللينك</a>");
                 $(".after-add-more").last().after(html);
             });
+             $("body").on("click",".remove",function(){ 
+        $(this).parents(".after-add-more").remove();
+                });
         });
         $(document).ready(function() {
    // "{{ form.my_field.id_for_label }}"

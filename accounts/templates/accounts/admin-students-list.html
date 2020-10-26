@@ -111,10 +111,9 @@
       {% if page_obj.has_next %}
       <a class="next btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.next_page_number}}">التالي</a>
     {% endif %}
+    </div>
+    </div>
       </ul>
-    </div>
-    </div>
-    <span class="clear_both"></span>
     {% endblock %}
 
 {% comment %} 

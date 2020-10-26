@@ -13,15 +13,12 @@
      <div class="form-group change">
             <a class="btn btn-success add-more">اضافة لينك اخر</a>
         </div>
-    {% comment %} <div class="col-md-4">                                 {% endcomment %}
         <div class="form-group">
             <label class="control-label">لينك المحاضرة</label>
             <input maxlength="200" type="url" class="form-control" placeholder="ادخل لينك المحاضرة" name="lecture_links" />
         </div>
      
     </div>
-{% comment %} </div> {% endcomment %}
-
 
 <input type="submit" class="button primary" value="تعديل المحاضرة"
     style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
@@ -78,10 +75,8 @@ $(document).ready(function() {
       
     
     });
-
     });
 $(document).ready(function() {
-   // "{{ form.my_field.id_for_label }}"
     a = document.getElementById("id_is_permanent").value;
     if(a == "True"){
             $('label[for="id_week"]').hide ();

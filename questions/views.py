@@ -46,11 +46,10 @@ def upload_to_s3(request):
     file_only_name, file_extension = os.path.splitext(file_name)
     if len(file_only_name) > 50:
         file_only_name = file_only_name[:50] + "..."
-    username = request.user.username
-    if len(username) > 50:
-        username = username[:50] + "..."
-    image_name = "images/questions/" + file_only_name + \
-        username + "-" + lowercase_str[:6] + str(file_extension)
+    # username = request.user.username
+    # if len(username) > 50:
+    #     username = username[:50] + "..."
+    image_name = "images/questions/" + file_only_name + lowercase_str[:6] + str(file_extension)
 
     if file_name:
         s3 = boto3.client('s3')

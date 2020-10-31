@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import QuestionListView, QuestionCreateView, QuestionDetailView, upload_to_s3
+from .views import QuestionListView, QuestionCreateView, QuestionDetailView, upload_to_s3, mr_question_image_success_upload
 from .views_admin import AdminQuestionUpdateView, AdminQuestionListView, upload_to_s3_admin, delete_image_answer
 
 urlpatterns = [
@@ -14,9 +14,7 @@ urlpatterns = [
     path('generate-s3-signature-admin', upload_to_s3_admin,
          name="generate_s3_signature_admin"),
     path('delete-image-answer/<int:pk>/', delete_image_answer,
-         name="delete_image_answer")
-
-
-
-
+         name="delete_image_answer"),
+    path('mr-question-image-success-upload/', mr_question_image_success_upload,
+         name="mr_question_image_success_upload"),
 ]

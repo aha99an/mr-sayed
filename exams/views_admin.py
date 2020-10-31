@@ -121,7 +121,6 @@ class AdminChoiceQuestion(AdminPermission, DetailView):
             question_content = self.all_questions[self.question_pk]
         else:
             question_content = list(self.all_questions.values())[0]
-        print(question_content, "AAAAAAAAAAAAA")
         return question_content
 
     def get_context_data(self, *args, **kwargs):

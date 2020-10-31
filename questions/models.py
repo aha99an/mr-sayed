@@ -20,3 +20,4 @@ class MrQuestion(models.Model):
         if self.answer or self.image_answer:
             self.is_answered = True
         super(MrQuestion, self).save(*args, **kwargs)
+

@@ -20,8 +20,8 @@ def get_all_questions(exam_id, user):
 
     # get questions
     questions = OrderedDict()
-    exam_choice_qs = exam.choice_question.all().order_by("?")
-    exam_essay_qs = exam.essay_question.all().order_by("?")
+    exam_choice_qs = exam.choice_question.all()
+    exam_essay_qs = exam.essay_question.all()
     question_index = 1
 
     # Choice questions
@@ -144,12 +144,12 @@ class QuestionUpdateView(UpdateView):
 
         # SAVE RANDOM order of questions in student_exam model
         if not self.student_exam.questions:
-            self.student_exam.questions = self.all_questions = get_all_questions(
+            self.student_exam.questions = get_all_questions(
                 self.kwargs.get("exam_pk"), self.request.user)
             self.student_exam.save()
             self.student_exam.refresh_from_db()
         self.all_questions = eval(self.student_exam.questions)
-
+        # import ipdb; ipdb.set_trace()
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):

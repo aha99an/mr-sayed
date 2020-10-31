@@ -119,9 +119,7 @@ class StudentEssayAnswer(models.Model):
             self.is_answered = True
         else:
             self.is_answered = False
-        print(self.grade)
-        if self.grade:
-            print("HELLO THERE")
+
         super(StudentEssayAnswer, self).save(*args, **kwargs)
 
     class Meta:

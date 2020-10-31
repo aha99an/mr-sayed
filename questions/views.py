@@ -8,8 +8,7 @@ from django.shortcuts import redirect
 import os
 import json
 import boto3
-import random
-import uuid
+from datetime import datetime
 
 
 class QuestionListView (StudentPermission, ListView):
@@ -36,7 +35,6 @@ class QuestionCreateView(StudentPermission, CreateView):
 
 
 def upload_to_s3(request):
-    lowercase_str = uuid.uuid4().hex
     S3_BUCKET = 'mr-sayedabdelhamed2'
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
@@ -46,10 +44,11 @@ def upload_to_s3(request):
     file_only_name, file_extension = os.path.splitext(file_name)
     if len(file_only_name) > 50:
         file_only_name = file_only_name[:50] + "..."
+    now = datetime.now().timestamp()
     # username = request.user.username
     # if len(username) > 50:
     #     username = username[:50] + "..."
-    image_name = "images/questions/" + file_only_name + lowercase_str[:6] + str(file_extension)
+    image_name = "images/questions/" + file_only_name + "_" + str(now) + str(file_extension)
 
     if file_name:
         s3 = boto3.client('s3')
@@ -67,23 +66,19 @@ def upload_to_s3(request):
             'data': presigned_post,
             'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
         }
-        MrQuestion.objects.create(
-            question=question, user=request.user, image_question=image_name)
+        # MrQuestion.objects.create(
+        #     question=question, user=request.user, image_question=image_name)
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
         MrQuestion.objects.create(
             question=question, user=request.user)
         return redirect('student_questions')
 
-    # if request.method == 'GET':
-        # form = InvoiceForm(request.POST)
-        # if form.is_valid():
-        #     instance = form.save(commit=False)
-        #     instance.save()
-        #     return redirect('home2')
-
-    # else:
-    #     form = InvoiceForm()
-
-    # return render(request, 'home2.html', {'form': form,
-    #                                       'invoices': Invoice.objects.all()})
+def mr_question_image_success_upload(request):
+    image_name = request.GET.get('image_name')[7:]
+    question = request.GET.get('question')
+    if not question:
+        question = "سؤال بصورة"
+    MrQuestion.objects.create(
+        question=question, user=request.user, image_question=image_name)
+    return HttpResponse(status=201)

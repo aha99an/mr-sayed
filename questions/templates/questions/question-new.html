@@ -100,7 +100,7 @@
                     if (xhr.status === 200) {
                         var response = JSON.parse(xhr.responseText);
                         
-                        uploadFile(file, response.data, response.url);
+                        uploadFile(file, question, response.data, response.url);
                     }
                     else {
                         alert("Could not get signed URL.");
@@ -110,7 +110,7 @@
             xhr.send();
         }
 
-        function uploadFile(file, s3Data, url) {
+        function uploadFile(file, question, s3Data, url) {
             document.getElementById("loader-upload").style.visibility = "visible";
             var xhr = new XMLHttpRequest();
             xhr.open("POST", s3Data.url);
@@ -123,14 +123,20 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200 || xhr.status === 204) {
                         document.getElementById("loader-upload").style.visibility = "hidden";
-                         swal({
+                        var new_request = new XMLHttpRequest();
+                        new_request.open("GET", "{% url 'mr_question_image_success_upload'%}?image_name=" + s3Data.fields["key"] + "&question=" + question);
+                        new_request.onreadystatechange = function () {
+                            if (new_request.status === 201){
+                                swal({
                                 type: 'success',
                                 text: 'تم تسليم السؤال'
                             }
                             ).then(function () {
                                 window.location = "{% url 'student_questions' %}";
                             });
-
+                         }
+                        }
+                        new_request.send();
                     }
                     else {
                         alert("Could not upload file.");

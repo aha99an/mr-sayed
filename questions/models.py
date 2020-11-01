@@ -22,4 +22,4 @@ class MrQuestion(models.Model):
         super(MrQuestion, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.username + self.question
+        return self.user.username + "_" + str(self.id)

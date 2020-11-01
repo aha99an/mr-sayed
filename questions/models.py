@@ -21,3 +21,5 @@ class MrQuestion(models.Model):
             self.is_answered = True
         super(MrQuestion, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.user.username + self.question

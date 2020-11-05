@@ -64,7 +64,7 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
         ctx["reseted_password"] = ctx["student_user"].check_password(
             ctx["student_user"].random_password)
-        ctx["lectures"] = Lecture.objects.all()
+        ctx["lectures"] = Lecture.objects.filter(is_permanent=False)
         ctx["makeup_lectures"] = StudentLectureMakeup.objects.filter(
             user=ctx["student_user"])
 

@@ -66,7 +66,7 @@ class StudentHomeworkFile(models.Model):
 
 
 class StudentHomeworkMakeup(models.Model):
-    exam = models.ForeignKey(
+    homework = models.ForeignKey(
         Homework, on_delete=models.CASCADE, related_name="student_homework_makeup")
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="student_homework_makeup")

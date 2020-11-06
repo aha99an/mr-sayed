@@ -9,8 +9,8 @@ from home.permissions import AdminPermission
 from lectures.models import Lecture, StudentLectureMakeup
 from exams.models import Exam, StudentExamMakeup
 from django.db.models import Q
-import difflib
-
+# import difflib
+from homework.models import Homework, StudentHomeworkMakeup
 
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
@@ -71,6 +71,10 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
         ctx["exams"] = Exam.objects.all()
         ctx["makeup_exams"] = StudentExamMakeup.objects.filter(
             user=ctx["student_user"])
+
+        ctx["homeworks"] = Homework.objects.all()
+        ctx["makeup_homeworks"] = StudentHomeworkMakeup.objects.filter(
+            user=ctx["student_user"])
         return ctx
 
 
@@ -113,6 +117,24 @@ class ExamMakeupDeleteView(AdminPermission, DeleteView):
 
     def get_object(self):
         return StudentExamMakeup.objects.get(id=self.kwargs.get("makeup_exam_pk"))
+
+    def get_success_url(self):
+        return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
+
+
+def add_makeup_homework(request, pk):
+    if request.method == 'POST':
+        StudentHomeworkMakeup.objects.get_or_create(
+            user=CustomUser.objects.get(id=pk), homework=Homework.objects.get(id=int(request.POST.get("homework_id"))))
+
+    return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
+
+
+class HomeworkMakeupDeleteView(AdminPermission, DeleteView):
+    model = StudentHomeworkMakeup
+
+    def get_object(self):
+        return StudentHomeworkMakeup.objects.get(id=self.kwargs.get("makeup_homework_pk"))
 
     def get_success_url(self):
         return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})

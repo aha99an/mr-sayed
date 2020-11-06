@@ -4,7 +4,8 @@ from .views import (SignUpView, ProfileView, ExamQuestionDetailView,
 from .views_admin import (AdminStudentListView, AdminStudentUpdateView, reset_password,
                           add_makeup_lecture, LectureMakeupDeleteView, AdminAccountDeleteView, AdminMyProfileData,
                           AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam, StudentPaymentUpdateView,
-                          AdminStudentPaymentListView, StudentPaymentCreateView, AdminStudentPaymentDeleteView)
+                          AdminStudentPaymentListView, StudentPaymentCreateView, AdminStudentPaymentDeleteView,
+                          add_makeup_homework, HomeworkMakeupDeleteView)
 
 
 urlpatterns = [
@@ -27,6 +28,10 @@ urlpatterns = [
          name="admin_add_makeup_exam"),
     path('admin-delete-makeup-exam/delete/<int:makeup_exam_pk>/<int:student_pk>', ExamMakeupDeleteView.as_view(),
          name="delete_makeup_exam"),
+    path("admin-add-makeup-homework/<int:pk>", add_makeup_homework,
+         name="admin_add_makeup_homework"),
+    path('admin-delete-makeup-homework/delete/<int:makeup_homework_pk>/<int:student_pk>', HomeworkMakeupDeleteView.as_view(),
+         name="admin_delete_makeup_homework"),
     path('delete-account/<int:pk>/', AdminAccountDeleteView.as_view(),
          name="delete_account"),
     path("my-profile-data/<int:pk>", MyProfileDataUpdateView.as_view(),
@@ -43,5 +48,4 @@ urlpatterns = [
          name="admin_student_payment_create_view"),
     path("admin-student-payment-delete-view/<int:pk>/<int:student_pk>/", AdminStudentPaymentDeleteView.as_view(),
          name="admin_student_payment_delete_view"),
-
 ]

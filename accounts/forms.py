@@ -48,10 +48,10 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class StudentChangeForm(forms.ModelForm):
-    TRUE_FALSE_CHOICES = (
-        (True, 'مفعل'),
-        (False, 'غير مفعل')
-    )
+    # TRUE_FALSE_CHOICES = (
+    #     (True, 'مفعل'),
+    #     (False, 'غير مفعل')
+    # )
     # student_class = forms.CharField(label="المجموعة")
     # student_is_active = forms.ChoiceField(
     #     choices=TRUE_FALSE_CHOICES, label="التفعيل")

@@ -15,10 +15,12 @@ for user in users:
         user=user).last()
     if payment:
         if payment.last_lecture_attended:
-            if (now.date() - payment.last_lecture_attended).days >= 0 and payment.remainder_available_lectures <= 0:
+            if (now.date() - payment.last_lecture_attended).days >= 6 and payment.remainder_available_lectures <= 0:
                 user.student_is_active = False
-        if payment.remainder_available_lectures <= 0:
+                user.save()
+        elif payment.remainder_available_lectures <= 0:
             user.student_is_active = False
+            user.save()
     else:
         user.student_is_active = False
-    user.save()
+        user.save()

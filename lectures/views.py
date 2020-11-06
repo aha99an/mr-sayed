@@ -24,14 +24,17 @@ class LectureListView(StudentPermission, ListView):
         now = datetime.datetime.now()
         student_class = self.request.user.student_class
         queryset = Lecture.objects.none()
-        mackup_lectures = StudentLectureMakeup.objects.filter(
-            user=self.request.user)
+
         # permenant lectures
         queryset |= Lecture.objects.filter(is_permanent=True)
+
+        # Makeup lectures
+        mackup_lectures = StudentLectureMakeup.objects.filter(
+            user=self.request.user)
         if mackup_lectures:
             for lecture in mackup_lectures:
                 queryset |= Lecture.objects.filter(id=lecture.lecture.id)
-
+        # lectures
         if student_class.week_day == now.weekday() and student_class.start < now.time():
             now_minus_start_minutes = check_lecture_time(self.request.user)
             queryset |= Lecture.objects.filter(week__start__lte=now.date(),

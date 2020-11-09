@@ -1,7 +1,6 @@
 *.pyc
 .idea
 /notes.txt
-*.log
 /db.sqlite3
 .coverage
 /htmlcov

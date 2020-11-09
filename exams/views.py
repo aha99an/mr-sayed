@@ -12,6 +12,9 @@ from home.permissions import StudentPermission
 import json
 import collections
 from django.forms.models import model_to_dict
+import logging
+
+logger = logging.getLogger('requests')
 
 
 def get_all_questions(exam_id, user):
@@ -81,6 +84,13 @@ class ExamListView(StudentPermission, ListView):
         if mackup_exams:
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
+
+        logger.debug("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+                                                                                   now.weekday(),
+                                                                                   self.request.user.student_class.week_day,
+                                                                                   now.date(),
+                                                                                   Exam.objects.last().week.start,
+                                                                                   Exam.objects.last().week.end))
 
         if self.request.user.student_class.week_day == now.weekday():
             queryset |= Exam.objects.filter(

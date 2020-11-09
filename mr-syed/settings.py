@@ -170,3 +170,43 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 CRONJOBS = [
     ('59 23 * * *', 'accounts.cron.deactivate_users')
 ]
+
+ADMINS = (
+    ('yasser', 'yasser.aboelgheit@gmail.com')
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s | %(message)s'
+        },
+    },
+    'handlers': {
+        # 'console': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.StreamHandler',
+        #     'formatter': 'simple'
+        # },
+        # 'mail_admins': {
+        #     'level': 'DEBUG',
+        #     'class': 'django.utils.log.AdminEmailHandler'
+        # },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + '/logs/debug.log',
+            "formatter": "simple",
+        },
+    },
+
+    'loggers': {
+        'requests': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+    },
+}

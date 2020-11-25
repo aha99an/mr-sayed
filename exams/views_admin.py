@@ -200,9 +200,9 @@ class AdminExamUpdateView(AdminPermission, UpdateView):
         return ctx
 
 
-class AdminExamDeleteView(AdminPermission, DeleteView):
-    model = Exam
-    success_url = reverse_lazy('admin_add_exam_list')
+# class AdminExamDeleteView(AdminPermission, DeleteView):
+#     model = Exam
+#     success_url = reverse_lazy('admin_add_exam_list')
 
 
 class AdminChoiceQuestionCreateView(AdminPermission, CreateView):

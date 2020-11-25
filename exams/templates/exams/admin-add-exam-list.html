@@ -10,9 +10,9 @@
         <thead>
             <tr>
                 <th>الامتحان</th>
-                <th scope="col" style="text-align: center;">
+                {% comment %} <th scope="col" style="text-align: center;">
                     <h4>مسح</h4>
-                </th>
+                </th> {% endcomment %}
             </tr>
         </thead>
         <tbody>
@@ -25,17 +25,17 @@
                 {{ exam }}
                 </a>
                 </td>
-                <td style="text-align: center;">
+                {% comment %} <td style="text-align: center;">
                     <span>
                         <!-- delete_file -->
-                        <form method="post" action="{% url 'admin_delete_exam' exam.id %}"
+                        <form method="post" action="#"
                             style="margin: 0 0 0 0;">
                             {% csrf_token %}
                             <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
                                 style="background-color: red;">
                         </form>
                     </span>
-                </td>
+                </td> {% endcomment %}
             </tr>
                          
 

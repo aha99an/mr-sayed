@@ -5,7 +5,7 @@ from .views_admin import (AdminStudentListView, AdminStudentUpdateView, reset_pa
                           add_makeup_lecture, LectureMakeupDeleteView, AdminAccountDeleteView, AdminMyProfileData,
                           AdminMyProfileDataUpdateView, ExamMakeupDeleteView, add_makeup_exam, StudentPaymentUpdateView,
                           AdminStudentPaymentListView, StudentPaymentCreateView, AdminStudentPaymentDeleteView,
-                          add_makeup_homework, HomeworkMakeupDeleteView, AdminHomeworkDetailView)
+                          add_makeup_homework, HomeworkMakeupDeleteView)
 
 
 urlpatterns = [
@@ -17,8 +17,6 @@ urlpatterns = [
          ExamQuestionDetailView.as_view(), name="profile_exam_question"),
     path('profile-homework/<int:pk>/',
          HomeworkDetailView.as_view(), name="profile_homework"),
-    path('admin-profile-homework/<int:pk>/',
-         AdminHomeworkDetailView.as_view(), name="admin_profile_homework"),
     path("student/<int:pk>", AdminStudentUpdateView.as_view(),
          name="student_update_view"),
     path("admin-reset-password/<int:pk>", reset_password,

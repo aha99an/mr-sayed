@@ -248,14 +248,13 @@ def get_all_questions(exam_id, user):
 
 class AdminProfileView(AdminPermission, TemplateView):
     template_name = 'accounts/admin-profile.html'
+
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
-        student_exams = StudentExam.objects.filter(user=self.kwargs.get("pk"))
 
         # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
-        homeworks = StudentHomework.objects.filter(
-            user = self.kwargs.get("pk"))
+        homeworks = StudentHomework.objects.filter(user=self.kwargs.get("pk"))
 
         student_homeworks = []
         for student_homework in homeworks:
@@ -264,37 +263,6 @@ class AdminProfileView(AdminPermission, TemplateView):
                 answered = True
             student_homeworks.append({"student_homework": student_homework, "answered": answered})
 
-        ctx["student_exams"] = student_exams
+        ctx["student_exams"] = StudentExam.objects.filter(user=self.kwargs.get("pk"))
         ctx["student_homeworks"] = student_homeworks
         return ctx
-
-
-class AdminExamQuestionDetailView(AdminPermission, DetailView):
-    template_name = 'accounts/admin-profile-exam.html'
-
-    def get_object(self):
-        self.student_exam_pk = self.kwargs.get("student_exam_pk")
-        student_exam = StudentExam.objects.get(id=self.student_exam_pk)
-        student_exam.is_graded = True
-        student_exam.save()
-        self.question_pk = self.kwargs.get("question_pk")
-        self.all_questions = get_all_questions(
-            student_exam.exam.id, student_exam.self.kwargs.get("pk"))
-        question_content = self.all_questions[self.question_pk]
-        return question_content
-
-    def get_context_data(self, *args, **kwargs):
-        ctx = super().get_context_data(*args, **kwargs)
-        ctx["all_questions"] = self.all_questions
-        ctx["student_exam_pk"] = self.student_exam_pk
-        if self.question_pk:
-            ctx["question_pk"] = self.question_pk
-        else:
-            ctx["question_pk"] = 1
-        return ctx
-
-
-class AdminHomeworkDetailView(AdminPermission, DetailView):
-    template_name = 'accounts/admin-profile-homework.html'
-    model = StudentHomework
-    

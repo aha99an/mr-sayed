@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, ListView, DeleteView, CreateView
+from django.views.generic import UpdateView, ListView, DeleteView, CreateView, TemplateView, DetailView
 from .models import CustomUser, StudentPayment
 from .forms import StudentChangeForm, test, AdminMyProfileData, AdminStudentPayment, AdminStudentPaymentUpdateForm
 from classes.models import Class
@@ -7,10 +7,13 @@ from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
 from lectures.models import Lecture, StudentLectureMakeup
-from exams.models import Exam, StudentExamMakeup
+from exams.models import Exam, StudentExamMakeup, StudentExam
 from django.db.models import Q
 # import difflib
-from homework.models import Homework, StudentHomeworkMakeup
+from homework.models import Homework, StudentHomeworkMakeup, StudentHomework
+from django.utils import timezone
+from datetime import datetime
+now = datetime.now()
 
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
@@ -196,3 +199,70 @@ class AdminStudentPaymentDeleteView(AdminPermission, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})
+
+def get_all_questions(exam_id, user):
+    exam = Exam.objects.get(id=exam_id)
+    student_exam = exam.student_exam.filter(id = self.kwargs.get("pk")).last()
+
+    # get questions
+    questions = OrderedDict()
+    exam_choice_qs = exam.choice_question.all()
+    exam_essay_qs = exam.essay_question.all()
+    question_index = 1
+
+    # Choice questions
+    for question in exam_choice_qs:
+        # question status
+        answer = ""
+        student_choice_answer = question.student_choice_answer.filter(
+            student_exam=student_exam).last()
+        if student_choice_answer:
+            if student_choice_answer.answer:
+                answer = student_choice_answer
+
+        questions[question_index] = {"url": "choice_question",
+                                     "type": "choice_question",
+                                     "question": question,
+                                     "answer": answer,
+                                     "answer_model": StudentChoiceAnswer,
+                                     }
+        question_index += 1
+
+    for question in exam_essay_qs:
+        # question status
+        answer = ""
+        student_essay_answer = question.student_essay_answer.last()
+        if student_essay_answer:
+            if student_essay_answer.answer or student_essay_answer.image_answer:
+                answer = student_essay_answer
+
+        questions[question_index] = {"url": "essay_question",
+                                     "type": "essay_question",
+                                     "question": question,
+                                     "answer": answer,
+                                     "answer_model": StudentEssayAnswer}
+        question_index += 1
+
+    return questions
+
+
+class AdminProfileView(AdminPermission, TemplateView):
+    template_name = 'accounts/admin-profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
+
+        # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
+        homeworks = StudentHomework.objects.filter(user=self.kwargs.get("pk"))
+
+        student_homeworks = []
+        for student_homework in homeworks:
+            answered = False
+            if student_homework.student_homework_file.all():
+                answered = True
+            student_homeworks.append({"student_homework": student_homework, "answered": answered})
+
+        ctx["student_exams"] = StudentExam.objects.filter(user=self.kwargs.get("pk"))
+        ctx["student_homeworks"] = student_homeworks
+        return ctx

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<h2>{{student_user.first_name}}</h2>
+{% endblock %}
+
+{% block content %}
+   <!-- Body -->
+        <div class="profile-content">
+
+            <!-- Exams -->
+            <div class="table-wrapper">
+                <table DIR="RTL">
+                    <thead>
+                        <tr>
+                            <th >الامتحان</th>
+                            <th>الدرجة (درجة الطالب/درجة الامتحان)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for exam in student_exams %}
+                        <tr>
+                            <td >
+                            {% if exam.exam.is_past_week %}
+                            
+                                <a href="{% url 'admin_choice_question' exam.id 1 %}"
+                                    style="color: lightblue;">
+                                    {{ exam.exam }}</a>
+                            {% else %}
+                                {{ exam.exam }}
+                            {% endif %}
+                            </td>
+                            <td>
+                                {% if exam.is_graded %}
+                                <div>
+                                {{exam.exam.grade|floatformat}}/{{exam.grade|floatformat}}
+                                </div>
+                                {% else %}
+                                  لم يمتحن
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+
+                </table>
+
+            </div>
+                    <hr>
+                    <!-- Homeworks -->
+                    <div class="table-wrapper">
+                <table DIR="RTL">
+                    <thead>
+                        <tr>
+                            <th>الواجب</th>
+                            <th>تم الحل؟</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for student_homework in student_homeworks %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'admin_check_homework' student_homework.student_homework.id %}"
+                                    style="color: lightblue;">
+                                    {{ student_homework.student_homework.homework.name }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if student_homework.answered %}
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div class="check"></div>
+                                {% else %}
+                                    &nbsp&nbsp&nbsp&nbsp&#10060;
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}

@@ -7,6 +7,8 @@ from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
 import datetime
 
+EIGHT_HOURS_IN_MINUTES = 8 * 60
+MAKEUP_LECTURE_EXPIRATION_DURATION = EIGHT_HOURS_IN_MINUTES
 
 def check_lecture_time(user):
     now = datetime.datetime.now()
@@ -16,6 +18,12 @@ def check_lecture_time(user):
                                - datetime.datetime.combine(today, student_class.start)).total_seconds() / 60
     return now_minus_start_minutes
 
+def is_makeup_lecture_expired(student_lecture_seen_at):
+    now = datetime.datetime.now()
+    today = datetime.date.today()
+    student_lecture_time_diff = (datetime.datetime.combine(today, now.time())
+                               - datetime.datetime.combine(today, student_lecture_seen_at.time())).total_seconds() / 60
+    return False if student_lecture_time_diff < MAKEUP_LECTURE_EXPIRATION_DURATION else True
 
 class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
@@ -33,7 +41,12 @@ class LectureListView(StudentPermission, ListView):
             user=self.request.user)
         if mackup_lectures:
             for lecture in mackup_lectures:
-                queryset |= Lecture.objects.filter(id=lecture.lecture.id)
+                mackup_student_lecture = StudentLecture.objects.filter(lecture=lecture.lecture, user=self.request.user).last()
+                if mackup_student_lecture and mackup_student_lecture.seen_at != None:
+                    if not is_makeup_lecture_expired(mackup_student_lecture.seen_at):
+                        queryset |= Lecture.objects.filter(id=lecture.lecture.id)
+                else:
+                    queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
         if student_class.week_day == now.weekday() and student_class.start < now.time():
             now_minus_start_minutes = check_lecture_time(self.request.user)
@@ -70,6 +83,10 @@ class LectureDetailView(StudentPermission, DetailView):
                         # save student payment in lecture class
                         student_lecture.student_payment = payment
                         student_lecture.save()
+                    else:
+                        if student_lecture.seen_at == None:
+                            student_lecture.seen_at = now
+                            student_lecture.save()
                     return True
                 else:
                     if StudentLecture.objects.filter(user=request.user, lecture=self.object):

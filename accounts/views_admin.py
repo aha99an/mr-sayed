@@ -91,8 +91,16 @@ def reset_password(request, pk):
 
 def add_makeup_lecture(request, pk):
     if request.method == 'POST':
+        lecture_id = int(request.POST.get("lecture_id"))
+        user = CustomUser.objects.get(id=pk)
+        
         StudentLectureMakeup.objects.get_or_create(
-            user=CustomUser.objects.get(id=pk), lecture=Lecture.objects.get(id=int(request.POST.get("lecture_id"))))
+            user=user, lecture=Lecture.objects.get(id=lecture_id))
+
+        student_lecture = StudentLecture.objects.filter(lecture=lecture_id, user=user).last()
+        if student_lecture:
+            student_lecture.seen_at = None
+            student_lecture.save()
 
     return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
 

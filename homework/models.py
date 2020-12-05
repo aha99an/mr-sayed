@@ -75,3 +75,6 @@ class StudentHomeworkMakeup(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="student_homework_makeup")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('created_at',)

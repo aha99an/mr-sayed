@@ -200,51 +200,6 @@ class AdminStudentPaymentDeleteView(AdminPermission, DeleteView):
     def get_success_url(self):
         return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})
 
-def get_all_questions(exam_id, user):
-    exam = Exam.objects.get(id=exam_id)
-    student_exam = exam.student_exam.filter(id=self.kwargs.get("pk")).last()
-
-    # get questions
-    questions = OrderedDict()
-    exam_choice_qs = exam.choice_question.all()
-    exam_essay_qs = exam.essay_question.all()
-    question_index = 1
-
-    # Choice questions
-    for question in exam_choice_qs:
-        # question status
-        answer = ""
-        student_choice_answer = question.student_choice_answer.filter(
-            student_exam=student_exam).last()
-        if student_choice_answer:
-            if student_choice_answer.answer:
-                answer = student_choice_answer
-
-        questions[question_index] = {"url": "choice_question",
-                                     "type": "choice_question",
-                                     "question": question,
-                                     "answer": answer,
-                                     "answer_model": StudentChoiceAnswer,
-                                     }
-        question_index += 1
-
-    for question in exam_essay_qs:
-        # question status
-        answer = ""
-        student_essay_answer = question.student_essay_answer.last()
-        if student_essay_answer:
-            if student_essay_answer.answer or student_essay_answer.image_answer:
-                answer = student_essay_answer
-
-        questions[question_index] = {"url": "essay_question",
-                                     "type": "essay_question",
-                                     "question": question,
-                                     "answer": answer,
-                                     "answer_model": StudentEssayAnswer}
-        question_index += 1
-
-    return questions
-
 
 class AdminProfileView(AdminPermission, TemplateView):
     template_name = 'accounts/admin-profile.html'
@@ -254,35 +209,30 @@ class AdminProfileView(AdminPermission, TemplateView):
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
 
         # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
-        all_homeworks = Homework.objects.all()
         homeworks = []
         exams = []
+        
+        #add homeworks 
+        all_homeworks = Homework.objects.all()
         for homework in all_homeworks:
+            answered = False
             student_homework = StudentHomework.objects.filter(
                 user=self.kwargs.get("pk"), homework=homework).last()
-            answered = False
             if student_homework and student_homework.student_homework_file.all():
                 answered = True
             homeworks.append({"homework": homework, "answered": answered})
 
+        # add exams
         all_exams = Exam.objects.all()
         for exam in all_exams:
+            exam_answered = False
             student_exam = StudentExam.objects.filter(
                 user=self.kwargs.get("pk"), exam=exam).last()
-            exam_answered = False
-            student_exam_grade = None
             exam_grade = exam.grade
-            show_grade = False
+            exam_answered = False
             if student_exam:
                 exam_answered = True
-                student_exam_grade = student_exam.grade
-                show_grade = False if student_exam.grade == None else True
-            else:
-                exam_answered = False
-            print(student_exam_grade, show_grade)
-            exams.append({"exam": exam, "answered": exam_answered, "student_exam": student_exam,
-                        "show_grade": show_grade,
-                          "student_exam_grade": student_exam_grade})
+            exams.append({"exam": exam, "student_exam": student_exam})
 
         ctx["homeworks"] = homeworks
         ctx["exams"] = exams

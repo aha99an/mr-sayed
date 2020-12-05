@@ -31,9 +31,9 @@
                             {% endif %}
                             </td>
                             <td>
-                                {% if studentexam.show_grade %}
+                                {% if studentexam.student_exam.is_graded %}
                                 <div>
-                                {{studentexam.exam.grade|floatformat}}/{{studentexam.student_exam_grade|floatformat}}
+                                {{studentexam.exam.grade|floatformat}}/{{studentexam.student_exam.grade|floatformat}}
                                 </div>
                                 {% else %}
                                   لم يمتحن

@@ -62,9 +62,13 @@
                         {% for i in homeworks %}
                         <tr>
                             <td>
+                             {% if i.answered %}
                                 <a href="{% url 'admin_check_homework' i.homework.id %}"
                                     style="color: lightblue;">
                                     {{ i.homework.name }}
+                                {% else %}
+                                {{ i.homework.name }}
+                                {% endif %}
                                 </a>
                             </td>
                             <td>

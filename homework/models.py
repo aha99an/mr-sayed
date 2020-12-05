@@ -21,6 +21,9 @@ class Homework(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('created_at',)
+
 
 class StudentHomework(models.Model):
     user = models.ForeignKey(
@@ -70,3 +73,5 @@ class StudentHomeworkMakeup(models.Model):
         Homework, on_delete=models.CASCADE, related_name="student_homework_makeup")
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="student_homework_makeup")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

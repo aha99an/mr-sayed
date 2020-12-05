@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
-from lectures.models import Lecture, StudentLectureMakeup
+from lectures.models import Lecture, StudentLectureMakeup, StudentLecture
 from exams.models import Exam, StudentExamMakeup, StudentExam
 from django.db.models import Q
 # import difflib
@@ -202,7 +202,7 @@ class AdminStudentPaymentDeleteView(AdminPermission, DeleteView):
 
 def get_all_questions(exam_id, user):
     exam = Exam.objects.get(id=exam_id)
-    student_exam = exam.student_exam.filter(id = self.kwargs.get("pk")).last()
+    student_exam = exam.student_exam.filter(id=self.kwargs.get("pk")).last()
 
     # get questions
     questions = OrderedDict()
@@ -254,15 +254,36 @@ class AdminProfileView(AdminPermission, TemplateView):
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
 
         # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
-        homeworks = StudentHomework.objects.filter(user=self.kwargs.get("pk"))
-
-        student_homeworks = []
-        for student_homework in homeworks:
+        all_homeworks = Homework.objects.all()
+        homeworks = []
+        exams = []
+        for homework in all_homeworks:
+            student_homework = StudentHomework.objects.filter(
+                user=self.kwargs.get("pk"), homework=homework).last()
             answered = False
-            if student_homework.student_homework_file.all():
+            if student_homework and student_homework.student_homework_file.all():
                 answered = True
-            student_homeworks.append({"student_homework": student_homework, "answered": answered})
+            homeworks.append({"homework": homework, "answered": answered})
 
-        ctx["student_exams"] = StudentExam.objects.filter(user=self.kwargs.get("pk"))
-        ctx["student_homeworks"] = student_homeworks
+        all_exams = Exam.objects.all()
+        for exam in all_exams:
+            student_exam = StudentExam.objects.filter(
+                user=self.kwargs.get("pk"), exam=exam).last()
+            exam_answered = False
+            student_exam_grade = None
+            exam_grade = exam.grade
+            show_grade = False
+            if student_exam:
+                exam_answered = True
+                student_exam_grade = student_exam.grade
+                show_grade = False if student_exam.grade == None else True
+            else:
+                exam_answered = False
+            print(student_exam_grade, show_grade)
+            exams.append({"exam": exam, "answered": exam_answered, "student_exam": student_exam,
+                        "show_grade": show_grade,
+                          "student_exam_grade": student_exam_grade})
+
+        ctx["homeworks"] = homeworks
+        ctx["exams"] = exams
         return ctx

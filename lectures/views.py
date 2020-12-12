@@ -6,22 +6,33 @@ from home.permissions import StudentPermission
 from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
 import datetime
+from django.utils import timezone
 
-
+EIGHT_HOURS_IN_MINUTES = 8 * 60
+MAKEUP_LECTURE_EXPIRATION_DURATION = EIGHT_HOURS_IN_MINUTES
+now = timezone.now()
 def check_lecture_time(user):
-    now = datetime.datetime.now()
+    # now = datetime.datetime.now()
     student_class = user.student_class
     today = datetime.date.today()
     now_minus_start_minutes = (datetime.datetime.combine(today, now.time())
                                - datetime.datetime.combine(today, student_class.start)).total_seconds() / 60
     return now_minus_start_minutes
 
+def is_makeup_lecture_expired(student_lecture):
+    # now = datetime.datetime.now()
+    today = datetime.date.today()
+    student_lecture_time_diff = (datetime.datetime.combine(today, now.time())
+                               - datetime.datetime.combine(today, student_lecture.seen_at.time())).total_seconds() / 60
+    print(student_lecture_time_diff)
+    print(student_lecture.lecture.lecture_allowed_time)
+    return False if student_lecture_time_diff < student_lecture.lecture.lecture_allowed_time else True
 
 class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
 
     def get_queryset(self):
-        now = datetime.datetime.now()
+        # now = datetime.datetime.now()
         student_class = self.request.user.student_class
         queryset = Lecture.objects.none()
 
@@ -33,7 +44,12 @@ class LectureListView(StudentPermission, ListView):
             user=self.request.user)
         if mackup_lectures:
             for lecture in mackup_lectures:
-                queryset |= Lecture.objects.filter(id=lecture.lecture.id)
+                mackup_student_lecture = StudentLecture.objects.filter(lecture=lecture.lecture, user=self.request.user).last()
+                if mackup_student_lecture and mackup_student_lecture.seen_at is not None:
+                    if not is_makeup_lecture_expired(mackup_student_lecture):
+                        queryset |= Lecture.objects.filter(id=lecture.lecture.id)
+                else:
+                    queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
         if student_class.week_day == now.weekday() and student_class.start < now.time():
             now_minus_start_minutes = check_lecture_time(self.request.user)
@@ -52,7 +68,7 @@ class LectureDetailView(StudentPermission, DetailView):
 
         if request.user.is_authenticated:
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
-            now = datetime.datetime.now()
+            # now = datetime.datetime.now()
             student_class = self.request.user.student_class
 
             def handle_student_payment():
@@ -69,7 +85,12 @@ class LectureDetailView(StudentPermission, DetailView):
                         payment.save()
                         # save student payment in lecture class
                         student_lecture.student_payment = payment
+                        student_lecture.seen_at = now
                         student_lecture.save()
+                    else:
+                        if student_lecture.seen_at is None:
+                            student_lecture.seen_at = now
+                            student_lecture.save()
                     return True
                 else:
                     if StudentLecture.objects.filter(user=request.user, lecture=self.object):
@@ -81,10 +102,23 @@ class LectureDetailView(StudentPermission, DetailView):
                 return super().dispatch(request, *args, **kwargs)
 
             # Makeup Lecture
-            if StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object):
+            student_makeup_lecture = StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object).last()
+            if student_makeup_lecture:
+                mackup_student_lecture = StudentLecture.objects.filter(lecture=self.object, user=self.request.user).last()
                 # subtract one from the avilable lecture to student
-                handle_student_payment()
-                return super().dispatch(request, *args, **kwargs)
+                if mackup_student_lecture:
+                    # check seen_at time if not exist then it is the first time student watches the lecture
+                    if mackup_student_lecture.seen_at is not None:
+                        if not is_makeup_lecture_expired(mackup_student_lecture):
+                            return super().dispatch(request, *args, **kwargs)
+                    else:
+                        mackup_student_lecture.seen_at = now
+                        mackup_student_lecture.save()
+                        return super().dispatch(request, *args, **kwargs)
+                else:
+                    handle_student_payment()
+
+                    return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)

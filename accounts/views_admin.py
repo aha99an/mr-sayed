@@ -6,10 +6,9 @@ from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
-from lectures.models import Lecture, StudentLectureMakeup
+from lectures.models import Lecture, StudentLectureMakeup, StudentLecture
 from exams.models import Exam, StudentExamMakeup, StudentExam
 from django.db.models import Q
-# import difflib
 from homework.models import Homework, StudentHomeworkMakeup, StudentHomework
 from django.utils import timezone
 from datetime import datetime

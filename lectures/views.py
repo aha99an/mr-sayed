@@ -116,9 +116,8 @@ class LectureDetailView(StudentPermission, DetailView):
                         mackup_student_lecture.save()
                         return super().dispatch(request, *args, **kwargs)
                 else:
-                    handle_student_payment()
-
-                    return super().dispatch(request, *args, **kwargs)
+                    if handle_student_payment():
+                        return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)

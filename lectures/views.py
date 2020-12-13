@@ -13,9 +13,8 @@ import logging
 logger = logging.getLogger('requests')
 
 
-now = datetime.datetime.now()
 def check_lecture_time(user):
-    # now = datetime.datetime.now()
+    now = datetime.datetime.now()
     student_class = user.student_class
     today = datetime.date.today()
     now_minus_start_minutes = (datetime.datetime.combine(today, now.time())
@@ -23,7 +22,7 @@ def check_lecture_time(user):
     return now_minus_start_minutes
 
 def is_makeup_lecture_expired(student_lecture):
-    # now = datetime.datetime.now()
+    now = datetime.datetime.now()
     today = datetime.date.today()
     student_lecture_time_diff = (datetime.datetime.combine(today, now.time())
                                - datetime.datetime.combine(today, student_lecture.seen_at.time())).total_seconds() / 60
@@ -33,7 +32,7 @@ class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
 
     def get_queryset(self):
-        # now = datetime.datetime.now()
+        now = datetime.datetime.now()
         student_class = self.request.user.student_class
         queryset = Lecture.objects.none()
 
@@ -79,7 +78,7 @@ class LectureDetailView(StudentPermission, DetailView):
 
         if request.user.is_authenticated:
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
-            # now = datetime.datetime.now()
+            now = datetime.datetime.now()
             student_class = self.request.user.student_class
 
             def handle_student_payment():

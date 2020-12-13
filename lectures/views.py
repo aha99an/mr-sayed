@@ -8,8 +8,7 @@ from django.shortcuts import redirect
 import datetime
 from django.utils import timezone
 
-EIGHT_HOURS_IN_MINUTES = 8 * 60
-MAKEUP_LECTURE_EXPIRATION_DURATION = EIGHT_HOURS_IN_MINUTES
+
 now = datetime.datetime.now()
 def check_lecture_time(user):
     # now = datetime.datetime.now()

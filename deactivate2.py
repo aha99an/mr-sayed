@@ -33,8 +33,7 @@ for user in users:
 
 @transaction.atomic
 def check_all_exams_not_graded():
-    # student_exams = StudentExam.objects.filter(is_graded=False)
-    student_exams = StudentExam.objects.all()
+    student_exams = StudentExam.objects.filter(is_graded=False)
     for student_exam in student_exams:
         if student_exam.expiry_time < timezone.now():
             student_exam.grade = StudentChoiceAnswer.objects.filter(

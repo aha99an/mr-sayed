@@ -51,16 +51,16 @@ class LectureListView(StudentPermission, ListView):
                 else:
                     queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
-        logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
-                                                                                                  student_class.start,
-                                                                                                  now.time(),
-                                                                                                  check_lecture_time(self.request.user)
-                                                                                                  ))
-        Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
-                                                                                                  student_class.start,
-                                                                                                  now.time(),
-                                                                                                  check_lecture_time(self.request.user)
-                                                                                                  ))
+        # logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+        #                                                                                           student_class.start,
+        #                                                                                           now.time(),
+        #                                                                                           check_lecture_time(self.request.user)
+        #                                                                                           ))
+        # Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+        #                                                                                           student_class.start,
+        #                                                                                           now.time(),
+        #                                                                                           check_lecture_time(self.request.user)
+        #                                                                                           ))
         if student_class.week_day == now.weekday() and student_class.start < now.time():
             now_minus_start_minutes = check_lecture_time(self.request.user)
             queryset |= Lecture.objects.filter(week__start__lte=now.date(),

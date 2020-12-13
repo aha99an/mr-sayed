@@ -9,7 +9,7 @@ import datetime
 from django.utils import timezone
 import logging
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger('requests')
 
 
 now = datetime.datetime.now()

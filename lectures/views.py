@@ -7,6 +7,9 @@ from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
 import datetime
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger('requests')
 
 
 now = datetime.datetime.now()
@@ -29,6 +32,7 @@ class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
 
     def get_queryset(self):
+        logger.exception("HELLO")
         # now = datetime.datetime.now()
         student_class = self.request.user.student_class
         queryset = Lecture.objects.none()

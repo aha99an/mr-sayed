@@ -10,7 +10,7 @@ from django.utils import timezone
 
 EIGHT_HOURS_IN_MINUTES = 8 * 60
 MAKEUP_LECTURE_EXPIRATION_DURATION = EIGHT_HOURS_IN_MINUTES
-now = timezone.now()
+now = datetime.datetime.now()
 def check_lecture_time(user):
     # now = datetime.datetime.now()
     student_class = user.student_class
@@ -24,8 +24,6 @@ def is_makeup_lecture_expired(student_lecture):
     today = datetime.date.today()
     student_lecture_time_diff = (datetime.datetime.combine(today, now.time())
                                - datetime.datetime.combine(today, student_lecture.seen_at.time())).total_seconds() / 60
-    print(student_lecture_time_diff)
-    print(student_lecture.lecture.lecture_allowed_time)
     return False if student_lecture_time_diff < student_lecture.lecture.lecture_allowed_time else True
 
 class LectureListView(StudentPermission, ListView):

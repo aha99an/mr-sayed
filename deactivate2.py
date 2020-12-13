@@ -14,7 +14,7 @@ from django.db.models import Sum
 users = CustomUser.objects.filter(student_is_active=True)
 now = datetime.now()
 one_week_ago = datetime.today() - timedelta(days=7)
-
+from django.utils import timezone
 for user in users:
     payment = StudentPayment.objects.filter(
         user=user).last()
@@ -33,13 +33,15 @@ for user in users:
 
 @transaction.atomic
 def check_all_exams_not_graded():
-    student_exams = StudentExam.objects.filter(is_graded=False)
+    # student_exams = StudentExam.objects.filter(is_graded=False)
+    student_exams = StudentExam.objects.all()
     for student_exam in student_exams:
-        student_exam.grade = StudentChoiceAnswer.objects.filter(
-            student_exam=student_exam).aggregate(
-                Sum('grade'))["grade__sum"]
-        student_exam.is_graded = True
-        student_exam.save()
+        if student_exam.expiry_time < timezone.now():
+            student_exam.grade = StudentChoiceAnswer.objects.filter(
+                student_exam=student_exam).aggregate(
+                    Sum('grade'))["grade__sum"]
+            student_exam.is_graded = True
+            student_exam.save()
 check_all_exams_not_graded()
 
 

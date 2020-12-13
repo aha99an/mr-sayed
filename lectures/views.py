@@ -7,6 +7,7 @@ from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
 import datetime
 from django.utils import timezone
+from home.models import Test
 import logging
 
 logger = logging.getLogger('requests')
@@ -52,6 +53,11 @@ class LectureListView(StudentPermission, ListView):
                     queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
         logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+                                                                                                  student_class.start,
+                                                                                                  now.time(),
+                                                                                                  check_lecture_time(self.request.user)
+                                                                                                  ))
+        Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
                                                                                                   student_class.start,
                                                                                                   now.time(),
                                                                                                   check_lecture_time(self.request.user)

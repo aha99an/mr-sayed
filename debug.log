@@ -1,1 +1,4 @@
 DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:20:21:16.942066, check_lecture_time:621.2823677666668
+DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:15:42.557606, check_lecture_time:-584.2907065666666
+DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:16:14.122204, check_lecture_time:-583.7646299333334
+DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:16:30.259665, check_lecture_time:-583.49567225

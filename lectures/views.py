@@ -140,6 +140,6 @@ class LectureDetailView(StudentPermission, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        lecture = Lecture.objects.get(id=self.kwargs["pk"])
+        lecture = Lecture.objects.filter(id=self.kwargs["pk"]).last()
         ctx["links"] = lecture.lecture_link.all()
         return ctx

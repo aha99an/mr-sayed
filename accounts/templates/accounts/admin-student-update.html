@@ -7,7 +7,21 @@
 <p>ايميل الطالب: {{student_user}} </p>
 {% if reseted_password %}
 الباسورد الجديد للطالب: {{student_user.random_password}}
+
+
+<br />
+<button onclick="myFunction()"    class="button primary"  >
+Verify
+</button>
+
+
+<a id="myBtn"   href ="{% url 'student_reset_password' student_user.id %}" class="button primary "  
+    style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%; pointer-events: none">تغيير الباسورد</a>
+  <hr />
+
 {% endif %}
+
+
 <br/>
  <a href="{% url 'admin_student_payment_list_view' student_user.id%}">
                         <button type="button" class="button primary">
@@ -19,9 +33,7 @@
     <input type="submit" class="button primary" value="تغيير البيانات"
     style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
 </form>
-<a href ="{% url 'student_reset_password' student_user.id %}" class="button primary" 
-    style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تغيير الباسورد</a>
-  <hr />
+
 
 <form method="post" action="{% url 'admin_add_makeup_lecture' student_user.id %}">
 {% csrf_token %}
@@ -210,4 +222,17 @@
                                 style="background-color: #ff0000; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
                         </form>
 
+
+
+
+<script>
+function myFunction() {
+    console.log('test')
+  var password = prompt("Please enter your password");
+  if (password === "Ahmed") {
+      document.getElementById("myBtn").style["pointer-events"] = "auto";
+
+}}
+</script>
     {% endblock %}
+

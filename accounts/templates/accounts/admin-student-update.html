@@ -8,7 +8,7 @@
 {% if reseted_password %}
 الباسورد الجديد للطالب: {{student_user.random_password}}
 
-
+{% endif %}
 <br />
 <button onclick="myFunction()"    class="button primary"  >
 Verify
@@ -18,8 +18,6 @@ Verify
 <a id="myBtn"   href ="{% url 'student_reset_password' student_user.id %}" class="button primary "  
     style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%; pointer-events: none">تغيير الباسورد</a>
   <hr />
-
-{% endif %}
 
 
 <br/>

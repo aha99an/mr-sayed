@@ -71,11 +71,11 @@ def set_expiry_date(student_exam):
     return
 
 
-now = datetime.now()
 
 
 class ExamListView(StudentPermission, ListView):
     template_name = "exams/exam-list.html"
+    now = datetime.now()
 
     def get_queryset(self):
         queryset = Exam.objects.none()
@@ -119,6 +119,7 @@ class QuestionUpdateView(UpdateView):
     model = StudentEssayAnswer
     template_name = 'exams/question.html'
     # form_class = StudentEssayAnswerForm
+    now = datetime.now()
 
     def dispatch(self, request, *args, **kwargs):
         # check permissions

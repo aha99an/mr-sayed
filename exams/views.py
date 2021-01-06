@@ -85,16 +85,16 @@ class ExamListView(StudentPermission, ListView):
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
 
-        # logger.debug("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
-        #                                                                            now.weekday(),
+        # logger.debug("%s, self.now weekday: %s, student week day: %s , self.now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+        #                                                                            self.now.weekday(),
         #                                                                            self.request.user.student_class.week_day,
-        #                                                                            now.date(),
+        #                                                                            self.now.date(),
         #                                                                            Exam.objects.last().week.start,
         #                                                                            Exam.objects.last().week.end))
 
-        if self.request.user.student_class.week_day == now.weekday():
+        if self.request.user.student_class.week_day == self.now.weekday():
             queryset |= Exam.objects.filter(
-                week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
+                week__start__lte=self.now.date(), week__end__gte=self.now.date(), is_active=True)
 
         return queryset
 
@@ -139,8 +139,8 @@ class QuestionUpdateView(UpdateView):
         # get exam and check if its time is due
         if not self.exam:
             self.exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"),
-                                            week__start__lte=now.date(),
-                                            week__end__gte=now.date(), is_active=True).last()
+                                            week__start__lte=self.now.date(),
+                                            week__end__gte=self.now.date(), is_active=True).last()
 
         if not self.exam:
             return redirect('exam_list')

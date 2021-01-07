@@ -2,3 +2,8 @@ DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time
 DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:15:42.557606, check_lecture_time:-584.2907065666666
 DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:16:14.122204, check_lecture_time:-583.7646299333334
 DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:00:16:30.259665, check_lecture_time:-583.49567225
+DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:11:13:05.091247, check_lecture_time:73.08580666666667
+DEBUG | user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:11:13:20.090866, check_lecture_time:73.33565096666666
+2021-01-07 17:51:23 [20081] [DEBUG] pathname=/home/yasser/Desktop/yasser-work/freelance/mr-syed/lectures/views.py lineno=57 funcname=get_queryset user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:17:51:23.006998, check_lecture_time:471.3840504333333
+2021-01-07 17:52:30 [20081] [DEBUG] pathname=/home/yasser/Desktop/yasser-work/freelance/mr-syed/lectures/views.py lineno=57 funcname=get_queryset user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:17:52:30.119564, check_lecture_time:472.50257401666664
+2021-01-07 17:53:30 [20081] [DEBUG] pathname=/home/yasser/Desktop/yasser-work/freelance/mr-syed/lectures/views.py lineno=57 funcname=get_queryset user:yasser.aboelgheit@gmail.com, student_class.start:10:00:00, now.time:17:53:30.788381, check_lecture_time:473.51340223333335

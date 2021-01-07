@@ -51,11 +51,11 @@ class LectureListView(StudentPermission, ListView):
                 else:
                     queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
-        # logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
-        #                                                                                           student_class.start,
-        #                                                                                           now.time(),
-        #                                                                                           check_lecture_time(self.request.user)
-        #                                                                                           ))
+        logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+                                                                                                  student_class.start,
+                                                                                                  now.time(),
+                                                                                                  check_lecture_time(self.request.user)
+                                                                                                  ))
         # Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
         #                                                                                           student_class.start,
         #                                                                                           now.time(),

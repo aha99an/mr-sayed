@@ -12,7 +12,7 @@ from home.permissions import StudentPermission
 import json
 import collections
 from django.forms.models import model_to_dict
-# import logging
+import logging
 
 # logger = logging.getLogger('requests')
 
@@ -84,13 +84,13 @@ class ExamListView(StudentPermission, ListView):
         if mackup_exams:
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
-
-        # logger.debug("%s, self.now weekday: %s, student week day: %s , self.now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
-        #                                                                            self.now.weekday(),
-        #                                                                            self.request.user.student_class.week_day,
-        #                                                                            self.now.date(),
-        #                                                                            Exam.objects.last().week.start,
-        #                                                                            Exam.objects.last().week.end))
+        logger = logging.getLogger('testlogger')
+        logger.info("%s, self.now weekday: %s, student week day: %s , self.now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+                                                                                   self.now.weekday(),
+                                                                                   self.request.user.student_class.week_day,
+                                                                                   self.now.date(),
+                                                                                   Exam.objects.last().week.start,
+                                                                                   Exam.objects.last().week.end))
 
         if self.request.user.student_class.week_day == self.now.weekday():
             queryset |= Exam.objects.filter(

@@ -174,7 +174,7 @@ CRONJOBS = [
 ADMINS = (
     ('yasser', 'yasser.aboelgheit@gmail.com')
 )
-
+LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

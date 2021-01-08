@@ -84,11 +84,11 @@ class ExamListView(StudentPermission, ListView):
                 queryset |= Exam.objects.filter(id=exam.exam.id)
         logger = logging.getLogger('testlogger')
         logger.info("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
-                                                                                   now.weekday(),
-                                                                                   self.request.user.student_class.week_day,
-                                                                                   now.date(),
-                                                                                   Exam.objects.get(id=32).week.start,
-                                                                                   Exam.objects.get(id=32).week.end))
+                                                                                                                       now.weekday(),
+                                                                                                                       self.request.user.student_class.week_day,
+                                                                                                                       now.date(),
+                                                                                                                       Exam.objects.get(id=32).week.start,
+                                                                                                                       Exam.objects.get(id=32).week.end))
         logger.info("{}".format(now))
         if self.request.user.student_class.week_day == now.weekday():
             queryset |= Exam.objects.filter(
@@ -117,9 +117,9 @@ class QuestionUpdateView(UpdateView):
     model = StudentEssayAnswer
     template_name = 'exams/question.html'
     # form_class = StudentEssayAnswerForm
-    now = datetime.now()
 
     def dispatch(self, request, *args, **kwargs):
+        now = datetime.now()
         # check permissions
         if self.request.user.is_authenticated is False:
             return redirect('login')

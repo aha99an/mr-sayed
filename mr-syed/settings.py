@@ -174,7 +174,48 @@ CRONJOBS = [
 ADMINS = (
     ('yasser', 'yasser.aboelgheit@gmail.com')
 )
-LOGGING_CONFIG = None
+# LOGGING_CONFIG = None
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+#                        'pathname=%(pathname)s lineno=%(lineno)s ' +
+#                        'funcname=%(funcName)s %(message)s'),
+#             'datefmt': '%Y-%m-%d %H:%M:%S'
+#         },
+#         'simple': {
+#             'format': '%(levelname)s | %(message)s'
+#         },
+#     },
+#     'handlers': {
+#         # 'console': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'logging.StreamHandler',
+#         #     'formatter': 'simple'
+#         # },
+#         # 'mail_admins': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'django.utils.log.AdminEmailHandler'
+#         # },
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': BASE_DIR + '/debug.log',
+#             "formatter": "verbose",
+#         },
+#     },
+
+#     'loggers': {
+#         'requests': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+
+#     },
+# }
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -186,33 +227,24 @@ LOGGING = {
             'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'simple': {
-            'format': '%(levelname)s | %(message)s'
-        },
+            'format': '%(levelname)s %(message)s'
+        }
     },
     'handlers': {
-        # 'console': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.StreamHandler',
-        #     'formatter': 'simple'
-        # },
-        # 'mail_admins': {
-        #     'level': 'DEBUG',
-        #     'class': 'django.utils.log.AdminEmailHandler'
-        # },
-        'file': {
+        'null': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR + '/debug.log',
-            "formatter": "verbose",
+            'class': 'logging.NullHandler',
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
     },
-
     'loggers': {
-        'requests': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-
-    },
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
 }

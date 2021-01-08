@@ -10,7 +10,7 @@ from django.utils import timezone
 from home.models import Test
 import logging
 
-logger = logging.getLogger('requests')
+# logger = logging.getLogger('requests')
 
 
 def check_lecture_time(user):
@@ -51,11 +51,13 @@ class LectureListView(StudentPermission, ListView):
                 else:
                     queryset |= Lecture.objects.filter(id=lecture.lecture.id)
         # lectures
-        logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
-                                                                                                  student_class.start,
-                                                                                                  now.time(),
-                                                                                                  check_lecture_time(self.request.user)
-                                                                                                  ))
+        logger = logging.getLogger('testlogger')
+        logger.info('This is a simple log message')
+        # logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+        #                                                                                           student_class.start,
+        #                                                                                           now.time(),
+        #                                                                                           check_lecture_time(self.request.user)
+        #                                                                                           ))
         # Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
         #                                                                                           student_class.start,
         #                                                                                           now.time(),

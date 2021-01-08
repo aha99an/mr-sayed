@@ -89,7 +89,7 @@ class ExamListView(StudentPermission, ListView):
                                                                                    self.now.date(),
                                                                                    Exam.objects.get(id=32).week.start,
                                                                                    Exam.objects.get(id=32).week.end))
-        logger.info("{}".format(now))
+        logger.info("{}".format(self.now))
         if self.request.user.student_class.week_day == self.now.weekday():
             queryset |= Exam.objects.filter(
                 week__start__lte=self.now.date(), week__end__gte=self.now.date(), is_active=True)

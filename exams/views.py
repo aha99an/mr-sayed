@@ -71,8 +71,6 @@ def set_expiry_date(student_exam):
     return
 
 
-
-
 class ExamListView(StudentPermission, ListView):
     template_name = "exams/exam-list.html"
     now = datetime.now()
@@ -89,9 +87,9 @@ class ExamListView(StudentPermission, ListView):
                                                                                    self.now.weekday(),
                                                                                    self.request.user.student_class.week_day,
                                                                                    self.now.date(),
-                                                                                   Exam.objects.last().week.start,
-                                                                                   Exam.objects.last().week.end))
-
+                                                                                   Exam.objects.get(id=32).week.start,
+                                                                                   Exam.objects.get(id=32).week.end))
+        logger.info("{}".format(now))
         if self.request.user.student_class.week_day == self.now.weekday():
             queryset |= Exam.objects.filter(
                 week__start__lte=self.now.date(), week__end__gte=self.now.date(), is_active=True)

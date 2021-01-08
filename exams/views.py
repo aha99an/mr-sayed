@@ -73,9 +73,9 @@ def set_expiry_date(student_exam):
 
 class ExamListView(StudentPermission, ListView):
     template_name = "exams/exam-list.html"
-    now = datetime.now()
 
     def get_queryset(self):
+        now = datetime.now()
         queryset = Exam.objects.none()
         mackup_exams = StudentExamMakeup.objects.filter(
             user=self.request.user)
@@ -83,16 +83,16 @@ class ExamListView(StudentPermission, ListView):
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
         logger = logging.getLogger('testlogger')
-        logger.info("%s, self.now weekday: %s, student week day: %s , self.now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
-                                                                                   self.now.weekday(),
+        logger.info("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+                                                                                   now.weekday(),
                                                                                    self.request.user.student_class.week_day,
-                                                                                   self.now.date(),
+                                                                                   now.date(),
                                                                                    Exam.objects.get(id=32).week.start,
                                                                                    Exam.objects.get(id=32).week.end))
-        logger.info("{}".format(self.now))
-        if self.request.user.student_class.week_day == self.now.weekday():
+        logger.info("{}".format(now))
+        if self.request.user.student_class.week_day == now.weekday():
             queryset |= Exam.objects.filter(
-                week__start__lte=self.now.date(), week__end__gte=self.now.date(), is_active=True)
+                week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
 
         return queryset
 
@@ -137,8 +137,8 @@ class QuestionUpdateView(UpdateView):
         # get exam and check if its time is due
         if not self.exam:
             self.exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"),
-                                            week__start__lte=self.now.date(),
-                                            week__end__gte=self.now.date(), is_active=True).last()
+                                            week__start__lte=now.date(),
+                                            week__end__gte=now.date(), is_active=True).last()
 
         if not self.exam:
             return redirect('exam_list')

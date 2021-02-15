@@ -12,3 +12,6 @@ class TestPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["now"] = datetime.now().time()
         return context
+
+class ahmedHassan(TemplateView):
+    template_name = 'home/ahmed-hassan.html'

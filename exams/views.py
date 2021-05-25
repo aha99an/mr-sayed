@@ -23,8 +23,8 @@ def get_all_questions(exam_id, user):
 
     # get questions
     questions = OrderedDict()
-    exam_choice_qs = exam.choice_question.all()
-    exam_essay_qs = exam.essay_question.all()
+    exam_choice_qs = exam.choice_question.all().order_by("?")
+    exam_essay_qs = exam.essay_question.all().order_by("?")
     question_index = 1
 
     # Choice questions
@@ -83,13 +83,13 @@ class ExamListView(StudentPermission, ListView):
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
         logger = logging.getLogger('testlogger')
-        logger.info("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
-                                                                                                                       now.weekday(),
-                                                                                                                       self.request.user.student_class.week_day,
-                                                                                                                       now.date(),
-                                                                                                                       Exam.objects.get(id=32).week.start,
-                                                                                                                       Exam.objects.get(id=32).week.end))
-        logger.info("{}".format(now))
+        # logger.info("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+        #                                                                                                                now.weekday(),
+        #                                                                                                                self.request.user.student_class.week_day,
+        #                                                                                                                now.date(),
+        #                                                                                                                Exam.objects.filter(id=32).last().week.start,
+        #                                                                                                                Exam.objects.filter(id=32).last().week.end))
+        # logger.info("{}".format(now))
         if self.request.user.student_class.week_day == now.weekday():
             queryset |= Exam.objects.filter(
                 week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)

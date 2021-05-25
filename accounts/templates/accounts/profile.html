@@ -65,8 +65,7 @@
                         {% for exam in student_exams %}
                         <tr>
                             <td style="text-align:center;">
-                            {% if exam.exam.is_past_week %}
-                            
+                            {% if exam.is_graded %}                         
                                 <a href="{% url 'profile_exam_question' exam.id 1 %}"
                                     style="color: lightblue;">
                                     {{ exam.exam }}</a>

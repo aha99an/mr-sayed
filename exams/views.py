@@ -158,7 +158,6 @@ class QuestionUpdateView(UpdateView):
             self.student_exam.save()
             self.student_exam.refresh_from_db()
         self.all_questions = eval(self.student_exam.questions)
-        # import ipdb; ipdb.set_trace()
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):

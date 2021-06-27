@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "lectures",
     # 3rd Party
     'django_crontab',
+    # 'shell_plus'
 
 
 ]

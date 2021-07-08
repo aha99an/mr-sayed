@@ -36,5 +36,14 @@
         <tfoot>
 
     </table>
-
+    {% if exam_not_answered_4_lecture %}
+    <script>
+        swal({
+            type: 'error',
+            title: 'لا يمكن دخول المحاضرة',
+            text: 'برجاء حل الامتحان المتعلق بالمحاضرة',
+            // footer: '<a href>Why do I have this issue?</a>'
+        })
+    </script>
+    {% endif %}
     {% endblock content %}

@@ -39,6 +39,8 @@ def handle_student_payment(self, request, exam):
         #     if student_lecture.seen_at is None:
         #         student_lecture.seen_at = now
         #         student_lecture.save()
+        student_exam.student_payment = payment
+        student_exam.save()
         return student_exam
     else:
         not_first_time_student_exam = StudentExam.objects.filter(user=request.user, exam=exam).last()

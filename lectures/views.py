@@ -1,7 +1,7 @@
 from django.views.generic import ListView, UpdateView, DetailView
 
 from .models import Lecture, StudentLecture, StudentLectureQuestion, StudentLectureMakeup, StudentLecture
-
+from exams.models import Exam, StudentExam
 from home.permissions import StudentPermission
 from accounts.models import CustomUser, StudentPayment
 from django.shortcuts import redirect
@@ -71,6 +71,13 @@ class LectureListView(StudentPermission, ListView):
 
         return queryset
 
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs) 
+        if self.request.session.get('exam_not_answered_4_lecture'):
+            ctx["exam_not_answered_4_lecture"] = True
+            del self.request.session["exam_not_answered_4_lecture"]
+        return ctx
+
 
 class LectureDetailView(StudentPermission, DetailView):
     model = Lecture
@@ -82,6 +89,19 @@ class LectureDetailView(StudentPermission, DetailView):
             self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
             now = datetime.datetime.now()
             student_class = self.request.user.student_class
+
+
+            # check if student solved the exam first
+            def check_week_exam():
+                week = self.object.week
+                exam = Exam.objects.filter(week=week).last()
+                student_exam = ''
+                if exam:
+                    student_exam = StudentExam.objects.filter(exam=exam, user=self.request.user).last()
+                if student_exam:
+                    return True
+                self.request.session['exam_not_answered_4_lecture'] = True 
+                return False
 
             def handle_student_payment():
                 payment = StudentPayment.objects.filter(
@@ -112,7 +132,6 @@ class LectureDetailView(StudentPermission, DetailView):
             # Permenant Lecture
             if self.object.is_permanent:
                 return super().dispatch(request, *args, **kwargs)
-
             # Makeup Lecture
             student_makeup_lecture = StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object).last()
             if student_makeup_lecture:
@@ -128,15 +147,25 @@ class LectureDetailView(StudentPermission, DetailView):
                         mackup_student_lecture.save()
                         return super().dispatch(request, *args, **kwargs)
                 else:
-                    if handle_student_payment():
+                    if check_week_exam():
+                        student_lecture = StudentLecture.objects.create(
+                            user=request.user, lecture=self.object)
+                        # payment = StudentPayment.objects.filter(
+                        #     user=self.request.user, remainder_available_lectures__gte=0).first()
+                        # student_lecture.student_payment = payment
+                        student_lecture.seen_at = now
+                        student_lecture.save()
+                        # first time to enter this mackup lecture
+                        # if handle_student_payment():
                         return super().dispatch(request, *args, **kwargs)
 
             if student_class.week_day == now.weekday() and student_class.start <= now.time():
                 now_minus_start_minutes = check_lecture_time(self.request.user)
                 if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
-                    # subtract one from the avilable lecture to student
-                    handle_student_payment()
-                    return super().dispatch(request, *args, **kwargs)
+                    if check_week_exam():
+                        # subtract one from the avilable lecture to student
+                        # handle_student_payment()
+                        return super().dispatch(request, *args, **kwargs)
 
         return redirect("lectures_list")
 

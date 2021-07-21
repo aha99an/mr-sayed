@@ -17,3 +17,9 @@ class AdminPermission(object):
             if self.request.user.user_type == CustomUser.ADMIN:
                 return super().dispatch(request, *args, **kwargs)
         return redirect('login')
+
+class AuthenticatedPermission(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('login')

@@ -15,33 +15,26 @@ div cladiv class="check"></div>ss="check"></div>
             <img src="{{ object.image_question.url}}"  href="{{object.image_question.url}}" alt={{ object.image_question }}>    
         </span>
     </a>
-{% else  %}
 {% endif %}
 
 
 {% if object.is_answered %}
-<h2>الإجابة:</h2>
-    {% else  %} 
-    
-    {% endif %}
+<h2>الإجابة:</h2>    
+{% endif %}
 
 {% if object.answer %}
 <p>{{ object.answer }}</p>
-    {% else  %} 
-    {% endif %}
-
-
-
-{% if object.image_answer %}
-<a href="{{ object.image_answer.url}}">    
-
-    <span class="image fit">
-            <img src="{{ object.image_answer.url}}"  href="{{object.image_answer.url}}" alt={{ object.image_answer }}>    
-        </span>
-    </a>
-{% else  %}
 {% endif %}
 
+{% if object.mr_question_file.all %}
+{% for image in object.mr_question_file.all %}
+<a href="{{ image.mr_question_file.url}}">    
 
+    <span class="image fit">
+            <img src="{{ image.mr_question_file.url}}"  href="{{image.mr_question_file.url}}" alt={{ image.mr_question_file }}>    
+        </span>
+    </a>
+{% endfor %}
+{% endif %}
 
 {% endblock content2 %}

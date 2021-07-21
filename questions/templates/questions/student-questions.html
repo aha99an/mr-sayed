@@ -10,8 +10,9 @@
 
 
 {% block content2 %}
+{% if student %}
 <a href="{% url 'question_new' %}" class="button primary">  انشاء سؤال جديد  </a>
-
+{% endif %}
 <div class="table-wrapper" dir="rtl" style="text-align: right;">
     <table>
         <thead>

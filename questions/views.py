@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import MrQuestion
 from django.urls import reverse_lazy
-from home.permissions import StudentPermission
+from home.permissions import StudentPermission, AuthenticatedPermission
 from django.shortcuts import redirect
 import os
 import json
@@ -16,9 +16,18 @@ class QuestionListView (StudentPermission, ListView):
 
     def get_queryset(self):
         return MrQuestion.objects.filter(user=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super(QuestionListView, self).get_context_data(**kwargs)
+        context["student"] = True
+        return context
 
+class SelectedQuestionListView(AuthenticatedPermission, ListView):
+    template_name = "questions/student-questions.html"
 
-class QuestionDetailView(StudentPermission, DetailView):
+    def get_queryset(self):
+        return MrQuestion.objects.filter(display_to_all=True)
+
+class QuestionDetailView(AuthenticatedPermission, DetailView):
     model = MrQuestion
     template_name = 'questions/question-detail.html'
 

@@ -13,6 +13,7 @@ class MrQuestion(models.Model):
     image_answer = models.ImageField(
         upload_to="images/questions", null=True, blank=True)
     is_answered = models.BooleanField(default=False)
+    display_to_all = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -25,6 +26,9 @@ class MrQuestion(models.Model):
         if self.user:
             return self.user.username + "_" + str(self.id)
         return str(self.id)
+    
+    class Meta:
+        ordering = ('-created_at',)
 
 class MrQuestionFile(models.Model):
     mr_question = models.ForeignKey(
@@ -41,4 +45,4 @@ class MrQuestionFile(models.Model):
             return self.mr_question_file.name
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('-created_at',)

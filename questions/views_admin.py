@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 from .models import MrQuestion, MrQuestionFile
 from .forms import MrQuestionMultipleFileForm
 from django.urls import reverse_lazy
@@ -73,19 +73,29 @@ class AdminQuestionUpdateView(AdminPermission, UpdateView):
 
 
 def upload_to_s3_admin(request):
+    question_id = request.GET.get("mr_question_id")
+    mrquestion = MrQuestion.objects.get(id=int(question_id))
+    display_question = request.GET.get('display_question')
+    if display_question in ["True", "False", "Empty"]:
+        if display_question == "True":
+            mrquestion.display_to_all = True
+        else:
+            mrquestion.display_to_all = False
+        mrquestion.save()
+
+
     lowercase_str = uuid.uuid4().hex
     S3_BUCKET = 'mr-sayedabdelhamed2'
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
     answer_question = request.GET.get('answer_question')
-    question_id = request.GET.get("mr_question_id")
-    mrquestion = MrQuestion.objects.get(id=int(question_id))
-
-    file_only_name, file_extension = os.path.splitext(file_name)
-    image_name = "images/questions/" + file_only_name + \
-        request.user.username + "-" + lowercase_str[:6] + str(file_extension)
+    print(answer_question)
 
     if file_name:
+        file_only_name, file_extension = os.path.splitext(file_name)
+        image_name = "images/questions/" + file_only_name + \
+            request.user.username + "-" + lowercase_str[:6] + str(file_extension)
+
         s3 = boto3.client('s3')
         presigned_post = s3.generate_presigned_post(
             Bucket=S3_BUCKET,
@@ -106,15 +116,20 @@ def upload_to_s3_admin(request):
         # mrquestion.save()
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
+        print("ANA HENA")
         mrquestion.answer = answer_question
         mrquestion.save()
-        return redirect('all_questions')
+        return HttpResponse(status=200, content_type="application/json")
 
-def mr_question_image_success_upload(request):
+
+        # return redirect('all_questions')
+
+def mr_question_admin_image_success_upload(request):
     image_name = request.GET.get('image_name')[7:]
     question_id = request.GET.get('question_id')
-
     mr_question = MrQuestion.objects.get(id=int(question_id))
+    mr_question.is_answered = True
+    mr_question.save()
     # student_homework, created = StudentHomework.objects.get_or_create(
     #     homework=homework, user=request.user)
     MrQuestionFile.objects.create(
@@ -134,7 +149,6 @@ class MrQuestionMultipleUpdateView(AdminPermission, FormView):
         return self.render_to_response(ctx)
 
     def dispatch(self, request, *args, **kwargs):
-        print("ANA")
         now = datetime.now()
         self.mr_question = MrQuestion.objects.filter(id=self.kwargs.get("pk")).last()
 
@@ -142,25 +156,27 @@ class MrQuestionMultipleUpdateView(AdminPermission, FormView):
             return redirect("all_questions")
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.getlist('mr_question_file')
+    # def post(self, request, *args, **kwargs):
+    #     print("YAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    #     form_class = self.get_form_class()
+    #     form = self.get_form(form_class)
+    #     files = request.FILES.getlist('mr_question_file')
 
-        if form.is_valid():
-            files_length = len(files)
-            uploaded_files_length = self.mr_question.mr_question_file.all().count()
-            if files_length + uploaded_files_length < 1:
-                return self.form_invalid(form, 'عدد الملفات لا يجب أن تقل عن 1')
-            elif files_length + uploaded_files_length > 6:
-                return self.form_invalid(form, 'عدد الملفات لا يجب أن تزيد عن 6')
-            for f in files:
-                MrQuestionFile.objects.create(
-                    student_homework=self.mr_question, mr_question_file=f)
+    #     if form.is_valid():
+    #         print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    #         files_length = len(files)
+    #         uploaded_files_length = self.mr_question.mr_question_file.all().count()
+    #         if files_length + uploaded_files_length < 1:
+    #             return self.form_invalid(form, 'عدد الملفات لا يجب أن تقل عن 1')
+    #         elif files_length + uploaded_files_length > 6:
+    #             return self.form_invalid(form, 'عدد الملفات لا يجب أن تزيد عن 6')
+    #         for f in files:
+    #             MrQuestionFile.objects.create(
+    #                 student_homework=self.mr_question, mr_question_file=f)
 
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -217,3 +233,13 @@ def delete_image_answer(request, pk):
     mrquestion.image_answer = None
     mrquestion.save()
     return redirect(reverse_lazy("answer_question", kwargs={"pk": pk}))
+
+
+class MrQuestionsUploadedFileDeleteView(AdminPermission, DeleteView):
+    model = MrQuestionFile
+
+    def get_object(self):
+        return MrQuestionFile.objects.get(id=self.kwargs.get("file_pk"))
+
+    def get_success_url(self):
+        return reverse_lazy("answer_question", kwargs={"pk": self.kwargs.get("mr_question_pk")})

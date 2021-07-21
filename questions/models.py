@@ -22,7 +22,9 @@ class MrQuestion(models.Model):
         super(MrQuestion, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.username + "_" + str(self.id)
+        if self.user:
+            return self.user.username + "_" + str(self.id)
+        return str(self.id)
 
 class MrQuestionFile(models.Model):
     mr_question = models.ForeignKey(

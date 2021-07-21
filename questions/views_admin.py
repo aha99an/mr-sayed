@@ -134,6 +134,7 @@ class MrQuestionMultipleUpdateView(AdminPermission, FormView):
         return self.render_to_response(ctx)
 
     def dispatch(self, request, *args, **kwargs):
+        print("ANA")
         now = datetime.now()
         self.mr_question = MrQuestion.objects.filter(id=self.kwargs.get("pk")).last()
 

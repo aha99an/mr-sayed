@@ -123,7 +123,7 @@ def mr_question_image_success_upload(request):
     return HttpResponse(status=201)
 
 
-class MrQuestionMultipleUpdateView(FormView):
+class MrQuestionMultipleUpdateView(AdminPermission, FormView):
     template_name = 'questions/answer-question.html'
     form_class = MrQuestionMultipleFileForm
     success_url = reverse_lazy('all_questions')
@@ -135,8 +135,6 @@ class MrQuestionMultipleUpdateView(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         now = datetime.now()
-        if self.request.user.student_is_active is False:
-            return redirect('login')
         self.mr_question = MrQuestion.objects.filter(id=self.kwargs.get("pk")).last()
 
         if not self.mr_question:

@@ -154,7 +154,7 @@ function rotateImage(id) {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200 || xhr.status === 204) {
                                 var new_request = new XMLHttpRequest();
-                                new_request.open("GET", "{% url 'homework_image_success_upload'%}?image_name=" + s3Data.fields["key"] + "&question_id=" + mr_question_id);
+                                new_request.open("GET", "{% url 'mr_question_image_success_upload' %}?image_name=" + s3Data.fields["key"] + "&question_id=" + mr_question_id);
                                 new_request.send();
                                 if (is_last == "YES") {
                                     document.getElementById("loader-upload").style.visibility = "hidden";

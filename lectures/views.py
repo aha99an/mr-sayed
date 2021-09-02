@@ -12,6 +12,16 @@ import logging
 
 # logger = logging.getLogger('requests')
 
+# check if student solved the exam first
+def check_week_exam(week, user):
+    # week = self.object.week
+    exam = Exam.objects.filter(week=week).last()
+    student_exam = ''
+    if exam:
+        student_exam = StudentExam.objects.filter(exam=exam, user=user).last()
+    if student_exam:
+        return True
+    return False
 
 def check_lecture_time(user):
     now = datetime.datetime.now()
@@ -32,8 +42,9 @@ class LectureListView(StudentPermission, ListView):
     template_name = "lectures/lecture-list.html"
 
     def get_queryset(self):
+        user = self.request.user
         now = datetime.datetime.now()
-        student_class = self.request.user.student_class
+        student_class = user.student_class
         queryset = Lecture.objects.none()
 
         # permenant lectures
@@ -41,10 +52,10 @@ class LectureListView(StudentPermission, ListView):
 
         # Makeup lectures
         mackup_lectures = StudentLectureMakeup.objects.filter(
-            user=self.request.user)
+            user=user)
         if mackup_lectures:
             for lecture in mackup_lectures:
-                mackup_student_lecture = StudentLecture.objects.filter(lecture=lecture.lecture, user=self.request.user).last()
+                mackup_student_lecture = StudentLecture.objects.filter(lecture=lecture.lecture, user=user).last()
                 if mackup_student_lecture and mackup_student_lecture.seen_at is not None:
                     if not is_makeup_lecture_expired(mackup_student_lecture):
                         queryset |= Lecture.objects.filter(id=lecture.lecture.id)
@@ -53,21 +64,24 @@ class LectureListView(StudentPermission, ListView):
         # lectures
         logger = logging.getLogger('testlogger')
         logger.info('This is a simple log message')
-        # logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+        # logger.debug("user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(user,
         #                                                                                           student_class.start,
         #                                                                                           now.time(),
-        #                                                                                           check_lecture_time(self.request.user)
+        #                                                                                           check_lecture_time(user)
         #                                                                                           ))
-        # Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(self.request.user,
+        # Test.objects.create(logger="user:{}, student_class.start:{}, now.time:{}, check_lecture_time:{}".format(user,
         #                                                                                           student_class.start,
         #                                                                                           now.time(),
-        #                                                                                           check_lecture_time(self.request.user)
+        #                                                                                           check_lecture_time(user)
         #                                                                                           ))
-        if student_class.week_day == now.weekday() and student_class.start < now.time():
-            now_minus_start_minutes = check_lecture_time(self.request.user)
-            queryset |= Lecture.objects.filter(week__start__lte=now.date(),
-                                               week__end__gte=now.date(),
-                                               lecture_allowed_time__gte=now_minus_start_minutes)
+        if student_class.start < now.time():
+            # now_minus_start_minutes = check_lecture_time(user)
+            lectures_pass_now_date = Lecture.objects.filter(week__start__lte=now.date())
+            lectures_ids = []
+            for lecture in lectures_pass_now_date:
+                if check_week_exam(lecture.week, user):
+                    lectures_ids.append(lecture.id)
+            queryset |= Lecture.objects.filter(id__in=lectures_ids)
 
         return queryset
 
@@ -84,31 +98,20 @@ class LectureDetailView(StudentPermission, DetailView):
     template_name = "lectures/lecture.html"
 
     def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
+        week = self.object.week
 
-        if request.user.is_authenticated:
-            self.object = Lecture.objects.filter(id=kwargs.get('pk')).last()
+        if user.is_authenticated:
             now = datetime.datetime.now()
-            student_class = self.request.user.student_class
-
-
-            # check if student solved the exam first
-            def check_week_exam():
-                week = self.object.week
-                exam = Exam.objects.filter(week=week).last()
-                student_exam = ''
-                if exam:
-                    student_exam = StudentExam.objects.filter(exam=exam, user=self.request.user).last()
-                if student_exam:
-                    return True
-                self.request.session['exam_not_answered_4_lecture'] = True 
-                return False
+            student_class = user.student_class
 
             def handle_student_payment():
                 payment = StudentPayment.objects.filter(
-                    user=self.request.user, remainder_available_lectures__gte=1).first()
+                    user=user, remainder_available_lectures__gte=1).first()
                 if payment:
                     student_lecture, created = StudentLecture.objects.get_or_create(
-                        user=request.user, lecture=self.object)
+                        user=user, lecture=self.object)
                     if created:
                         # subtract from remainder_available_lectures and get date if last lecture
                         payment.remainder_available_lectures -= 1
@@ -125,7 +128,7 @@ class LectureDetailView(StudentPermission, DetailView):
                             student_lecture.save()
                     return True
                 else:
-                    if StudentLecture.objects.filter(user=request.user, lecture=self.object):
+                    if StudentLecture.objects.filter(user=user, lecture=self.object):
                         return True
                     else:
                         return False
@@ -133,9 +136,9 @@ class LectureDetailView(StudentPermission, DetailView):
             if self.object.is_permanent:
                 return super().dispatch(request, *args, **kwargs)
             # Makeup Lecture
-            student_makeup_lecture = StudentLectureMakeup.objects.filter(user=self.request.user, lecture=self.object).last()
+            student_makeup_lecture = StudentLectureMakeup.objects.filter(user=user, lecture=self.object).last()
             if student_makeup_lecture:
-                mackup_student_lecture = StudentLecture.objects.filter(lecture=self.object, user=self.request.user).last()
+                mackup_student_lecture = StudentLecture.objects.filter(lecture=self.object, user=user).last()
                 # subtract one from the avilable lecture to student
                 if mackup_student_lecture:
                     # check seen_at time if not exist then it is the first time student watches the lecture
@@ -147,11 +150,11 @@ class LectureDetailView(StudentPermission, DetailView):
                         mackup_student_lecture.save()
                         return super().dispatch(request, *args, **kwargs)
                 else:
-                    if check_week_exam():
+                    if check_week_exam(week, user):
                         student_lecture = StudentLecture.objects.create(
-                            user=request.user, lecture=self.object)
+                            user=user, lecture=self.object)
                         # payment = StudentPayment.objects.filter(
-                        #     user=self.request.user, remainder_available_lectures__gte=0).first()
+                        #     user=user, remainder_available_lectures__gte=0).first()
                         # student_lecture.student_payment = payment
                         student_lecture.seen_at = now
                         student_lecture.save()
@@ -159,14 +162,15 @@ class LectureDetailView(StudentPermission, DetailView):
                         # if handle_student_payment():
                         return super().dispatch(request, *args, **kwargs)
 
-            if student_class.week_day == now.weekday() and student_class.start <= now.time():
-                now_minus_start_minutes = check_lecture_time(self.request.user)
-                if self.object.lecture_allowed_time > now_minus_start_minutes and now.date() <= self.object.week.end:
-                    if check_week_exam():
-                        # subtract one from the avilable lecture to student
-                        # handle_student_payment()
-                        return super().dispatch(request, *args, **kwargs)
-
+            if now.date() >= self.object.week.start:
+                # now_minus_start_minutes = check_lecture_time(user)
+                # if self.object.lecture_allowed_time > now_minus_start_minutes and :
+                if check_week_exam(week, user):
+                    # subtract one from the avilable lecture to student
+                    # handle_student_payment()
+                    return super().dispatch(request, *args, **kwargs)
+        if not check_week_exam(week, user):
+            self.request.session['exam_not_answered_4_lecture'] = True 
         return redirect("lectures_list")
 
     def get_context_data(self, *args, **kwargs):

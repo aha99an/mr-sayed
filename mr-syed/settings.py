@@ -36,10 +36,9 @@ INSTALLED_APPS = [
     "lectures",
     # 3rd Party
     'django_crontab',
-    # 'shell_plus'
-
-
+    'django_extensions',
 ]
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MIDDLEWARE = [

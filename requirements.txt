@@ -9,3 +9,4 @@ boto3==1.15.11
 xlrd==1.2.0
 googletrans==3.0.0
 django-crontab==0.7.1
+django-extensions==3.1.3

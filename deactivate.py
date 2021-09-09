@@ -8,6 +8,8 @@ from accounts.models import CustomUser, StudentPayment
 from datetime import datetime
 
 
+
+
 users = CustomUser.objects.filter(student_is_active=True)
 now = datetime.now()
 for user in users:

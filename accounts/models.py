@@ -2,8 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from classes.models import Class
 import random
-from django.conf import settings
-
 
 
 class CustomUser(AbstractUser):

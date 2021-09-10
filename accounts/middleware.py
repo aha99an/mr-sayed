@@ -1,6 +1,6 @@
 #Session model stores the session data
 from django.contrib.sessions.models import Session
-
+from accounts.models import CustomUser
 class OneSessionPerUserMiddleware:
     # Called only once when the web server starts
     def __init__(self, get_response):
@@ -9,7 +9,7 @@ class OneSessionPerUserMiddleware:
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.user_type == CustomUser.STUDENT:
             stored_session_key = request.user.session_key
 
             # if there is a stored_session_key  in our database and it is

@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from classes.models import Class
 import random
+from django.conf import settings
+
 
 
 class CustomUser(AbstractUser):
@@ -29,6 +31,8 @@ class CustomUser(AbstractUser):
     homeWorkAnswerd = models.BooleanField(default=False)
     examStudentGrade = models.FloatField(default=None, null=True, blank=True)
     examGrade = models.FloatField(default=None, null=True, blank=True)
+    session_key = models.CharField(max_length=32, null=True, blank=True)
+
     def save(self, *args, **kwargs):
         self.email = self.username
 

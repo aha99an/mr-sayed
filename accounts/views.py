@@ -11,6 +11,8 @@ from homework.models import StudentHomework
 from home.permissions import StudentPermission
 from datetime import datetime
 from .models import CustomUser
+from django.shortcuts import redirect
+
 now = datetime.now()
 
 
@@ -133,9 +135,14 @@ class ProfileView(StudentPermission, TemplateView):
 
 class ExamQuestionDetailView(StudentPermission, DetailView):
     template_name = 'accounts/profile-exam.html'
+    def dispatch(self, request, *args, **kwargs):
+        self.student_exam_pk = self.kwargs.get("student_exam_pk")
+        student_exam = StudentExam.objects.get(id=self.student_exam_pk)
+        if not student_exam.is_graded:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
-        self.student_exam_pk = self.kwargs.get("student_exam_pk")
         student_exam = StudentExam.objects.get(id=self.student_exam_pk)
         student_exam.is_graded = True
         student_exam.save()
@@ -154,6 +161,7 @@ class ExamQuestionDetailView(StudentPermission, DetailView):
             ctx["question_pk"] = self.question_pk
         else:
             ctx["question_pk"] = 1
+        ctx["student_exam"] = StudentExam.objects.get(id=self.student_exam_pk)
         return ctx
 
 

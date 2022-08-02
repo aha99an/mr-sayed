@@ -7,6 +7,7 @@ from accounts.models import CustomUser
 from datetime import timedelta
 from classes.models import Week
 from django.contrib.postgres.fields import JSONField
+from accounts.models import CustomUser, StudentPayment
 
 
 class Exam(models.Model):
@@ -58,6 +59,8 @@ class StudentExam(models.Model):
     grade = models.DecimalField(
         max_digits=4, decimal_places=1, null=True, blank=True)
     answered_questions = models.IntegerField(null=True, blank=True, default=0)
+    student_payment = models.ForeignKey(
+        StudentPayment, on_delete=models.SET_NULL, related_name="student_exam", null=True, blank=True)
     is_graded = models.BooleanField(default=False)
     expiry_time = models.DateTimeField(null=True, blank=True)
     questions = models.TextField(null=True, blank=True)
@@ -119,9 +122,7 @@ class StudentEssayAnswer(models.Model):
             self.is_answered = True
         else:
             self.is_answered = False
-        print(self.grade)
-        if self.grade:
-            print("HELLO THERE")
+
         super(StudentEssayAnswer, self).save(*args, **kwargs)
 
     class Meta:

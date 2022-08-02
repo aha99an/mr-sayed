@@ -7,7 +7,19 @@
 <p>ايميل الطالب: {{student_user}} </p>
 {% if reseted_password %}
 الباسورد الجديد للطالب: {{student_user.random_password}}
+
 {% endif %}
+<br />
+<button onclick="myFunction()"    class="button primary"  >
+Verify
+</button>
+
+
+<a id="myBtn"   href ="{% url 'student_reset_password' student_user.id %}" class="button primary "  
+    style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%; pointer-events: none">تغيير الباسورد</a>
+  <hr />
+
+
 <br/>
  <a href="{% url 'admin_student_payment_list_view' student_user.id%}">
                         <button type="button" class="button primary">
@@ -19,9 +31,7 @@
     <input type="submit" class="button primary" value="تغيير البيانات"
     style="background-color: #4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
 </form>
-<a href ="{% url 'student_reset_password' student_user.id %}" class="button primary" 
-    style="background-color: blue; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">تغيير الباسورد</a>
-  <hr />
+
 
 <form method="post" action="{% url 'admin_add_makeup_lecture' student_user.id %}">
 {% csrf_token %}
@@ -141,7 +151,64 @@
     </table>
 {% endif %}
 
+{% comment %} MAKEUP HOMEWORKS {% endcomment %}
+<form method="post" action="{% url 'admin_add_makeup_homework' student_user.id %}">
+{% csrf_token %}
 
+    <select name="homework_id" dir="rtl" onchange="this.form.submit()">
+        <option value="">اختار واجب تعويضي</option>
+
+        {% for homework in homeworks %}
+
+        <option value="{{homework.id}}" {% if homework_id == homework.name %} selected{% endif %}>
+            {{homework.name}}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+{% if makeup_homeworks %}
+<h3>الواجبات التعويضية</h3>
+<div class="table-responsive table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <h4>الاسم</h4>
+                </th>
+                <th scope="col" style="text-align: center;">
+                    <h4>مسح</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for homework in makeup_homeworks %}
+
+            <tr>
+
+                <td>
+                    
+                <div style="color: lightblue;">{{homework.homework.name}}</div>
+
+                </td>
+                <td style="text-align: center;">
+                    <span>
+                        <!-- delete_file -->
+                        <form method="post" action="{% url 'admin_delete_makeup_homework' homework.id  student_user.id %}"
+                            style="margin: 0 0 0 0;">
+                            {% csrf_token %}
+                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                style="background-color: red;">
+                        </form>
+                    </span>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+
+    </table>
+{% endif %}
 <a href="{%url 'admin_student_update_data' object.id %}" class="button primary" style="background-color:#4CAF50; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">  البيانات الشخصية للطالب     </a>
 
 
@@ -153,4 +220,19 @@
                                 style="background-color: #ff0000; font-size: 30px;height: 4rem; line-height: 4rem; width:100%">
                         </form>
 
+
+
+
+<script>
+function myFunction() {
+  var password = prompt("برجاء ادخال الباسورد");
+  if (password === "Ahmed1153") {
+      document.getElementById("myBtn").style["pointer-events"] = "auto";  
+}
+
+   else {
+alert("الباسورد خطأ!");
+      }}
+</script>
     {% endblock %}
+

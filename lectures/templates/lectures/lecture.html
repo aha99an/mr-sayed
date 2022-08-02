@@ -5,15 +5,14 @@
 {% endblock %}
 
 {% block content %}
+{% if object.homeworkAnswerFile %}
 <form method="get" action="{{object.homeworkAnswerFile.url}}">
 <input type="submit" value="حل واجب الحصة السابقة">
 </form>
+{% endif %}
+{% if object.examAnswerFile %}
 <form method="get" action="{{object.examAnswerFile.url}}">
 <input type="submit" value="حل امتحان الحصة السابقة">
-</form>
-{% if object.id == 8 %}
-<form method="get" action="https://mr-sayedabdelhamed2.s3-us-west-2.amazonaws.com/static/%D9%88%D8%A7%D8%AC%D8%A8+%D9%88%D8%A7%D8%AE%D8%AA%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%AD%D8%B5%D8%A9+%D8%A7%D9%84%D8%B3%D8%A7%D8%A8%D8%B9%D8%A9.pdf">
-<input type="submit" value="حل واجب وامتحان الحصة السابقة">
 </form>
 {% endif %}
 {% for link in links %}

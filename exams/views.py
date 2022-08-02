@@ -12,6 +12,41 @@ from home.permissions import StudentPermission
 import json
 import collections
 from django.forms.models import model_to_dict
+from accounts.models import CustomUser, StudentPayment
+import logging
+
+# logger = logging.getLogger('requests')
+def handle_student_payment(self, request, exam):
+    '''
+    For now only subtract one if this is the first time the user enters this exam
+    '''
+    payment = StudentPayment.objects.filter(
+        user=self.request.user, remainder_available_lectures__gte=1).first()
+    if payment:
+        student_exam, created = StudentExam.objects.get_or_create(
+            user=request.user, exam=exam)
+        if created:
+            # subtract from remainder_available_lectures and get date if last lecture
+            payment.remainder_available_lectures -= 1
+            if payment.remainder_available_lectures == 0:
+                payment.last_lecture_attended = datetime.now().date()
+            payment.save()
+        #     # save student payment in lecture class
+        #     student_lecture.student_payment = payment
+        #     student_lecture.seen_at = now
+        #     student_lecture.save()
+        # else:
+        #     if student_lecture.seen_at is None:
+        #         student_lecture.seen_at = now
+        #         student_lecture.save()
+        student_exam.student_payment = payment
+        student_exam.save()
+        return student_exam
+    else:
+        not_first_time_student_exam = StudentExam.objects.filter(user=request.user, exam=exam).last()
+        if not_first_time_student_exam:
+            return not_first_time_student_exam
+        return False
 
 
 def get_all_questions(exam_id, user):
@@ -68,20 +103,25 @@ def set_expiry_date(student_exam):
     return
 
 
-now = datetime.now()
-
-
 class ExamListView(StudentPermission, ListView):
     template_name = "exams/exam-list.html"
 
     def get_queryset(self):
+        now = datetime.now()
         queryset = Exam.objects.none()
         mackup_exams = StudentExamMakeup.objects.filter(
             user=self.request.user)
         if mackup_exams:
             for exam in mackup_exams:
                 queryset |= Exam.objects.filter(id=exam.exam.id)
-
+        logger = logging.getLogger('testlogger')
+        # logger.info("%s, now weekday: %s, student week day: %s , now date: %s, last-exam start %s last-exam end %s" % (self.request.user.username,
+        #                                                                                                                now.weekday(),
+        #                                                                                                                self.request.user.student_class.week_day,
+        #                                                                                                                now.date(),
+        #                                                                                                                Exam.objects.filter(id=32).last().week.start,
+        #                                                                                                                Exam.objects.filter(id=32).last().week.end))
+        # logger.info("{}".format(now))
         if self.request.user.student_class.week_day == now.weekday():
             queryset |= Exam.objects.filter(
                 week__start__lte=now.date(), week__end__gte=now.date(), is_active=True)
@@ -111,6 +151,7 @@ class QuestionUpdateView(UpdateView):
     # form_class = StudentEssayAnswerForm
 
     def dispatch(self, request, *args, **kwargs):
+        now = datetime.now()
         # check permissions
         if self.request.user.is_authenticated is False:
             return redirect('login')
@@ -120,9 +161,9 @@ class QuestionUpdateView(UpdateView):
         exam = Exam.objects.filter(id=self.kwargs.get("exam_pk"))
 
         # check if this is a makeup exam
-        self.exam = StudentExamMakeup.objects.filter(
+        make_up_exam = StudentExamMakeup.objects.filter(
             user=self.request.user, exam__id=self.kwargs.get("exam_pk")).last()
-        self.exam = getattr(self.exam, 'exam', None)
+        self.exam = getattr(make_up_exam, 'exam', None)
         # return super().dispatch(request, *args, **kwargs)
 
         # get exam and check if its time is due
@@ -134,8 +175,12 @@ class QuestionUpdateView(UpdateView):
         if not self.exam:
             return redirect('exam_list')
 
-        self.student_exam, created = StudentExam.objects.get_or_create(
-            user=self.request.user, exam=self.exam)
+        
+        self.student_exam = handle_student_payment(self, self.request, self.exam)
+        if not self.student_exam:
+            # This means that no lectures are available in the payment for this user
+            return redirect("exam_list")
+
         if not self.student_exam.expiry_time:
             set_expiry_date(self.student_exam)
         if self.student_exam.expiry_time < timezone.now():
@@ -144,12 +189,11 @@ class QuestionUpdateView(UpdateView):
 
         # SAVE RANDOM order of questions in student_exam model
         if not self.student_exam.questions:
-            self.student_exam.questions = self.all_questions = get_all_questions(
+            self.student_exam.questions = get_all_questions(
                 self.kwargs.get("exam_pk"), self.request.user)
             self.student_exam.save()
             self.student_exam.refresh_from_db()
         self.all_questions = eval(self.student_exam.questions)
-
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
@@ -183,13 +227,15 @@ class QuestionUpdateView(UpdateView):
         for v, k in self.all_questions.items():
             if k["type"] == "choice_question":
                 question = ChoiceQuestion.objects.get(id=k["question"])
-                if question.student_choice_answer.exists():
-                    if question.student_choice_answer.last().is_answered:
+                student_answer = question.student_choice_answer.filter(student_exam=self.student_exam)
+                if student_answer:
+                    if student_answer.last().is_answered:
                         k["answered"] = "answered"
             if k["type"] == "essay_question":
                 question = EssayQuestion.objects.get(id=k["question"])
-                if question.student_essay_answer.exists():
-                    if question.student_essay_answer.last().is_answered:
+                student_answer = question.student_essay_answer.filter(student_exam=self.student_exam)
+                if student_answer:
+                    if student_answer.last().is_answered:
                         k["answered"] = "answered"
 
         ctx["all_questions"] = self.all_questions

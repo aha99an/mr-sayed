@@ -5,8 +5,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.mr-syed.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '&b5=0pq&c-#18rpqb92v7h%9h4xd%l!*9*j2y4bq5cgpnmv6*d'
@@ -36,9 +34,9 @@ INSTALLED_APPS = [
     "lectures",
     # 3rd Party
     'django_crontab',
-
-
+    'django_extensions',
 ]
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MIDDLEWARE = [
@@ -49,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.OneSessionPerUserMiddleware'
 ]
 
 ROOT_URLCONF = 'mr-syed.urls'
@@ -159,9 +158,10 @@ USE_TZ = True
 AWS_ACCESS_KEY_ID = 'AKIAQKW72FGFKP7AXDV4'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'mr-sayedabdelhamed2'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 AWS_LOCATION = 'static'
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -170,3 +170,81 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 CRONJOBS = [
     ('59 23 * * *', 'accounts.cron.deactivate_users')
 ]
+
+ADMINS = (
+    ('yasser', 'yasser.aboelgheit@gmail.com')
+)
+# LOGGING_CONFIG = None
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+#                        'pathname=%(pathname)s lineno=%(lineno)s ' +
+#                        'funcname=%(funcName)s %(message)s'),
+#             'datefmt': '%Y-%m-%d %H:%M:%S'
+#         },
+#         'simple': {
+#             'format': '%(levelname)s | %(message)s'
+#         },
+#     },
+#     'handlers': {
+#         # 'console': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'logging.StreamHandler',
+#         #     'formatter': 'simple'
+#         # },
+#         # 'mail_admins': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'django.utils.log.AdminEmailHandler'
+#         # },
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': BASE_DIR + '/debug.log',
+#             "formatter": "verbose",
+#         },
+#     },
+
+#     'loggers': {
+#         'requests': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+
+#     },
+# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}

@@ -6,7 +6,7 @@
 <!-- <a href="#">{{class}}</a> <br> -->
 <form method="get" action="{% url 'admin_exam_list' %}">
  <input style = "width: auto;"  id="al-search" type="text"  
-           name="exam" value="{{ request.GET.exam }}"
+           name="search_value" value="{{ request.GET.search_value }}"
            class="form-control" />
     <input type="submit"
            value="بحث" class="button primary" />
@@ -72,43 +72,58 @@
                             <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
                                 style="background-color: red;">
                         </form>
-
-
-
                  </td>
             </tr>
-            
-
-
-
             {% endfor %}
         </tbody>
         <tfoot>
     </table>
 
-
-
-
       <ul>
     <div c lass="prev_next">
     <div class="pages">
     {% if page_obj.has_previous %}
-      <a class="prev btn btn-info" href="?page={{page_obj.previous_page_number}}">لسابق</a>
+      <a class="prev btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.previous_page_number}}">السابق</a>
     {% endif %}
       {% for pg in page_obj.paginator.page_range %}
-        {% if page_obj.number == pg %}
-          <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+      {% comment %}Ensure that serach filter is applied with pagination  {% endcomment %}
+        {% if 'search_value' in request.get_full_path %}
+            {% if page_obj.number == pg %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
+            {% else %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
+            {% endif %}
+
+      {% comment %} Ensure that class_filter is applied in pagination {% endcomment %}
+      {% elif 'class_filter' in request.get_full_path %}
+            {% if page_obj.number == pg %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
+            {% else %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
+            {% endif %}
+
+      {% comment %} Ensure that is_checked_filter is applied in pagination {% endcomment %}
+        {% elif 'is_checked_filter' in request.get_full_path %}
+            {% if page_obj.number == pg %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn btn-default">{{pg}}</a>
+            {% else %}
+              <a href="{{ request.get_full_path }}&page={{ pg }}"{{ pg }} class="btn">{{pg}}</a>
+            {% endif %}
         {% else %}
-          <a href="?page={{pg}}" class="btn">{{pg}}</a>
+        {% comment %} If none of them is there {% endcomment %}
+          {% if page_obj.number == pg %}
+            <a href="?page={{pg}}" class="btn btn-default">{{pg}}</a>
+          {% else %}
+            <a href="?page={{pg}}" class="btn">{{pg}}</a>
+          {% endif %}
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}
-      <a class="next btn btn-info" href="?page={{page_obj.next_page_number}}">التالي</a>
+      <a class="next btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.next_page_number}}">التالي</a>
     {% endif %}
+    </div>
+    </div>
       </ul>
-    </div>
-    </div>
-    <span class="clear_both"></span>
     {% endblock content2 %}
 
 

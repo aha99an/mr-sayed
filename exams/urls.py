@@ -1,9 +1,9 @@
 from django.urls import path
 from .views import (ExamListView, QuestionUpdateView)
 from .views_admin import (ExamAdminListView, AdminChoiceQuestion, update_view, AdminAddExamListView,
-                          AdminExamCreateView, AdminExamUpdateView, AdminExamDeleteView,
-                          AdminChoiceQuestionCreateView, AdminEssayQuestionCreateView, AdminEssayQuestionUpdateView, AdminChoiceQuestionUpdateView,
-                          AdminChoiceQuestionDeleteView, AdminEssayQuestionDeleteView,AdminExamForStudentDeleteView)
+                          AdminExamCreateView, AdminExamUpdateView, AdminChoiceQuestionCreateView,
+                          AdminEssayQuestionCreateView, AdminEssayQuestionUpdateView, AdminChoiceQuestionUpdateView,
+                          AdminChoiceQuestionDeleteView, AdminEssayQuestionDeleteView, AdminExamForStudentDeleteView)
 
 
 urlpatterns = [
@@ -26,8 +26,8 @@ urlpatterns = [
     path('exam-create/', AdminExamCreateView.as_view(), name='admin_create_exam'),
     path('exam-update/<int:pk>/', AdminExamUpdateView.as_view(),
          name='admin_update_exam'),
-    path('exam-delete/<int:pk>/', AdminExamDeleteView.as_view(),
-         name='admin_delete_exam'),
+#     path('exam-delete/<int:pk>/', AdminExamDeleteView.as_view(),
+#          name='admin_delete_exam'),
     path('exam-create-choice-question/<int:pk>/',
          AdminChoiceQuestionCreateView.as_view(), name='admin_create_choice_question'),
     path('exam-create-essay-question/<int:pk>/',

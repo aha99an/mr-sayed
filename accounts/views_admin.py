@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, ListView, DeleteView, CreateView
+from django.views.generic import UpdateView, ListView, DeleteView, CreateView, TemplateView, DetailView
 from .models import CustomUser, StudentPayment
 from .forms import StudentChangeForm, test, AdminMyProfileData, AdminStudentPayment, AdminStudentPaymentUpdateForm
 from classes.models import Class
@@ -6,11 +6,13 @@ from django.urls import reverse_lazy
 from django.shortcuts import HttpResponseRedirect
 import random
 from home.permissions import AdminPermission
-from lectures.models import Lecture, StudentLectureMakeup
-from exams.models import Exam, StudentExamMakeup
+from lectures.models import Lecture, StudentLectureMakeup, StudentLecture
+from exams.models import Exam, StudentExamMakeup, StudentExam
 from django.db.models import Q
-import difflib
-
+from homework.models import Homework, StudentHomeworkMakeup, StudentHomework
+from django.utils import timezone
+from datetime import datetime
+now = datetime.now()
 
 class AdminStudentListView(AdminPermission, ListView):
     queryset = CustomUser.objects.filter(user_type=CustomUser.STUDENT)
@@ -64,12 +66,16 @@ class AdminStudentUpdateView(AdminPermission, UpdateView):
         ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
         ctx["reseted_password"] = ctx["student_user"].check_password(
             ctx["student_user"].random_password)
-        ctx["lectures"] = Lecture.objects.all()
+        ctx["lectures"] = Lecture.objects.filter(is_permanent=False)
         ctx["makeup_lectures"] = StudentLectureMakeup.objects.filter(
             user=ctx["student_user"])
 
         ctx["exams"] = Exam.objects.all()
         ctx["makeup_exams"] = StudentExamMakeup.objects.filter(
+            user=ctx["student_user"])
+
+        ctx["homeworks"] = Homework.objects.all()
+        ctx["makeup_homeworks"] = StudentHomeworkMakeup.objects.filter(
             user=ctx["student_user"])
         return ctx
 
@@ -84,8 +90,16 @@ def reset_password(request, pk):
 
 def add_makeup_lecture(request, pk):
     if request.method == 'POST':
+        lecture_id = int(request.POST.get("lecture_id"))
+        user = CustomUser.objects.get(id=pk)
+        
         StudentLectureMakeup.objects.get_or_create(
-            user=CustomUser.objects.get(id=pk), lecture=Lecture.objects.get(id=int(request.POST.get("lecture_id"))))
+            user=user, lecture=Lecture.objects.get(id=lecture_id))
+
+        student_lecture = StudentLecture.objects.filter(lecture=lecture_id, user=user).last()
+        if student_lecture:
+            student_lecture.seen_at = None
+            student_lecture.save()
 
     return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
 
@@ -113,6 +127,24 @@ class ExamMakeupDeleteView(AdminPermission, DeleteView):
 
     def get_object(self):
         return StudentExamMakeup.objects.get(id=self.kwargs.get("makeup_exam_pk"))
+
+    def get_success_url(self):
+        return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
+
+
+def add_makeup_homework(request, pk):
+    if request.method == 'POST':
+        StudentHomeworkMakeup.objects.get_or_create(
+            user=CustomUser.objects.get(id=pk), homework=Homework.objects.get(id=int(request.POST.get("homework_id"))))
+
+    return HttpResponseRedirect(reverse_lazy("student_update_view", kwargs={"pk": pk}))
+
+
+class HomeworkMakeupDeleteView(AdminPermission, DeleteView):
+    model = StudentHomeworkMakeup
+
+    def get_object(self):
+        return StudentHomeworkMakeup.objects.get(id=self.kwargs.get("makeup_homework_pk"))
 
     def get_success_url(self):
         return reverse_lazy("student_update_view", kwargs={"pk": self.kwargs.get("student_pk")})
@@ -174,3 +206,41 @@ class AdminStudentPaymentDeleteView(AdminPermission, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("admin_student_payment_list_view", kwargs={"student_pk": self.kwargs.get("student_pk")})
+
+
+class AdminProfileView(AdminPermission, TemplateView):
+    template_name = 'accounts/admin-profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["student_user"] = CustomUser.objects.get(id=self.kwargs["pk"])
+
+        # we will check for show_answer field and make it true in case of we exceeded el end time bta3 el week (7esa)
+        homeworks = []
+        exams = []
+        
+        #add homeworks 
+        all_homeworks = Homework.objects.all()
+        for homework in all_homeworks:
+            answered = False
+            student_homework = StudentHomework.objects.filter(
+                user=self.kwargs.get("pk"), homework=homework).last()
+            if student_homework and student_homework.student_homework_file.all():
+                answered = True
+            homeworks.append({"homework": homework, "answered": answered})
+
+        # add exams
+        all_exams = Exam.objects.all()
+        for exam in all_exams:
+            exam_answered = False
+            student_exam = StudentExam.objects.filter(
+                user=self.kwargs.get("pk"), exam=exam).last()
+            exam_grade = exam.grade
+            exam_answered = False
+            if student_exam:
+                exam_answered = True
+            exams.append({"exam": exam, "student_exam": student_exam})
+
+        ctx["homeworks"] = homeworks
+        ctx["exams"] = exams
+        return ctx

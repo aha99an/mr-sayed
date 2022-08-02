@@ -9,7 +9,9 @@
 {% block content2 %}
 <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
     <p>السؤال:</p>
+    {% if object.question %}
     <p>{{ object.question }}</p>
+    {% endif %}
     {% if object.image_question %}
     <a target="_blank" href="{{ object.image_question.url}}">
         
@@ -29,7 +31,6 @@ function rotateImage(id) {
                 console.log(image_height);
                 console.log(image_width);
                 if (image_width >image_height){
-                    console.log("HELLO HERE");
                     margin = (image_width-image_height)/2;
                     margin_top = margin.toString()+"px";
                     margin_bottom = margin.toString()+"px";
@@ -65,20 +66,80 @@ function rotateImage(id) {
     </script>
 
 
-    <p><label for="id_question_answer">الاجابة:</label> <input value="{{object.answer|default:""}}" type="text" name="question" maxlength="1000"
+    <p><label for="id_question_answer">الاجابة:</label> <input value="{{object.answer|default:''}}" type="text" name="question" maxlength="1000"
             id="id_question_answer"></p>
+
+
     {% if object.image_answer%}
-        صورة حل السؤال:
-        <a href="{{object.image_answer.url}}"> {{object.image_answer.name }}</a>
-           <form style ="display:inline-block;"  method="post" action="{% url 'delete_image_answer' object.id %}"
-                            style="margin: 0 0 0 0;">
-                            {% csrf_token %}
-                            <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
-                                style="background-color: red;">
-                        </form>
+    صورة حل السؤال:
+    <a href="{{object.image_answer.url}}"> {{object.image_answer.name }}</a>
+        <form style ="display:inline-block;"  method="post" action="{% url 'delete_image_answer' object.id %}"
+                        style="margin: 0 0 0 0;">
+                        {% csrf_token %}
+                        <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                            style="background-color: red;">
+                    </form>
     {% endif %}
+
+
+    {% if uploaded_files %}
+    <h3>الصور المرفوعة</h3>
+    <br>
+    <div class="table-responsive table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <h4>الاسم</h4>
+                    </th>
+                    <th scope="col" style="text-align: center;">
+                        <h4>مسح</h4>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in uploaded_files %}
+                <tr>
+    
+                    <td>
+                        <a href="{{file.mr_question_file.url}}"
+                            style="color: lightblue;">{{file.snippet_file_name}}</a>
+    
+                    </td>
+                    <td style="text-align: center;">
+                        <span>
+                            <!-- delete_file -->
+                            <form method="post" action="{% url 'delete_mr_questions_file' object.id file.id %}"
+                                style="margin: 0 0 0 0;">
+                                {% csrf_token %}
+                                <input type="submit" value="&nbsp; مسح &nbsp;" class="btn btn-danger"
+                                    style="background-color: red;">
+                            </form>
+                        </span>
+                    </td>
+    
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+    
+        </table>
+        {% endif %}
+    
+        <h1>{{error_message}}<h1>
+    
+    
     <p><label for="id_image_question">الاجابة بصورة:</label> <input type="file" name="image_question"
-            accept="image/*" id="id_image_question"></p>
+            accept="image/*" id="id_image_question" multiple></p>
+    <!-- <input type="checkbox" id="id_display_question" name="display_question">
+            <label for="display_question"> اظهار السؤال لجميع الطلبة</label><br> -->
+    <select name="display_question" id="id_display_question">
+        <option value="Empty" selected disabled hidden>اظهار السؤال؟ </option>
+        <option value="True" {% if object.display_to_all  %} selected{% endif %}>اظهار لجميع الطلبة</option>
+        <option value="False" {% if not object.display_to_all %} selected{% endif %}>عدم اظهار السؤال لجميع الطلبة</option>
+    </select>
+
+
     <input type="submit" style="width:100%; font-size: 20px;" value="تسليم اجابة السؤال"
         id="question-form" onclick="checkInput();this.disabled = true;">
 
@@ -86,83 +147,194 @@ function rotateImage(id) {
     </div>
     <script>
 
+
         function checkInput() {
-            var files = document.getElementById("id_image_question").files;
-            var file = files[0];
-            var question = document.getElementById("id_question_answer").value;
-            if (!file && question == "") {
-                swal({
-                    type: 'error',
-                    text: 'من فضلك اجب كتابة او بصورة'
-                }
-                )
-                document.getElementById("question-form").disabled = False;
-            }
+                    var files = document.getElementById("id_image_question").files;
+                    var file = files[0];
+                    var question = document.getElementById("id_question_answer").value;
+                    var display_question = document.getElementById("id_display_question").value;
+                    // document.write(display_question);
 
-            else {
-                if (!file) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?file_name=" + "" + "&file_type=" + "" + "&answer_question=" + question + "&question_id={{object.id}}");
-                    xhr.send();
-                    window.location.replace("{% url 'all_questions' %}")
-                }
-                else {
-                    getSignedRequest(file, question);
-                }
+                    // if (!file && question == "") {
+                    //     swal({
+                    //         type: 'error',
+                    //         text: 'من فضلك اجب كتابة او بصورة'
+                    //     }
+                    //     )
+                    //     document.getElementById("question-form").disabled = False;
+                    // }
 
-            }
-
-        };
-
-
-
-        function getSignedRequest(file, question) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?file_name=" + file.name + "&file_type=" + file.type + "&answer_question=" + question + "&question_id={{object.id}}");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        
-                        uploadFile(file, response.data, response.url);
-                    }
-                    else {
-                        alert("Could not get signed URL.");
-                    }
-                }
-            };
-            xhr.send();
-        }
-
-        function uploadFile(file, s3Data, url) {
-            document.getElementById("loader-upload").style.visibility = "visible";
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", s3Data.url);
-            var postData = new FormData();
-            for (key in s3Data.fields) {
-                postData.append(key, s3Data.fields[key]);
-            }
-            postData.append('file', file);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200 || xhr.status === 204) {
-                        document.getElementById("loader-upload").style.visibility = "hidden";
-                         swal({
-                                type: 'success',
-                                text: 'تم رفع صورة حل السؤال'
+                    // else {
+                    if(display_question){
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?display_question=" + display_question +"&mr_question_id={{object.id}}");
+                            xhr.send();
+                            if(question=="" && !file){
+                        window.location.replace("{% url 'all_questions' %}")
                             }
-                            ).then(function () {
-                                window.location = "{% url 'all_questions' %}";
-                            });
+                        }
+                        if(file) {
+                            document.getElementById("loader-upload").style.visibility = "visible";
+                        for (i = 0; i < files.length; i++) {
+                            var is_last;
+                            if (i == files.length - 1) {
+                                is_last = "YES";
+                            }
+                            getSignedRequest(files[i], is_last, display_question);
+                            }
 
-                    }
-                    else {
-                        alert("Could not upload file.");
-                    }
+                        }
+                        if (question) {
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?file_name=" + "" + "&file_type=" + "" + "&answer_question=" + question + "&mr_question_id={{object.id}}" + "&display_question=" + display_question);
+                            xhr.send();
+                            xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4) {
+                                if (xhr.status === 200) {
+                                    if(question && !file){
+                        window.location.replace("{% url 'all_questions' %}")
+                            }
+                                }
+                            }
+                        }}
+                    
+                };        
+                // };
+
+                function getSignedRequest(file, is_last, display_question) {
+                    var xhr = new XMLHttpRequest();
+                    var mr_question_id = "{{object.id}}"
+                    xhr.open("GET", "{% url 'generate_s3_signature_admin'%}?file_name=" + file.name + "&file_type=" + file.type + "&mr_question_id=" + mr_question_id + "&display_question=" + display_question);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                uploadFile(file, response.data, response.url, is_last);
+                            }
+                            else {
+                                alert("Could not get signed URL.");
+                            }
+                        }
+                    };
+                    xhr.send();
                 }
-            };
-            xhr.send(postData);
-        }
+
+                function uploadFile(file, s3Data, url, is_last) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", s3Data.url);
+                    var postData = new FormData();
+                    for (key in s3Data.fields) {
+                        postData.append(key, s3Data.fields[key]);
+                    }
+                    postData.append('file', file);
+                    var mr_question_id = "{{object.id}}"
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200 || xhr.status === 204) {
+                                var new_request = new XMLHttpRequest();
+                                new_request.open("GET", "{% url 'mr_question_admin_image_success_upload'%}?image_name=" + s3Data.fields["key"] + "&question_id=" + mr_question_id);
+                                new_request.send();
+                                if (is_last == "YES") {
+                                    document.getElementById("loader-upload").style.visibility = "hidden";
+                                    swal({
+                                        type: 'success',
+                                        text: 'تم تسليم الاجابة بنجاح'
+                                    }
+                                    ).then(function () {
+                                        window.location = "{% url 'all_questions' %}";
+                                    });
+                                }
+
+                                // document.getElementById("preview").src = url;
+                                // document.getElementById("avatar-url").value = url;
+                            }
+                            else {
+                                alert("Could not upload file.");
+                            }
+                        }
+                    };
+                    xhr.send(postData);
+                    //window.location.replace("{% url 'student_questions' %}");
+                }
+        // OLD LOGIC
+        // ################################################################
+        // function checkInput() {
+        //     var files = document.getElementById("id_image_question").files;
+        //     var file = files[0];
+        //     var question = document.getElementById("id_question_answer").value;
+        //     if (!file && question == "") {
+        //         swal({
+        //             type: 'error',
+        //             text: 'من فضلك اجب كتابة او بصورة'
+        //         }
+        //         )
+        //         document.getElementById("question-form").disabled = False;
+        //     }
+
+        //     else {
+        //         if (!file) {
+        //             var xhr = new XMLHttpRequest();
+        //             xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?file_name=" + "" + "&file_type=" + "" + "&answer_question=" + question + "&question_id={{object.id}}");
+        //             xhr.send();
+        //             window.location.replace("{% url 'all_questions' %}")
+        //         }
+        //         else {
+        //             getSignedRequest(file, question);
+        //         }
+
+        //     }
+
+        // };
+
+
+
+        // function getSignedRequest(file, question) {
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("GET", "{% url 'generate_s3_signature_admin' %}?file_name=" + file.name + "&file_type=" + file.type + "&answer_question=" + question + "&question_id={{object.id}}");
+        //     xhr.onreadystatechange = function () {
+        //         if (xhr.readyState === 4) {
+        //             if (xhr.status === 200) {
+        //                 var response = JSON.parse(xhr.responseText);
+                        
+        //                 uploadFile(file, response.data, response.url);
+        //             }
+        //             else {
+        //                 alert("Could not get signed URL.");
+        //             }
+        //         }
+        //     };
+        //     xhr.send();
+        // }
+
+        // function uploadFile(file, s3Data, url) {
+        //     document.getElementById("loader-upload").style.visibility = "visible";
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("POST", s3Data.url);
+        //     var postData = new FormData();
+        //     for (key in s3Data.fields) {
+        //         postData.append(key, s3Data.fields[key]);
+        //     }
+        //     postData.append('file', file);
+        //     xhr.onreadystatechange = function () {
+        //         if (xhr.readyState === 4) {
+        //             if (xhr.status === 200 || xhr.status === 204) {
+        //                 document.getElementById("loader-upload").style.visibility = "hidden";
+        //                  swal({
+        //                         type: 'success',
+        //                         text: 'تم رفع صورة حل السؤال'
+        //                     }
+        //                     ).then(function () {
+        //                         window.location = "{% url 'all_questions' %}";
+        //                     });
+
+        //             }
+        //             else {
+        //                 alert("Could not upload file.");
+        //             }
+        //         }
+        //     };
+        //     xhr.send(postData);
+        // }
     </script>
 
 {% endblock content2 %}

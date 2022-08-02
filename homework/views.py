@@ -2,7 +2,7 @@ from home.permissions import StudentPermission
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
 from .models import (Homework, StudentHomework,
-                     StudentHomeworkFile)
+                     StudentHomeworkFile, StudentHomeworkMakeup)
 from collections import OrderedDict
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -30,9 +30,18 @@ class HomeworkListView(StudentPermission, ListView):
     now = datetime.now()
 
     def get_queryset(self):
-        # if self.request.user.student_class.week_day == self.now.weekday():
-        return Homework.objects.filter(week__start__lte=self.now.date(), week__end__gte=self.now.date())
-        # return Homework.objects.none()
+        queryset = Homework.objects.none()
+
+        # Makeup homeworks
+        mackup_homeworks = StudentHomeworkMakeup.objects.filter(
+            user=self.request.user)
+        if mackup_homeworks:
+            for makeup_homework in mackup_homeworks:
+                queryset |= Homework.objects.filter(id=makeup_homework.homework.id)
+
+        # Week homework
+        queryset |= Homework.objects.filter(week__start__lte=self.now.date(), week__end__gte=self.now.date())
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -66,13 +75,19 @@ class HomeworkMultipleUpdateView(FormView):
         now = datetime.now()
         if self.request.user.student_is_active is False:
             return redirect('login')
-        self.homwork = Homework.objects.filter(id=self.kwargs.get("homework_pk"),
+        # Week Homework
+        self.homework = Homework.objects.filter(id=self.kwargs.get("homework_pk"),
                                                week__start__lte=now.date(),
                                                week__end__gte=now.date()).last()
-        if not self.homwork:
+        # Makeup Homework
+        if not self.homework:
+            if self.kwargs.get("homework_pk") in StudentHomeworkMakeup.objects.filter(user=self.request.user).values_list("homework", flat=True):
+                self.homework = Homework.objects.get(id=self.kwargs.get("homework_pk"))
+             
+        if not self.homework:
             return redirect("homework_list")
         self.student_homework, created = StudentHomework.objects.get_or_create(
-            homework=self.homwork, user=self.request.user)
+            homework=self.homework, user=self.request.user)
         if self.student_homework.is_checked is True:
             self.request.session['homework_is_checked'] = True
             return redirect("homework_list")

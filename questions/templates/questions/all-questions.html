@@ -47,7 +47,7 @@
                 <td>
                     <a style="color: lightblue;"
                         href="{% url 'answer_question' qu.id %}">
-                        {{qu.question }}</a>
+                        {{qu.question|default:"سؤال بصورة" }}</a>
                 </td> 
 
                 <td>                     

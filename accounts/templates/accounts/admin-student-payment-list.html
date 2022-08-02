@@ -37,8 +37,8 @@
                     {{payment.remainder_available_lectures}}
                 </td>
                   <td style="text-align:center; padding:0px;">
-                    {% for student_lecture in payment.student_lecture.all%}
-                    {{student_lecture.lecture.name}}{% if not forloop.last %}، {% endif %}
+                    {% for student_exam in payment.student_exam.all%}
+                    {{student_exam.exam.name}}{% if not forloop.last %}، {% endif %}
                     {% if forloop.counter|divisibleby:3 %}
                     <br/>
                     {% endif %}

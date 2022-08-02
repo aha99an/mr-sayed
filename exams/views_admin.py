@@ -73,7 +73,7 @@ class ExamAdminListView(AdminPermission, ListView):
 
     def get_queryset(self):
         try:
-            a = self.request.GET.get('exam',)
+            a = self.request.GET.get('search_value',)
         except KeyError:
             a = None
         q = StudentExam.objects.all()
@@ -82,8 +82,9 @@ class ExamAdminListView(AdminPermission, ListView):
             admin_student_list1 = Q(user__first_name__contains=a)
             admin_student_list2 = Q(user__username__contains=a)
             admin_student_list3 = Q(exam__name__contains=a)
+            admin_student_list4 = Q(user__student_class__name__contains=a)
             q = q.filter(admin_student_list1 |
-                         admin_student_list2 | admin_student_list3)
+                         admin_student_list2 | admin_student_list3 | admin_student_list4)
 
         class_filter = self.request.GET.get('class_filter')
         is_checked_filter = self.request.GET.get('is_checked_filter')
@@ -103,7 +104,7 @@ class ExamAdminListView(AdminPermission, ListView):
         ctx["classes"] = Class.objects.all()
         ctx["class_filter"] = self.request.GET.get('class_filter')
         ctx["is_checked_filter"] = self.request.GET.get('is_checked_filter')
-
+        ctx["search_value"] = self.request.GET.get('search_value')
         return ctx
 
 
@@ -120,7 +121,6 @@ class AdminChoiceQuestion(AdminPermission, DetailView):
             question_content = self.all_questions[self.question_pk]
         else:
             question_content = list(self.all_questions.values())[0]
-        print(question_content, "AAAAAAAAAAAAA")
         return question_content
 
     def get_context_data(self, *args, **kwargs):
@@ -200,9 +200,9 @@ class AdminExamUpdateView(AdminPermission, UpdateView):
         return ctx
 
 
-class AdminExamDeleteView(AdminPermission, DeleteView):
-    model = Exam
-    success_url = reverse_lazy('admin_add_exam_list')
+# class AdminExamDeleteView(AdminPermission, DeleteView):
+#     model = Exam
+#     success_url = reverse_lazy('admin_add_exam_list')
 
 
 class AdminChoiceQuestionCreateView(AdminPermission, CreateView):

@@ -9,27 +9,25 @@
 </p>
 {% endif %}
 {% if object.homework.homework_file %}
-<h3>ملفات الواجب</h3>
-
-{% for question in object.homework.homework_file.all %}
-{% if question.extension in image_extensions %}
+<h3>ملف الواجب</h3>
+{{image_extensions}}
+{% if object.homework.homework_file.extension in image_extensions %}
+sddddddddddddddd
 <span class="image fit">
-    <a href="{{ question.homework_file.url }}">
-        <img src="{{ question.homework_file.url}}">
+    <a href="{{ object.homework.homework_file.url }}">
+        <img src="{{ object.homework.homework_file.url}}">
     </a>
 </span>
 {% else %}
 
-<a href="{{ question.homework_file.url }}" style="color: lightblue;">
-    {{question.homework_file.name}}
+<a href="{{ qobject.homework.homework_file.url }}" style="color: lightblue;">
+    {{object.homework.homework_file.name}}
 
 </a>
 <br><br><br>
 {% endif %}
-{% endfor %}
 {% endif %}
 <!-- uploaded files -->
-
 {% if object.student_homework_file %}
 <h3>الملفات المُسلمة</h3>
 <br>
@@ -62,16 +60,19 @@
     لم يتم حل الواجب
     {% endif %}
 
-    {% if object.notes %}
+   {% if object.notes or object.notes_file %}
     الملاحظات:
-    <br>
+   {% endif %}
+
+    {% if object.notes %}
+    <br/>
     {{object.notes}}
     {% endif %}
 
 {% if object.notes_file %}
-    الملاحظات:
-    <br>
-    {{object.notes_file}}
+    <br/>
+    <a href="{{object.notes_file.url}}"
+                        style="color: lightblue;">{{object.notes_file}}</a>
     {% endif %}
 
     {% endblock content %}

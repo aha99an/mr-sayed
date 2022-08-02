@@ -55,8 +55,28 @@
 {% if not object.answer %}
 لم تجاوب على هذا السؤال<br /><br />
 {% endif %}
+
+<!-- display if it is right or wrong answer -->
+{% if student_exam.is_graded %}
+    {% if object.answer.grade > 0 %}
+    <h3>اجابة صحيحة</h3>
+    {% else %}
+    <h3>اجابة غير صحيحة</h3>
+    {% endif %}
+{% else %}
+    <h3>جاري تصحيح الامتحان</h3>
+{%endif%}
+
+<!-- display right answer only if the student didnt get it-->
+{% if object.answer.grade == 0 %}
+{% if student_exam.exam.show_answer %}
 <h3>الاجابة الصحيحة رقم: {{object.question.right_answer_choice}}
 </h3>
+{%else%}
+<h3>الاجابة الصحيحة ستكون متاحة الاسبوع القادم</h3>
+{% endif %}
+{% endif %}
+
 <br><br>
 
 <!-- Essay question -->

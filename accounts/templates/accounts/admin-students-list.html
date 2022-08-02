@@ -43,6 +43,8 @@
                 <th>اسم الطالب</th>
                 <th>ايميل الطالب</th>
                 <th>المجموعة</th>
+                <th>آخر واجب</th>
+                <th>آخر امتحان</th>
                 <th>مفعل/غير مفعل</th>
             </tr>
         </thead>
@@ -59,6 +61,18 @@
                         {{ student }}</a>
                 </td>
                 <td>{{ student.student_class }}</td>
+                <td> {% if student.homeWorkAnswerd %}
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div class="check"></div>
+                    {% else %}
+                    &nbsp&nbsp&nbsp&nbsp&#10060;
+                    {% endif %}</td>
+
+                <td><a style="color: lightblue;" href="{% url 'admin_profile' student.id %}">
+                        {% if student.examStudentGrade %}
+                       {{student.examStudentGrade|floatformat}} / {{student.examGrade|floatformat}} </a></td>
+                        {% else %}
+                    &nbsp&nbsp&nbsp&nbsp&#10060;
+                    {% endif %}</td>
                 <td>
                     {% if student.student_is_active %}
                     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div class="check"></div>
@@ -111,10 +125,9 @@
       {% if page_obj.has_next %}
       <a class="next btn btn-info" href="{{ request.get_full_path }}&page={{page_obj.next_page_number}}">التالي</a>
     {% endif %}
+    </div>
+    </div>
       </ul>
-    </div>
-    </div>
-    <span class="clear_both"></span>
     {% endblock %}
 
 {% comment %} 

@@ -13,12 +13,11 @@ from django.db.models import Q
 class AdminCheckHomeworkListView(AdminPermission, ListView):
     model = StudentHomework
     template_name = "homework/admin-homework-list.html"
-    # queryset = StudentHomework.objects.all()
     paginate_by = 10
 
     def get_queryset(self):
         try:
-            a = self.request.GET.get('homework',)
+            a = self.request.GET.get('search_value',)
         except KeyError:
             a = None
 
@@ -29,8 +28,9 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
             admin_student_list1 = Q(user__first_name__contains=a)
             admin_student_list2 = Q(user__username__contains=a)
             admin_student_list3 = Q(homework__name__contains=a)
+            admin_student_list4 = Q(user__student_class__name__contains=a)
             q = q.filter(admin_student_list1 |
-                         admin_student_list2 | admin_student_list3)
+                         admin_student_list2 | admin_student_list3 | admin_student_list4)
 
         class_filter = self.request.GET.get('class_filter')
         is_checked_filter = self.request.GET.get('is_checked_filter')
@@ -51,7 +51,7 @@ class AdminCheckHomeworkListView(AdminPermission, ListView):
         ctx["classes"] = Class.objects.all()
         ctx["class_filter"] = self.request.GET.get('class_filter')
         ctx["is_checked_filter"] = self.request.GET.get('is_checked_filter')
-
+        ctx["search_value"] = self.request.GET.get('search_value')
         return ctx
 
 

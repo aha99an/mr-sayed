@@ -26,6 +26,10 @@ class CustomUser(AbstractUser):
     user_type = models.IntegerField(choices=USER_TYPE_CHOICES, default=0)
     student_is_active = models.BooleanField(default=False)
     random_password = models.CharField(max_length=10, null=True, blank=True)
+    homeWorkAnswerd = models.BooleanField(default=False)
+    examStudentGrade = models.FloatField(default=None, null=True, blank=True)
+    examGrade = models.FloatField(default=None, null=True, blank=True)
+    session_key = models.CharField(max_length=32, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.email = self.username

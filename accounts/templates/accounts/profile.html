@@ -55,18 +55,17 @@
                 <table DIR="RTL">
                     <thead>
                         <tr>
-                            <th>الامتحان</th>
-                            <th>الدرجة (درجة الامتحان/درجتك)</th>
-                            <th>نموذج الاجابة</th>
+                            <th >الامتحان</th>
+                            <th>الدرجة (درجتك/درجة الامتحان)</th>
+                            <th >نموذج الاجابة</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         {% for exam in student_exams %}
                         <tr>
-                            <td>
-                            {% if exam.exam.is_past_week %}
-                            
+                            <td style="text-align:center;">
+                            {% if exam.is_graded %}                         
                                 <a href="{% url 'profile_exam_question' exam.id 1 %}"
                                     style="color: lightblue;">
                                     {{ exam.exam }}</a>
@@ -74,17 +73,17 @@
                                 {{ exam.exam }}
                                 {% endif %}
                             </td>
-                            <td>
+                            <td style="text-align:center;">
                                 {% if exam.is_graded %}
-                                <div style="text-align:center;">
-                                {{exam.grade|floatformat}}/{{exam.exam.grade|floatformat}}
+                                <div>
+                                {{exam.exam.grade|floatformat}}/{{exam.grade|floatformat}}
                                 </div>
                                 {% else %}
                                 جاري تصحيح الامتحان
                                 {% endif %}
                                 
                             </td>
-                            <td>
+                            <td style="text-align:center;">
                                 {% if exam.exam.show_answer and exam.exam.answer %}
                                 
                                 <a href="{{exam.exam.answer.url}}" download>
@@ -131,15 +130,19 @@
                                 {% endif %}
                             </td>
                             <td>
-                            
-                                {% if homework.homework.show_answer and homework.homework.homework_answer_file %}
+                             
+                                {% if homework.homework.show_answer and homework.homework.homework_answer_file and homework.is_checked %}
                                 
                                 <a href="{{homework.homework.homework_answer_file.url}}" download>
                                     <button type="button" class="button primary">تنزيل نموذج
                                         الاجابة</button>
                                 </a>
-                                {% else %}
+                                {% elif not homework.homework.show_answer %}
                                 نموذج الاجابة سيكون متاح الاسبوع القادم
+                                {% elif not homework.is_checked %}
+                                نموذج الاجابة سيكون متاح بعد التصحيح
+                                {% elif not homework.homework.homework_answer_file %}
+                                نموذج الاجابة غير متاح
                                 {% endif %}
                             </td>
                         </tr>
